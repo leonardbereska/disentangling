@@ -1,0 +1,65 @@
+%&tex
+\chapter{Intro}
+
+\section{Why Disentangle?}
+	\begin{itemize}
+		\item Computer vision: automatically discern patterns, that reflect structures in physical world
+		\item Why disentangle: detect causal factors to image
+		\item Pragmatic reason: efficient transfer learning, multi-task learning
+		\item Philosophical reason: build machines that understand mechanisms, reason about world \cite{Pearl:2018im}
+		\item Targeted changes $\rightarrow$ thought experiments; not possible for e.g. GAN, VAE\ \textit{"imagine, ..."}\ science of images $\Rightarrow$ science of imagination \cite{Mahadevan:2018tz}.
+	\end{itemize}
+
+\section{How Disentangle?}
+	Statistical residues -> will depends on statistical nature of data (e.g. Gaussian with two dimensions P(s, a)
+	current machine learning: association, probability distribution modeling.
+	% from pure image data without any further assumptions the information about the world will not be learned, because the information does not exist in the data.
+
+	How do humans disentangle?
+	2. Apart from pure association -> access to video information
+	e.g. video information: how do objects behave across time?
+
+	3. Learning by interacting: knowing change by changing.
+	second rung on causal ladder (Pearl): intervention. (, acting) What happens if I do?
+	P(s, do(a))
+	Others: counterfactual (imagining), association.
+	In humans e.g. egomotion cues: how does image on retina change if I move.
+
+
+	How disentangle?
+	change factor -> image change equivariantly, leave others invariant
+	-> equivariance, invariance
+
+	change can be mimicked artificially
+
+
+\section{Contributions I}
+	\textbf{Hypothesis}: learning shape requires abstracting away appearance -> hence disentangling
+	\textbf{Hypothesis \emph{ii)}}: learning disentanglement from pure data is fundamentally constrained. need to take causal literature into account -> disentangling causal factors will need assumptions on causal model and/or interventional/interactional data (instead of raw data).
+	% need to interact with the world, need to change, need to model physical reality -> image transformations, analyis-by-synthesis
+	\begin{itemize}
+		\item validate and evaluate method developed by Lorenz \etal\ 2018 for disentangling
+		\item overview over state-of-the-art disentangling, analysis of future directions
+		\item explain method in context to these
+		\item evaluate unsupervised shape learning:
+			\begin{itemize}
+				\item human faces, bodies (CelebA, Human3.6M)
+				\item animal faces, bodies (cats, dogs, birds)
+				\item composite objects (dancing pair)
+			\end{itemize}
+		\item make own video dataset
+			\begin{itemize}
+				\item for disentangling human pose and appearance (heidelbergpose)
+				\item for articulated animal video (dogs)
+				\item for composite object (pair dancing salsa)
+			\end{itemize}
+		\item ablation study (reconstruction, equivariance loss, transformations)
+		\item qualitative comparison to non-disentangling composite shape learning (Zhang)
+		\item evaluating disentanglement
+			\begin{itemize}
+				\item reID
+				\item pose estimation
+			\end{itemize}
+	\end{itemize}
+	result: soa in shape learning, (first) unsupervised disentangling of articulated shape and appearance
+

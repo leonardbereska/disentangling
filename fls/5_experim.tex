@@ -1,0 +1,49 @@
+%&tex
+\chapter{Experiments}
+
+\section{Shape Learning}
+	\subsection{Landmark Discovery}
+		\subsubsection{Human Faces}
+		\subsubsection{Human Bodies}
+		Human, Olympic, Penn
+		\subsubsection{Animal Faces/Bodies}
+		Dogs, Cats, Birds
+		\subsubsection{Composite Objects/Scenes}
+		What is an object? What is a scene?
+		compositional nature of reality
+		Bird on twig object? Bird can also fly, but neural networks learn by correlation in data (-> ref to these ''failure modes''
+		Dancing pair as object.
+		\subsubsection{Object/Background Separation}
+			Complexly cluttered background is actually favorable for the method. Correlations of object with background will belong to object.
+	\subsection{Transformations}
+	\subsubsection{Parity}
+	birds parity
+	salsa parity
+	\subsubsection{Rotation, Scaling, Translation}
+		on Cats -> black cats different set of KP than rest -> connect these samples via transformation to reach intra-class consistency
+	\subsubsection{Mimicking Appearance}
+	Color, Contrast, Hue
+	\subsection{Natural Changes}
+	Video data: Penn, Own
+\section{Disentangling Generative Factors}
+	t-SNE of Shape Representation
+	\subsection{Disentangling Pose and Appearance}
+	\subsubsection{ReID}
+	t-SNE of IDs
+	Own, Other (stronger statement)
+	\subsubsection{Pose}
+	PCK Curve
+	\subsection{Factorizing into Parts}
+		Own Dataset: Move KP
+		DeepFashion: exchange parts
+\section{Follow-Up}
+	\begin{itemize}
+		\item make generative:(KP distribution estimation, variational features).
+		\item make video generation possible (RNN on KP vector).
+		\item better transformations -> appearance locally (around parts changed), appearance changed perceptually -> style transfer
+	\end{itemize}
+
+
+
+
+

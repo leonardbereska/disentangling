@@ -1,0 +1,94 @@
+%&tex
+\chapter{Literature Review: Disentangling}
+
+research for papers connecting disentangling and causality
+
+\section{Learning Object Shape}
+for estimating shape $s$ from images $x$ the task is
+$p(s|x)$
+representation of shape can be landmarks
+
+
+Disentangling generative factors definition
+model-free vs model-based approaches:
+\begin{itemize}
+	\item model-based $\rightarrow$ more flexible, transferable, modular combination (like parts)
+\end{itemize}
+parts as regional attention (cite attention paper)
+parts/compositionality is key to creativity -> new combination of known parts
+
+% link to causality: ladder of causal reasoning needs intervention
+
+\section{Analysis-by-Synthesis}
+	Capsules, Tieleman
+	make model as good as we can implementing as many assumptions as we can and only leave the rest to powerful model
+	Synthesis known, analysis only indirectly by observing cognition
+
+	leaving synthesis to learning from scratch, can meet practical/computational limits \eg\ convolutional neural networks better than fully connected neural models.
+	But can also be ultimately impossible. Modelling synthesis explicitly with a causal model about image generation, by knowledge about the physical world enables answering interventional and counterfactional questions. (mathematically impossible to learn from ''pure'' data alone)
+
+\section{Causal Learning}
+	Pearl
+	Ladder of Causation: rung one seen, rung two seeable, rung three cannot be seen.
+	Barometer example, best neural network will not know -> theoretical proof (look up in Pearl) -> need interaction with the world / or causal assumptions.
+
+\section{Disentangled Generative Models}
+	Capturing essential information about data in a representation by being able to generate it is the rationale behind generative modelling. Currently the approaches in this direction are defined by adversarial \cite{Goodfellow:2014td} and autoencoding \cite{Kingma:2013tz} model formulations. Recently, the endeavour for disentangling explanatory factors in the latent representation is being made explicit in the objective functions \cite{Burgess:2018uf, Chen:2016tp} of these models. So far, however, these attempts are limited to rigid objects without articulation and disentangle holistic image factors like illumination, object rotation or total shape and global appearance. \todo{Denton:2017uf} \ % TODO ref disentangling models % TODO capsules
+
+\section{Disentangling Shape and Appearance}
+	Factorizing an object representation into shape and appearance is a popular ansatz for representation learning.
+	Recently, a lot of progress has been made in this direction by conditioning generative models on shape information \cite{Esser:2018ue, Ma:2017wq, deBem:2018wp, Ma:2017uu, Siarohin:2018wk, Balakrishnan:2018wo}.
+	While most of them explain the object holistically, only few also introduce a factorization into parts \cite{Siarohin:2018wk, Balakrishnan:2018wo}.
+	In contrast to these shape-supervised approaches, we learn both shape and appearance without any supervision.
+
+	For unsupervised disentangling, several generative frameworks have been proposed ~\cite{Higgins2016betavae, Chen2016infogan, Li2018analogy, Denton:2017uf, Shu:2018ua, Xing:2018un}.
+	However, these works use holistic models and show results on rather rigid objects and simple datasets, while we explicitly tackle strong articulation with a part-based formulation.
+
+\section{Part-based Representation Learning}
+	Describing an object as an assembly of parts is a classical paradigm for learning an object representation in computer vision \cite{Ross:2006uc} with linkage to human perceptual theories \cite{Biederman:1987tc}.
+	What constitutes a part, is the defining question in this scheme.
+	Defining parts by e.g. (\emph{i}) visual/semantic features (object detection), or by (\emph{ii}) geometric shape, behavior under (\emph{iii}) viewpoint changes or (\emph{iv}) object articulation, in general leads to a different partition of the object.
+	Recently, most part learning has been employed for object recognition, such as in \cite{Felzenszwalb:2010ve, Novotny:2017ta, Singh:2012un, Mesnil:2013hi, Yang:2016uo, Lam:2017ta}.
+	% other methods for discriminative -> recognition -> focus on visual factorization % ours for generative image modeling -> also structural aspects %\cite{DPM, constellation1,constellation2} combine parts with a probabilistic prior on their spatial arrangements. %Novotny et al. \cite{anchornet} find parts shared by similar categories to perform semantic matching. Mining of discriminative parts can be formulated as an clustering problem or an iterative refinement process \cite{partLearning2}.
+	To solve such a discriminative task, parts will be based on the semantic connection to the object and can ignore their spatial arrangement and articulation of the object instance. Our method instead is driven by a generative process and aims at more generic modeling of the object as a whole. Hence, parts have to encode both spatial structure and visual appearance accurately. To our best knowledge unsupervised part learning and the proposed split in shape and appearance description for a part has only been used in pre-deep learning approaches \cite{Ross:2006uc, Nguyen:2013vk, Cootes:1998tn}.
+
+
+\section{Landmark Learning}
+	There is an extensive literature on landmarks as compact representations of object structure.
+	Most approaches, however, make use of manual landmark annotations as supervision signal \cite{Wu:2017vc, Ranjan:2016vv, Yu:2016vi, Zhang:2016vx, Zhu:2015tz, Zhang:2014wy, Pedersoli:2014ta, Ionescu:2011ue, Toshev:2014tp, Pfister:2015uo, Wei:2016ws, Newell:2016vq, Lim:2018uo, Cao:2017vv}.
+
+	To tackle the problem without supervision, Thewlis \etal \cite{Thewlis:2017wi} proposed enforcing equivariance of landmark locations under artificial transformations of images. The equivariance idea had been formulated in earlier work \cite{Lenc:2016tz} and has since been extended to learn a dense object-centric coordinate frame \cite{Thewlis:2017wg}. However, enforcing only equivariance encourages consistent landmarks at %easily
+	discriminable object locations,
+	but disregards an explanatory coverage of the object.
+	% which is especially critical for strong
+	%does not aim at explaining the object from it.
+
+	Zhang \etal \cite{Zhang:2018vz} addresses this issue: the equivariance task is supplemented by a reconstruction task in an autoencoder framework, which gives visual meaning to the landmarks. However, in contrast to our work, he does not disentangle shape and appearance of the object. Furthermore, his approach relies on a separation constraint in order to avoid the collapse of landmarks.
+	This constraint results in an artificial, rather grid-like layout of landmarks, that does not scale to complex articulations.
+	%In contrast, our method disentangles shape and appearance. Hence, for optimal reconstruction, our model has to make use of the shape information efficiently, which leads to a meaningful coverage.
+
+	%Building on the reconstruction objective introduced by \cite{Zhang:2018vz},
+	Jakab \etal \cite{Jakab:2018wc} proposes conditioning the generation on a landmark representation from another image. A global feature representation of one image is combined with the landmark positions of another image to reconstruct the latter. Instead of considering landmarks which only form a representation for spatial object structure, we factorize an object into local parts, each with its own shape \textit{and} appearance description.
+	Thus, parts are learned which meaningfully capture the variance of an object class in shape as well as in appearance.
+
+	Additionally, and in contrast to all these works (\cite{Thewlis:2017wi, Zhang:2018vz, Jakab:2018wc}) we take the extend of parts into account, when formulating our equivariance constraint. Furthermore, we explicitly address the goal of disentangling shape and appearance on a part-based level by introducing invariance constraints.
+	%
+	%
+	%Jakab \etal \cite{Jakab:2018wc} proposes conditioning the generation on a landmark representation from another image. A global feature representation of one image is combined with the landmark positions of another image to reconstruct the latter.
+	%In contrast to our work, appearance representation is global, whereas we partition an object explicitly into local parts, each with its own shape \textit{and} appearance description. The conceptual difference here is, that we understand a part not only as a point (landmark), but as an image region, with an appearance description for this region. This %further factorization
+	%encourages part placement at visually meaningful locations and assists the part assignment consistency.
+	%\\
+    %In contrast to all these works (\cite{Thewlis:2017wi, Zhang:2018vz, Jakab:2018wc}) we model shape by parts with an extend. That extend needs to be equivariant up to the second moment and is used to extract the appearance of a part, which leads to better object coverage. In addition, we make the goal of disentangling explicit with our formulation and show quantitative results on this.
+    %\textbf{Landmark learning.}
+	%There is an extensive literature on landmarks as compact representations of object structure.
+	%Most approaches, however, make use of manual landmark annotations as supervision signal \cite{Wu:2017vc, Ranjan:2016vv, Yu:2016vi, Zhang:2016vx, Zhu:2015tz, Zhang:2014wy, Pedersoli:2014ta, Ionescu:2011ue, Toshev:2014tp, Pfister:2015uo, Wei:2016ws, Newell:2016vq, Lim:2018uo, Cao:2017vv}.
+	%\\
+	%To tackle the problem without supervision, Thewlis \etal \cite{Thewlis:2017wi} proposed enforcing equivariance of landmark locations under artificial transformations of images. The equivariance idea had been formulated in earlier work \cite{Lenc:2016tz} and has since been extended to learn a dense object-centric coordinate frame \cite{Thewlis:2017wg}. However, enforcing only equivariance encourages consistent landmarks at easily discriminable object locations, but disregards a sensible coverage of the object.
+	%\\
+	%Zhang \etal \cite{Zhang:2018vz} addresses this issue: the equivariance task is supplemented by a reconstruction task in an auto-encoder framework, which gives visual meaning to the landmarks. However, their approach does not disentangle shape from appearance, thus shape information can be encoded in the appearance representation resulting in the collapse of the landmarks. To counter this they rely on a artificial separation constraint which results in an artificial, rather grid-like layout of landmarks, that does not scale to complex variation in object shape.
+	%In contrast, our method disentangles shape and appearance of the object and thus, for optimal reconstruction, our model has to capture the variation of object shape in the shape representation which automatically leads to a meaningful object coverage.
+	%\\
+    %Jakab \etal \cite{Jakab:2018wc} proposes conditioning the generation on a landmark representation from another image. A global feature representation of one image is combined with the landmark positions of another image to reconstruct the latter. Instead of considering landmarks which only form a representation for spatial object structure, we factorize an object into local parts, each with its own shape \textit{and} appearance description.
+	% Thus, parts are learned which meaningfully capture the variance in shape as well as in appearance of an object class.
+    %In contrast to all these works (\cite{Thewlis:2017wi, Zhang:2018vz, Jakab:2018wc}) we take the extend of parts into account when formulation the equivariance constraint.
+    % In addition, we make the goal of disentangling shape and appearance on a part based level explicit with our formulation and show quantitative results on this.

@@ -1,0 +1,20 @@
+\begin{abstract}
+Large intra-class variation is the result of changes in multiple object characteristics. Images, however, only show the superposition of different variable factors such as appearance or shape. Therefore, learning to disentangle and represent these different characteristics poses a great challenge, especially in the unsupervised case. Moreover, large object articulation calls for a flexible part-based model. We present an unsupervised approach
+for disentangling appearance and shape by learning parts consistently over all instances of a category. Our %generative -> no probabilistic formulation
+%part-based
+model for learning an object representation % for representation learning -> overclaim?
+is trained by simultaneously exploiting invariance and equivariance constraints between synthetically transformed images. Since %only single images and
+no part annotation or prior information on
+an object class is required, the approach is applicable to arbitrary classes.
+We evaluate our approach on a wide range of object categories and diverse tasks including pose prediction, disentangled image synthesis, and video-to-video translation. The approach outperforms the state-of-the-art on unsupervised keypoint prediction and compares favorably even against supervised approaches on the task of shape and appearance transfer.
+
+
+%   Object representations are of paramount importance for various computer vision applications. %Learning such a      model without supervision is still an open challenge. %Frequently used holistic object representations limit a     deep understanding of its spatial structure.
+%   This paper presents an unsupervised method to learn a dedicated compositional part representation of an articulated object, disentangling the factors of shape and appearance for each part. %The invariance of one factor when        the other is transformed in a two-stream auto-encoding framework.
+%   To disentangle, each factor is assumed to be invariant under transformations of the other factor. In addition, shape is assumed to be equivariant with respect to spatial transformations. These assumptions are implemented in a two-stream autoencoding framework, the architecture of which is dedicated to maintain a local interpretation of the parts.
+%   %We derive explicit invariance and equivariance constraints for such a decomposition and implement these in a      generative framework. % by our shape representation.
+%   Trained without any manual supervision or prior information about the object itself, the method discovers consistent parts, meaningfully covering the object. We evaluate this on a diverse selection of challenging datasets, the object classes ranging from human faces and bodies to dogs, cats and birds.
+%   On the task of unsupervised landmark regression, our model outperforms state-of-the-art methods significantly. The margin is especially large on datasets with strong articulation.
+%     Further experiments show that our model learns to disentangle shape from appearance on the level of individual parts.
+%  %Unsupervised results for datasets with background clutter and significant articulation have never been            obtained before.
+\end{abstract}

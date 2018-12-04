@@ -1,0 +1,88 @@
+%&tex
+\chapter{Introduction}
+
+	Computer vision is the endeavour to algorithmically discern patterns in images, which reflect structures and processes in the physical world. For an understanding of the world, that is captured in an image, an algorithm needs to model the underlying causal elements, that contribute to generating the image.
+	For example, when shown an image ..
+
+	Finding an abstract image representation, can be framed as a problem of understanding, such that an image representation contains the states of the factors that led to the image including objects and the physical states of objects.
+	A factorized representation should then represent each causal element and its state individually, in a disentangled manner: A change in the real causal element should correspond to an equivalent change in the abstract representational factor, while leaving the other factors, that represent other causes, unchanged.
+	% Capturing the causal elements that generate an image is a long-standing goal of computer vision and is driving the search for image representations which disentangle these causal factors from each other.
+	On the one hand there are pragmatic reasons to aim at extracting disentangled factors from images: to successfully transfer a representation between different tasks, typically only a few factors are relevant \cite{Bengio:2013bu}.
+	Efficient transfer and multi-task learning should account for this.
+	On the other hand, learning to capture external mechanisms in appropriate internal representations, can be seen as a goal in its own.
+	It enables machines to reason about the world \cite{Pearl:2018im}.
+	In addition, once disentangled, a factor can be manipulated individually to make a targeted change.
+	Thought experiments like \textit{"imagine, how ridiculous you would look, if you wore that hot pants"} are managable tasks for human imagination, but are out of the league for currently used generative image models \cite{Goodfellow:2014td, Kingma:2013tz}, that typically rely on uninterpretable vector spaces with entangled dimensions.
+	In the sense of generative modelling, disentangling factors could as well lead the way from a science of images to a science of imagination \cite{Mahadevan:2018tz}.
+
+	% \note{Data-driven algorithms for pattern recognition good recently}
+	% \note{how much and how to incorporate prior knowledge}
+	% \note{is this necessary, theoretical arguments against}
+	% \begin{itemize}
+		% \item Computer vision: automatically discern patterns, that reflect structures in physical world
+		% \item Why disentangle: detect causal factors to image
+		% \item Pragmatic reason: efficient transfer learning, multi-task learning
+		% \item Philosophical reason: build machines that understand mechanisms, reason about world \cite{Pearl:2018im}
+		% \item Targeted changes $\rightarrow$ thought experiments; not possible for e.g. GAN, VAE\ \textit{"imagine, ..."}\ science of images $\Rightarrow$ science of imagination \cite{Mahadevan:2018tz}.
+	% \end{itemize}
+
+	% How Disentangle?
+	But how to learn a disentangled representation from scratch, \ie from pure data?
+	As we will find out, disentangling causal factors from raw image data, without any side information is impossible theoretically and can only work based on statistical assumptions.
+	Lets consider an example to illustrate this point:
+	Statistical residues -> will depends on statistical nature of data (e.g. Gaussian with two dimensions P(s, a)
+	current machine learning: association, probability distribution modeling.
+	% from pure image data without any further assumptions the information about the world will not be learned, because the information does not exist in the data.
+
+
+	How do humans disentangle?
+	1. association: "conditioning"
+	2. Apart from pure association -> access to video information
+	e.g. video information: how do objects behave across time?
+
+	3. Learning by interacting: knowing change by changing.
+	second rung on causal ladder (Pearl): intervention. (, acting) What happens if I do?
+	P(s, do(a))
+	Others: counterfactual (imagining), association.
+	In humans e.g. egomotion cues: how does image on retina change if I move.
+
+
+	How disentangle?
+	change factor -> image change equivariantly, leave others invariant
+	-> equivariance, invariance
+
+	change can be mimicked artificially
+Intelligent pattern recognition algorithms, fuelled by sensory data as learning material alone, may ultimately drive the way to a full-blown artificial intelligence, reasoning about the world on its own. - That is the reasoning behind data-driven and assumptionless machine learning approaches that have conquered several research communities.
+	A theoretical objection to driving-only-with-data comes from the causal literature: For an understanding of the world, an algorithm needs to model causal processes, that cause an image to be generated.
+
+\section{Contributions I}
+	\textbf{Hypothesis}: learning shape requires abstracting away appearance -> hence disentangling
+	\textbf{Hypothesis \emph{ii)}}: learning disentanglement from pure data is fundamentally constrained. need to take causal literature into account -> disentangling causal factors will need assumptions on causal model and/or interventional/interactional data (instead of raw data).
+	% need to interact with the world, need to change, need to model physical reality -> image transformations, analyis-by-synthesis
+	\begin{itemize}
+		\item validate and evaluate method developed by Lorenz \etal\ 2018 for disentangling
+		\item overview over state-of-the-art disentangling, analysis of future directions
+		\item explain method in context to these
+		\item evaluate unsupervised shape learning:
+			\begin{itemize}
+				\item human faces, bodies (CelebA, Human3.6M)
+				\item animal faces, bodies (cats, dogs, birds)
+				\item composite objects (dancing pair)
+			\end{itemize}
+		\item make own video dataset
+			\begin{itemize}
+				\item for disentangling human pose and appearance (heidelbergpose)
+				\item for articulated animal video (dogs)
+				\item for composite object (pair dancing salsa)
+			\end{itemize}
+		\item ablation study (reconstruction, equivariance loss, transformations)
+		\item qualitative comparison to non-disentangling composite shape learning (Zhang)
+		may be a petty detail or a simple hack/trick (reconstruction on other image) but makes all the difference in terms of causal information
+		\item evaluating disentanglement
+			\begin{itemize}
+				\item reID
+				\item pose estimation
+			\end{itemize}
+	\end{itemize}
+	result: soa in shape learning, (first) unsupervised disentangling of articulated shape and appearance
+
