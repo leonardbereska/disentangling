@@ -1,6 +1,6 @@
 # Disentangling Shape and Appearance
 
-Outline | |
+Part |  Name|  Pages
 --------|-------|---
 1 | Intro | 5
 2 | Basics | 10
