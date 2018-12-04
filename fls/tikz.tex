@@ -1,0 +1,17 @@
+\begin{tikzpicture}
+	% Define nodes
+	\node[obs]                               (x) {$\mathbf{x}$};
+	\node[latent, above=of x, xshift=-1.2cm] (z1) {$\mathbf{z_3}$};
+	\node[latent, above=of x, xshift=1.2cm]   (z2) {$\mathbf{z_4}$};
+	\node[latent, above=of z1, xshift=-1.2cm] (z3) {$\mathbf{z_1}$};
+	\node[latent, above=of z1, xshift=1.2cm]  (z4) {$\mathbf{z_2}$};
+
+	% Connect the nodes
+	\edge {z1,z2} {x} ; %
+	\edge {z3,z4} {z1} ; %
+
+	% Plates
+	% \plate {yx} {(x)(y)} {$N$} ;
+	% \plate {} {(w)(y)(yx.north west)(yx.south west)} {$M$} ;
+\end{tikzpicture}
+

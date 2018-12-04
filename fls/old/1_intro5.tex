@@ -1,0 +1,70 @@
+\section{Introduction}
+\begin{figure}\label{fig:firstpage}
+	\centering
+	\includegraphics[trim={2.9cm 0cm 4cm 0cm},clip, width=1.\linewidth]{fig/compr.pdf}
+	%\caption{}
+\end{figure}
+Computer vision is the endeavour to automatically discern patterns in images, which reflect physical states of objects in the world.
+Typically, objects appear in an intricated interaction of many factors of variation.
+For example, given the object class of people, variation can be in visual appearance such as the persons clothing or skin color or variation in geometric shape determined by a persons pose or body physique.
+%
+In order to gain a conceptual understanding of the world, disentangling the underlying factors of variation is a crucial step, as has been argued in numerous works,~\cite{Desjardins2012dr, Bengio2013rep, Chen2016infogan, Higgins2016betavae, Eastwood2018dr}.
+%
+For articulated object classes the most prominent factors are geometric shape and visual appearance.
+Disentangling these factors is a difficult problem due to the intricated interplay of shape and appearance under articulation.
+The complexity enters, as a variation in shape is a change of the images domain rather than a change of its values~\cite{Shu:2018ua}.
+Consider a person raising his arm: the color and texture of his pullover sleeve intrinsically does not change, but appears at a different location in the image. An efficient model for shape should cover all possible states of the object and preserve the local linkage to its intrinsic appearance.
+\\
+%
+To solve the disentangling problem for shape and appearance, several supervised methods have been proposed lately~\cite{Esser:2018ue, Ma:2017wq, Ma:2017uu, deBem:2018wp, Siarohin:2018wk, Balakrishnan:2018wo}.
+By conditioning generative models on a pre-specified shape representation, they are able to successfully explain away appearance.
+However, they are limited to object categories, for which pose labels are readily available i.e.\ human bodies and faces and not scalable to the vast amounts of unlabelled data of arbitrary object classes.\\
+%
+Unsupervised disentangling of shape and appearance is a much harder problem.
+% In addition to the disentangling problem comes the problem to learn object shape unsupervised.
+Instead of capturing non-shape factors in the input based on a known shape, both shape and appearance streams need to be learned and disentangled from each other.
+% In order to make the goal of disentangling explicit, several approaches proposed changes to the loss functions of typical generative models~\cite{Burgess:2018uf, Chen2016infogan}.
+% For disentangling generic (in advance unknown) factors one can modify the objective function of generative models
+% In contrast to these works, we specify the factors we want to find in advance, namely object shape and appearance.
+% This enables us to not rely on the assumption of statistical independence of generative factors in the dataset, which in particular for the interplay of shape and appearance is not granted.
+There are attempts to disentangle these streams based on learning the parameters for a shape deformation and take the appearance transformation as its complement~\cite{Shu:2018ua, Xing:2018un}.
+So far, however, these deformation learning approaches have shown only results for rather rigid objects, like human faces. The essentially smooth warping they propose as a model for shape transformations, hinders the learning of stronger articulation, such as of human bodies. \\
+To account for non-rigid deformation, a traditional computer vision approach~\cite{Ross:2006uc, Cootes:1998tn} is to model the object as a composition of rigid parts, which are able to move with respect to each other.
+%~\cite{Ross:2006uc, Nguyen:2013vk, Cootes:1998tn}.
+% To instantiate parts, a compact description are landmarks.
+% Landmarks have been used extensively in supervised \cite{Wu:2017vc, Ranjan:2016vv, Yu:2016vi, Zhang:2016vx, Zhu:2015tz, Zhang:2014wy, Pedersoli:2014ta, Ionescu:2011ue, Toshev:2014tp, Pfister:2015uo, Wei:2016ws, Newell:2016vq, Lim:2018uo, Cao:2017vv} and recently also in unsupervised approaches \cite{Thewlis:2017wi, Zhang:2018vz, Jakab:2018wc} for shape learning.
+In the context of recent unsupervised shape learning an instantiation
+of the part idea are landmarks~\cite{Thewlis:2017wi, Zhang:2018vz, Jakab:2018wc}.
+To use a part-based approach for disentanglement, the remaining question is, how to model appearance. As outlined above, in reality, the appearance is closely tied to parts of the object, which suggests a local model for appearance. Hence we model an object as an arrangement of parts, each part with a part shape and a part appearance. \\
+%
+In this paper, we propose the first appraoch to learn a part-wisely disentangled shape and appearance representation of articulated object classes.
+This is achieved without prior knowledge of the object itself, i.e.\ no pose labels.
+In the spirit of analysis-by-synthesis~\cite{Yildirim:2015ur}, we learn the factors by reconstruction. The learned part shapes and part appearances are fully differentiably integrated in the process.
+To disentangle them, we enforce constraints on equivariance and invariance.
+% both in the learning framework and in the loss formulation.
+%The disentanglement of the factors of shape and appearance can be enforced by demanding that shape is invariant under the image transformations that change appearance and vice versa. This is realized in a two-stream auto-encoding formulation. Here, an image is reconstructed from a combination of part shapes and part appearances, with the part shapes extracted from the appearance-transformed image and part appearances from a shape-transformed image. Additionally, the part shape is tied to the location of the part in the image: an equivariance loss encourages the part shape to move in unison with the part in the image. To enforce equivariance implicitly via the reconstruction task, the part appearance extraction and projection is localized by the parts shape. %We implement these objectives into a loss framework, which is explained in sec.~\ref{sec:framework}. \\
+%To assert a decomposition into independent local parts, we also ensured their local modelling and treatment throughout the whole architecture.\\
+%This is highlighted when describing the architecture in sec.~\ref{sec:architecture}.
+% In summary, the we contribute: \emph{(i)} a learning formulation to disentangle shape and appearance. For this, we incorporate constraints on the invariance and equivariance behavior under image transformations into an auto-encoding framework. \emph{(ii)} part-based model for shape and appearance, with local feature extraction and projection
+%
+The main novelty is a part shape aware feature extraction to obtain a part appearance representation and the subseqent reconstruction at a changed location specified by the part shape.
+% This appearance is then used to reconstruct an image under shape changes.
+This acts as a hard constraint simultaneously on the equivariance of the learned part shape representation and on the invariance of the part appearance under changes of shape.
+Additionally, we use a novel equivariance loss on the part shapes as a soft constraint.
+These contributions enable us to achieve significant improvements upon the state-of-the-art of unsupervised object shape learning, evaluated on the task of landmark regression.
+We evaluate and compare to competitors on a wide range of datasets both for static and articulated objects.
+% We compare the shape representation on datasets for rather static objects and for strong articulation.
+% with rather static objects, namely CelebA~\cite{Liu:2015vj}, Cat Head~\cite{Zhang:2008uj} and CUB-200-2011~\cite{Wah:2011vq} and on datasets featuring articulation, namely Human3.6M~\cite{Ionescu:2014ua} and BBCPose~\cite{Charles:2013tb}.
+% The results are presented in sec.~\ref{sec:static} and~\ref{sec:articulation}.
+% Our part-based disentangling approach obtains state-of-the-art results on all datasets.
+%Confirming the usefulness of the approach to tackle articulation, we observe, that the margin with which our model beats others widens significantly, when evaluated on articulated objects.
+% We also show qualitative shape learning results on more difficult datasets such as Penn Action~\cite{Zhang:2013tr}.
+Furthermore, we evaluate the disentanglement of our representation on
+%on Deep Fashion~\cite{Liu:2016vv},
+a benchmark dataset for supervised shape-appearance disentangling methods.
+%Since no previous results for unsupervised shape-appearance disentanglement have been demonstrated here,
+Here, we compare against state-of-the-art supervised results and achieve a similar performance.
+We also show disentangling results on the task of video-to-video translation, where fine-grained articulation is smoothly and consistently translated on a frame-to-frame level.
+Lastly, since our model captures appearance in parts, it is also possible to transfer and manipulate single parts between objects in an image.
+%, for example to virtually strip someone of his jeans and replace it by hot pants.
+% The quantitative and qualitative results for evaluating the disentanglement are presented in sec. \ref{sec:disentangling}.
