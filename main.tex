@@ -1,0 +1,107 @@
+	\documentclass[
+	  paper    = a4,
+	  BCOR     = 10mm,
+	  twoside,
+	  fontsize = 12pt,
+	  fleqn,
+	  toc      = bibnumbered,
+	  toc      = listofnumbered,
+	  numbers  = noendperiod,
+	  headings = normal,
+	  listof   = leveldown,
+	  version  = 3.03
+	]{scrreprt}
+
+	\usepackage[utf8]{inputenc}
+	\usepackage[T1]{fontenc}
+	\usepackage{color}
+	\usepackage{amsmath}
+	\usepackage{graphicx}
+	\usepackage[english]{babel}
+	\usepackage{natbib}
+
+	\usepackage{hyperref}
+	\usepackage{csquotes}
+	\usepackage{times}
+	\usepackage{epsfig}
+	\usepackage{graphicx}
+	\usepackage{amsmath}
+	\usepackage{dsfont}
+	\usepackage{mathtools}
+	\usepackage{caption}
+	\usepackage{float}
+	\usepackage{subcaption}
+	\usepackage{xspace}
+	\usepackage{tikz}
+	\usetikzlibrary{bayesnet}
+	% \usepackage{comment}
+	\usepackage{xcolor}
+	\newcommand\todo[1]{\textcolor{red}{#1}}
+	% \renewcommand\todo[1]{}
+
+	\newcommand\expr[1]{\textcolor{red}{#1}}
+	% \renewcommand\expr[1]{}
+
+	\newcommand\note[1]{\textcolor{blue}{#1}}
+	% \renewcommand\note[1]{}
+
+	\definecolor{darkblue}{rgb}{0.0,0.0,0.4}
+	\definecolor{darkgreen}{rgb}{0.0,0.4,0.0}
+	\hypersetup{%
+	    colorlinks,
+	    linkcolor=black,
+	    citecolor=darkgreen,
+	    urlcolor=darkblue
+	}
+
+	\makeatletter
+		\DeclareRobustCommand\onedot{\futurelet\@let@token\@onedot}
+		\def\@onedot{\ifx\@let@token.\else.\null\fi\xspace}
+		\def\eg{\emph{e.g}\onedot} \def\Eg{\emph{E.g}\onedot}
+		\def\ie{\emph{i.e}\onedot} \def\Ie{\emph{I.e}\onedot}
+		\def\cf{\emph{c.f}\onedot} \def\Cf{\emph{C.f}\onedot}
+		\def\etc{\emph{etc}\onedot} \def\vs{\emph{vs}\onedot}
+		\def\wrt{w.r.t\onedot} \def\dof{d.o.f\onedot}
+		\def\etal{\emph{et al}\onedot}
+	\makeatother
+
+\begin{document}
+	% \include{frm/titlepages-ger} % select either german
+	% \input{frm/titlepages-eng} % or english title page
+	% \include{frm/abstracts}
+
+	% \tableofcontents
+	% \newpage
+
+	\input{fls/1_intro.tex}
+	% \input{fls/2_prereq.tex}
+	% \input{fls/3_literat.tex}
+	% \input{fls/4_method.tex}
+	% \input{fls/5_experim.tex}
+	% \input{fls/6_discuss.tex}
+
+	% \input{fls/0_contrib.tex}
+<<<<<<< HEAD
+	\part{Appendix}
+	\begin{appendix}
+	%\chapter{Lists}
+	%\listoffigures
+	%\listoftables
+	\bibliography{frm/mend2}{}
+	\citestyle{egu}
+	\bibliographystyle{plainnat}
+	%\include{frm/deposition}
+	\end{appendix}
+=======
+	% \part{Appendix}
+	% \begin{appendix}
+	% \chapter{Lists}
+	% \listoffigures
+	% \listoftables
+	\bibliography{frm/mend2}{}
+	\citestyle{egu}
+	\bibliographystyle{plainnat}
+	% \include{frm/deposition}
+	% \end{appendix}
+>>>>>>> intro
+\end{document}
