@@ -23,6 +23,24 @@
 	\begin{quotation}
 		\textit{disentangle as many factors as possible, discarding as little information about the data as is practical} - Y. Bengio, A. Courville and P. Vincent \cite{bengio}
 	\end{quotation}
+
+	\begin{figure}[t]
+		\begin{subfigure}{0.49\linewidth}
+			\centering
+			\input{fls/tikz/parts.tex}
+			\caption{Modelling an image of an object as a collection of parts, each with its own shape and appearance}
+			\label{fig:s1}
+		\end{subfigure}
+		\begin{subfigure}{0.49\linewidth}
+			\centering
+			\input{fls/tikz/trans.tex}
+			\caption{Implementing the do-operation with a transformation of factors}
+			\label{fig:s2}
+		\end{subfigure}
+		\caption{}
+		\label{fig:fig}
+	\end{figure}
+
 	To capture an object in an abstract representation, we follow two key ideas: \emph{(i)} disassembling the object into its constituent parts and \emph{(ii)} disentangling spatial geometry (shape) from visual features (appearance). Hence, we model an object as a composition of parts, each part with a part appearance and a part shape, see Fig. \ref{fig:representation}. The part shape should correspond to the area in the image where the part is located, whereas the part appearance is a feature descriptor for that area. The overall object representation is then the collection of part shapes and part appearances. \\
 	% \begin{equation}
 	%(a, s) = \cup_i (f_i, p_i)
