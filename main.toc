@@ -1,8 +1,0 @@
-\select@language {english}
-\contentsline {chapter}{\numberline {1}Intro}{3}{chapter.1}
-\contentsline {section}{\numberline {1.1}Contributions I}{4}{section.1.1}
-\contentsline {part}{\numberline {I}Appendix}{5}{part.1}
-\contentsline {chapter}{\numberline {A}Lists}{6}{appendix.A}
-\contentsline {section}{\numberline {A.1}List of Figures}{6}{section.A.1}
-\contentsline {section}{\numberline {A.2}List of Tables}{6}{section.A.2}
-\contentsline {chapter}{\numberline {B}Bibliography}{7}{appendix.B}
