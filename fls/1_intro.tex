@@ -1,11 +1,40 @@
 %&tex
 \chapter{Introduction}
 
-	Computer vision is the endeavour to algorithmically discern certain patterns in images. The structures and processes in the physical world interact in complex and intricate ways to generate an image. The image is then a mirror, in which elements of the world are reflected.
-	To recognize the patterns in an image is to take this mirror as a window to understand and observe reality.
-	This can be formulated as an inference problem: variables interacted in certain ways to
-	that reflect structures and processes in the physical world. The world is captured in an image. For an understanding of the world, that is captured in an image, an algorithm needs to model the underlying causal elements, that contribute to generating the image.
-	For example, when shown an image ..
+	Computer vision is the scientific endeavour to algorithmically understand patterns in images. Structures and processes in the physical world interact in complex ways to generate an image, the image acts as a mirror, in which these elements of the world are reflected and leave patterns.
+	To recognize these patterns in an image, means to use this mirror as a window to observe the reality lurking behind it, \ie to measure the causal elements that contributed to the image generation.
+	Formally this can be posed as an inference problem: a number of latent variables $\mathbf{z_1}\ldots\mathbf{z_N}$ interacted in certain ways to cause the image $\mathbf{x}$. An inference algorithm aims at recovering these variables from the observation, \ie the image. This recoveries can be seen as an estimate for or a representation of the true latent variables $\mathbf{z_i}$. A graphical depiction is shown in figure \ref{fig:causal}.
+	\begin{figure}[ht]
+		\centering
+		% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=.3\linewidth]{fig/causal}
+		\begin{tikzpicture}
+			% Define nodes
+			\node[obs]                               (x) {$\mathbf{x}$};
+			\node[latent, above=of x, xshift=-1.2cm] (z1) {$\mathbf{z_3}$};
+			\node[latent, above=of x, xshift=1.2cm]   (z2) {$\mathbf{z_4}$};
+			\node[latent, above=of z1, xshift=-1.2cm] (z3) {$\mathbf{z_1}$};
+			\node[latent, above=of z1, xshift=1.2cm]  (z4) {$\mathbf{z_2}$};
+
+			% Connect the nodes
+			\edge {z1,z2} {x} ; %
+			\edge {z3,z4} {z1} ; %
+
+			% Plates
+			% \plate {yx} {(x)(y)} {$N$} ;
+			% \plate {} {(w)(y)(yx.north west)(yx.south west)} {$M$} ;
+		\end{tikzpicture}
+		\caption{Causal elements $\mathbf{z_i}$ contributing to generation of image $\mathbf{x}$}
+		\label{fig:causal}
+	\end{figure}
+	Typically, objects appear in an intricated interaction of many factors of variation.
+	For example, given the object class of people, variation can be in visual appearance such as the persons clothing or skin color or variation in geometric shape determined by a persons pose or body physique.
+	%
+	In order to gain a conceptual understanding of the world, disentangling the underlying factors of variation is a crucial step, as has been argued in numerous works,~\cite{Desjardins2012dr, Bengio2013rep, Chen2016infogan, Higgins2016betavae, Eastwood2018dr}.
+	%
+	For articulated object classes the most prominent factors are geometric shape and visual appearance.
+	Disentangling these factors is a difficult problem due to the intricated interplay of shape and appearance under articulation.
+	The complexity enters, as a variation in shape is a change of the images domain rather than a change of its values~\cite{Shu:2018ua}.
+	Consider a person raising his arm: the color and texture of his pullover sleeve intrinsically does not change, but appears at a different location in the image. An efficient model for shape should cover all possible states of the object and preserve the local linkage to its intrinsic appearance.
 
 	Finding an abstract image representation, can be framed as a problem of understanding, such that an image representation contains the states of the factors that led to the image including objects and the physical states of objects.
 	A factorized representation should then represent each causal element and its state individually, in a disentangled manner: A change in the real causal element should correspond to an equivalent change in the abstract representational factor, while leaving the other factors, that represent other causes, unchanged.
