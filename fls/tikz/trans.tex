@@ -1,0 +1,16 @@
+\begin{tikzpicture}
+	% Define nodes
+	\node[obs]                               (x) {$\mathbf{x}$};
+	\node[latent, above=of x, xshift=-1.3cm] (s) {$\mathbf{s}$};
+	\node[latent, above=of x, xshift=1.3cm]   (a) {$\mathbf{a}$};
+	\node[latent, above=of s] (ts) {$\phi_\mathbf{s}$};
+	\node[latent, above=of a] (ta) {$\phi_\mathbf{a}$};
+	\edge {s,a} {x} ; %
+	\edge {ts} {s} ; %
+	\edge {ta} {a} ; %
+	% Plates
+	% \plate {yx} {(x)(y)} {$N$} ;
+	% \plate {} {(w)(y)(yx.north west)(yx.south west)} {$M$} ;
+\end{tikzpicture}
+
+
