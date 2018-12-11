@@ -2,15 +2,21 @@
 \chapter{Prerequisites on Learning Disentanglement}
 
 \section{Learning from Data}
-	{Learning from data} is commonly understood as the ability of algorithms to improve their performance on a task with experience accumulated from observing the data \cite{goodfellow16dlb}. The source of data points $x$ is usually understood as a probability distribution $x \sim p(x)$.
-	\subsection{Supervised}
-	{Supervised learning} denotes the task to learn a mapping from data points $x$ to target labels $y$. A supervised algorithm has access to data-label pairs  $(y, x) \sim p(y, x)$, to estimate $p(y|x)$, or a function $y = f(x)$.
-	The label can be discrete e.g. a object class label or continuous e.g. the location of an object part in an image.
-	% example for landmarks
+	{Learning from data} is commonly understood as the ability of algorithms to improve their performance on a task with experience accumulated from observing data \todo{cite{goodfellow16dlb}}. The source of data is usually a dataset - set of data points $X = \{x_i | i \in \{1\ldots n\} \}$, which are sampled from a probability distribution $x_i \sim p(x)$.
 
-	\subsection{Unsupervised}
-		\note{why?:? usage of unlabeled data -> find structure in data space; transfer learning, multi-task learning}
-		{Unsupervised learning} is the endeavour to learn structure and patterns in unlabelled data. The learning algorithm then has access to the data distribution $x \sim p(x)$. The task is usually framed as a form of density estimation, to model the entire distribution $\hat p(x)$. Thus, after estimation one can generate samples from this model $\hat p$, which is then called generative model, cf. sec. \ref{sec:genmodel}.
+	\subsection{Supervised}\label{sec:supervised}
+		The term {supervised learning} denotes the task to learn a mapping from data points $x_i$ to target labels $y_i$.
+		A supervised algorithm has access to data-label pairs  $(y_i, x_i) \sim p(y, x)$, in order to estimate the connection between data points and labels, either in form of a conditional probability $p(y|x)$, or in form of a deterministic function $y = f(x)$.
+		The label $y$ can be either discrete (\eg information about an object class) or continuous (\eg the location of an object part in an image).
+		\todo{example for landmarks}
+		Recent advances, in particular the effectiveness of neural network models (cf. sec. \ref{sec:neuralnetworks}) on big datasets, have led to huge progress on problems that can be formulated as regression or classification. On many traditional computer vision problems, such as \eg object recognition, image classification or human pose estimation, machines are now performing on a superhuman level; hence, many supervised problems are considered to be solved problems\todo{ cite here}.
+		The Achilles' heel of supervised learning lies in obtaining a viable supervision signal. To get labels is requiring human labor which is costly, error-prone and not scalable to the ever faster-growing vast amounts of raw data.
+
+	\subsection{Unsupervised}\label{sec:unsupervised}
+		{Unsupervised learning} is the endeavour to learn about structures and patterns in unlabelled data. The learning algorithm then has access to the data distribution $x \sim p(x)$. The task is usually framed as a form of density estimation, to model the entire distribution ( cf. sec. \ref{sec:genmodel}).
+		\note{much harder also unspecified}
+
+		connection between unsupervised and supervised learning, cite dlb.
 
 		model-free vs model-based
 		rigid enough to be useful, flexible enough to useful
@@ -24,33 +30,39 @@
 		sampling from distribution possible
 		e.g. outlier detection P(X) has low probability
 
-	\subsection{Neural Network Models}
-		Artificial neural networks (NN) are a powerful and flexible tool for function approximation. They are inspired by biological neural networks. A function $y = f(x)$ with vector input $x = \{ x_i | i = 1 \ldots n \}$ and vector output $y = \{ y_j | j = 1 \ldots m \}$ is modelled by:
-		\begin{equation} \label{eq1}
-		\begin{split}
-		h_j & =  a (\sum_i w_{ji} x_i + b_i)  \\
-		y_j & =  a' (\sum_i w'_{ji} h_i + b'_i)
-		\end{split}
-		\end{equation},
-		with weight matrices $w, w'$, non-linear functions $a, a'$ (e.g. $a(x)=0$ for $x<0$, $a(x)=x$ for $x>=0$) and bias vectors $b, b'$.
-		The components $h_j$ are called hidden units or neurons. Neural networks are considered \textit{deep} if they comprise multiple hidden layers a la $h_j  =  a (\sum_i w_{ji} h_i + b_i)$.
-		It can be shown theoretically, that in the limit of infinite hidden units $h_j$, that NN can approximate any (continuous) function arbitrarily close \cite{cybenko89approx}.
-		In practice, however deeper networks seem to work better. For processing image data, one constrains the weight matrices to be only locally connected and to share weights across locations to enforce translation invariance, resulting in \textit{convolutional} neural networks.
+		\note{talk about data compression}
+		\note{what does unsupervised even mean? no prior assumptions, no knowledge at all? unspecified.. read on this.}
+		\todo{notion of truly unsupervised learning actually harmful to progress, ill-defined -> intro}
 
-		feature hierarchy \cite{zeiler14vis}
-		optimization via gradient descent has proven successful (for deep networks called backpropagation)
+	\subsection{Artificial Neural Networks}\label{sec:neuralnetworks}
+		Artificial neural networks are a powerful and flexible tool for function approximation. In their principles they are inspired by biological neural networks. An artificial network is model for a function $y = f(x)$ with vector input $x = \{ x_i | i = 1 \ldots n \}$ and vector output $y = \{ y_j | j = 1 \ldots m \}$:
+		\begin{equation} \label{eq1}
+			\begin{split}
+				h_j & =  a (\sum_i w_{ji} x_i + b_i)  \\
+				y_j & =  a' (\sum_i w'_{ji} h_i + b'_i)
+			\end{split}
+		\end{equation},
+		with weight matrices $w, w'$, non-linear so-called activation functions $a, a'$ (\eg $a(x)=0$ for $x<0$, $a(x)=x$ for $x>=0$) and bias vectors $b, b'$.
+		The components $h_j$ are called hidden units or neurons. Neural networks can also comprise multiple hidden layers via $h_j  =  a (\sum_i w_{ji} h_i + b_i)$.
+		It can be shown theoretically, that in the limit of infinite hidden units $h_j$ they can approximate any (continuous) function arbitrarily close \cite{cybenko89approx} \todo{cite other}.
+		In practice, however, networks with more that one layer, referred to as deep neural networks, seem to work better.
+		\note{feature hierarchy \cite{zeiler14vis}
+
+		For processing image data, one constrains the weight matrices to be only locally connected and to share weights across locations to enforce translation invariance, resulting in \textit{convolutional} neural networks.
+
+		longstanding model gained hype-status as working together
+		optimization via gradient descent has proven successful (for deep networks called backpropagation)}
+		differentiable
 
 \section{Generative Models}\label{sec:genmodel}
 	\begin{quote}
 	    What I cannot create, I do not understand. - R. Feynman
 	\end{quote}
-	Learning and understanding structure in data by being able to generate the data distribution, is the rationale behind generative modelling.
-	Generative models which are mostly applied for unsupervised learning and can be distinguished from discriminative models, that are used to model posterior conditionals $p(y|x)$ \cite{bishop06ml}.
-	\note{extend on discriminative}
-	The currently predominant formulations for generative models are build on autoencoding or adversarial formulations:
-	\note{talk about data compression}
+	Learning and understanding structure in data by being able to generate, is the rationale behind generative modelling.
+	Generative models are mostly applied for unsupervised learning and can be contrasted to discriminative models. While discriminative models are used to model posterior conditionals $p(y|x)$ (\eg for supervised learning (cf. sec. \ref{sec:supervised}), generative models capture the complete data distribution $p(x)$ in an estimate $\hat p(x)$\todo{cite{bishop06ml}}. Thus, after estimation, one can generate samples from this model $\hat p$, hence the name generative model.
+	The currently predominant formulations for learning generative models are built on either autoencoding or adversarial formulations:
 
-	\subsection{Autoencoding}
+	\subsection{Autoencoding Formulations}\ref{sec:autoencoding}
 		An autoencoding model is learning by reconstructing samples of data, $\hat x = f(x)$. To enforce data compression (otherwise the identity function is a trivial solution of autoencoding) the function has an information bottleneck, namely an inferred latent code $z$ of reduced dimension. The autoencoder is then the chain of an encoding function $z = e(x)$ and a decoding function $\hat x = d(z) = d(e(x))$.
 
 		Whereas the conventional autoencoder consists of deterministic mappings $e, d$, the \textbf{variational autoencoder} models the probability distribution $p(x)$. More specifically, is maximizes a lower bound to the logarithmic likelihood $\log p(x)$ of data $x$. This so-called variational lower bound $\mathcal{L}$ is given by:
@@ -63,26 +75,55 @@
 
 		Where $z$ introduces latent variables, with a prior distribution $p(z)$. The approximation to the posterior $q(z|x)$ of the latent variables and the posterior of the data given the latent variables $p(x|z)$. If one wants to model the distributions with neural networks, one typically uses Gaussian distributions and lets the networks predict the parameters (mean and variance) based on the image.
 
-	\subsection{Adversarial}
+	\subsection{Adversarial Formulations}\ref{sec:adversarial}
 		\textbf{Generative Adversarial Networks} (GAN) consist of two neural networks competing in a zero-sum game. A generator network $G$ is generating images based on a latent code $z$ sampled from a distribution $p(z)$. The discriminator network $D$ is a binary classifier with the task to classify an image as originating from the data distribution $p_{data}$ or from the distribution produced by $G$. The loss function of $G$ is the negative of the loss of $D$, such that one can formulate the optimization in a minmax form:
 		\begin{equation}
 			% \begin{split}
 				\min_D \max_G - \frac{1}{2} \mathds{E}_{x\sim p_{data}}[\log D(x)] - \frac{1}{2}\mathds{E}_{z\sim p(z)}[\log (1-D(G(z)))]
 			% \end{split}
 		\end{equation}
-		The discriminator can also be interpreted as a learned similarity metric to measure the closeness of an image to the data distribution. (\cite{Larsen2015AutoencodingMetric}) The generator is then optimized to make the output indiscriminable from the data distribution.
+		The discriminator can also be interpreted as a learned similarity metric to measure the closeness of an image to the data distribution. \cite{Larsen2015AutoencodingMetric}. The generator is then optimized to make the output indiscriminable from the data distribution.
 
-\section{Disentangling Causal Factors}
-	In supervised learning a performance measure is naturally given by the metric that is optimized. In the unsupervised setting, judging the performance of a model less straightforward. For example, when modelling an image domain, one could subjectively rate the quality of the generated image. But what characterizes the quality of the latent representation?
-	cite representation quotes
-	The latent representation $z$ learned by generative models captures the essential features of the data distribution.
+		There are many variants and extensions to this basic principle of learning with an adversarial principle. For example one can learn a discriminator on for a set of image patches \todo{cite CoGAN}
 
+\section{Disentangling Representations}\ref{sec:disentangled}
+	In supervised learning, a performance measure is naturally induced by the metric that is being optimized. In the unsupervised setting, judging the performance of a model is less straightforward. For example, when modelling an image domain, one could subjectively rate the quality of the generated image. But even for a qualitative assessment the question arises, how to rate the quality of the latent representation?
+
+	\begin{quote}
+		{Disentangle as many factors as possible, discarding as little information about the data as is practical.} - Y. Bengio, A. Courville and P. Vincent \todo{cite{bengio}}
+	\end{quote}
+	According to Bengio \etal, a representation is useful, if it can be applied to many - in advance unknown - different tasks, while being trained on only one particular task.
+	As the downstream tasks can be multifarious, the essential \textit{information} should be contained in the representation.
+	For some tasks only a subset of aspects of the data will be necessary, that is why \textit{disentangled factors} make a representation particularly practical - so goes their reasoning.\\
+	The latent representation $z$ learned by generative models captures the essential \textit{information} of the data distribution. That is made sure by requiring the ability to generate samples from the original data distribution from it.
+	How then to reach the second goal, the \textit{disentanglement} of generative factors:
 
 	\subsection{Equivariance and Invariance}
-		factors should
+		The
+		definition of factor by change static ...
+		factors should represent elements of real world
 
-\section{Impediments to Causal Learning}
-	The type of knowledge that can be gained by learning from data is limited:
+		- change in element -> corresponding change in representational factor
+		- leave other factors representing other elements invariant
+
+		Formally, this can be posed as an inference problem: a number of latent variables $\mathbf{z_1}\ldots\mathbf{z_N}$ has interacted in certain ways to cause the existence of the observed image $\mathbf{x}$. An inference algorithm aims at recovering these latent variables from the observation, \ie the image. These recoveries can be seen as estimates $\mathbf{\hat z_i}$ for - or a representation of - the true latent variables $\mathbf{z_i}$. A graphical model of the process is shown in figure \ref{fig:infer}.
+		A disentangled representation should then represent each causal element and its state independently: A change in the real causal element $\mathbf{z_i}$ should correspond to an equivalent change in the abstract representational factor $\mathbf{\hat z_i}$, while leaving the other factors $\mathbf{\hat z_j}, j\neq i$, that represent other causes, unchanged.
+
+		\begin{figure}[ht]
+			\centering
+			\input{fls/tikz/inferlevel.tex}
+			\caption{Disentangling causal factors means to infer an estimate - \ie a representation - from an image}
+			\label{fig:infer}
+		\end{figure}
+		mathematically,..
+		$f \circ g (x) = ... $
+
+	\subsection{Shape and Appearance}
+		\note{especially difficult because of domain}
+
+\section{Theoretical Impediments from Causality}\ref{sec:causality}
+ 	\note{factors are causal}
+	As outlined earlier, the type of knowledge that can be gained by learning from "raw" data is limited. With raw data we mean data $x$ sampled from a $p(x)$.
 	so far fitting curve p(x) to data manifold
 	what is missing to human-level intelligence? (cite lake 2016)
 
@@ -94,7 +135,14 @@
 	1. intervene with changes to an image which are assumed to change only one factor.
 	2. model the causal process of the image generation in the theme of analysis-by-synthesis
 
+	% \subsection{Causal Learning}
 	what does the causality literature have to say?
+	$\rightarrow$ barometer example: How to find out the causal connection between a barometer and the weather.
+	There cannot be an abstract intelligence, which finds out about the world purely by observation. The intelligence has to interact with the world, it has to be in the world.
+	before this becomes too philosophical
+	infer causation from correlation
+	RCT
+
 	lacking the tools to accurately estimate causality, researchers shied away from making causal statement. Developing machines with human-like abilities requires discovery and reasoning in terms of causal models. Recently (in the past 30 years), overshadowed by the prominent success of data-driven deep learning, the field of causality has emerged to mathematical rigor.
 
 	- ladder of causation: association, intervention, counterfactual
@@ -126,7 +174,11 @@
 	But how can a machine find these axes automatically from raw data? it cant, neither can anyone (including humans) (Pearl). Humans know these factors are independent from observing that they can change independently e.g. from observing someone undressing or changing his pose (i.e. harnessing temporal information, with the assumption of temporal coherence) or by changing the factors themselves e.g. what happens to the image of me if I change my pullover?
 	It can be proven mathematically (Pearl) that interventional data or at least certain (which) causal assumptions about the world are necessary to estimate certain quantities.
 
+	\subsection{Transformation as interventions}
 
 
 	we harness intervention
 	p(x| do(a), b)
+
+
+

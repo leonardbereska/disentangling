@@ -1,53 +1,29 @@
 %&tex
 \chapter{Introduction}
-	Computer vision is the scientific endeavour to algorithmically understand patterns in images. Structures and processes in the physical world interact in complex ways to generate an image, the image acts as a mirror, in which these elements of the world are reflected and leave patterns.
-	To recognize these patterns in an image, means to use this mirror as a window to observe the reality lurking behind it, \ie to measure the causal elements that contributed to the image generation.
-	Formally this can be posed as an inference problem: a number of latent variables $\mathbf{z_1}\ldots\mathbf{z_N}$ has interacted in certain ways to cause the existence of the observed image $\mathbf{x}$. An inference algorithm aims at recovering these latent variables from the observation, \ie the image. These recoveries can be seen as an estimate $\mathbf{\hat z_i}$ for - or a representation of - the true latent variables $\mathbf{z_i}$. A graphical model of the process is shown in figure \ref{fig:causal}.
-	A disentangled representation should then represent each causal element and its state independently: A change in the real causal element $\mathbf{z_i}$ should correspond to an equivalent change in the abstract representational factor $\mathbf{\hat z_i}$, while leaving the other factors $\mathbf{\hat z_j}, j\neq i$, that represent other causes, unchanged.
-
-	\begin{figure}[t]
-		\begin{subfigure}{0.49\linewidth}
-			\centering
-			\input{fls/tikz/level.tex}
-			\caption{}
-			\label{fig:s1}
-		\end{subfigure}
-		\begin{subfigure}{0.49\linewidth}
-			\centering
-			\input{fls/tikz/sa.tex}
-			\caption{}
-			\label{fig:s2}
-		\end{subfigure}
-		\caption{(a) Causal elements $\mathbf{z_i}$ contributing to generation of image $\mathbf{x}$, (b) Shape $\mathbf{s}$ and appearance $\mathbf{a}$ influencing the image of an object.}
-		\label{fig:causal}
-	\end{figure}
-
-	\begin{figure}[t]
-		\centering
-		\input{fls/tikz/infer.tex}
-		\caption{Disentangling causal factors: \eg inferring an estimate of object shape $\mathbf{\hat s}$ and appearance $\mathbf{\hat a}$ from an image}
-		\label{fig:infer}
-	\end{figure}
-
-
+	Computer vision is the scientific endeavour to algorithmically understand patterns in images.
+	Structures and processes in the physical world interact in complex ways to generate an image, the image acts as a mirror, in which these elements of the world are reflected and leave patterns.
+	To recognize patterns in an image, effectively means, to use this mirror as a window to observe the reality lurking behind it, \ie to measure the causal elements that contributed to the image generation.
 	Typically, objects appear in an intricated interaction of many factors of variation. \note{multiple levels of interaction}
-	For example, given the object class of people, variation can be in visual appearance such as the persons clothing or skin color or variation in geometric shape determined by a persons pose or body physique.
+	For example, given the object class of people, persons can vary in their visual appearance by clothing and skin color or in their geometric structure due to their pose or body physique.
 	%
 	% In order to gain a conceptual understanding of the world, disentangling the underlying factors of variation is a crucial step, as has been argued in numerous works,~\cite{Desjardins2012dr, Bengio2013rep, Chen2016infogan, Higgins2016betavae, Eastwood2018dr}.
 	% %
-	For articulated object classes the most prominent factors are geometric shape and visual appearance.
-	Disentangling these factors is a difficult problem due to the intricated interplay of shape and appearance under articulation.
+	For articulated object classes the most prominent factors of variation are geometric shape and visual appearance.
+	Disentangling these factors is a difficult problem, due to the intricated interplay of shape and appearance under articulation.
 	The complexity enters, as a variation in shape is a change of the images domain rather than a change of its values~\cite{Shu:2018ua}.
 	Consider a person raising his arm: the color and texture of his pullover sleeve intrinsically does not change, but appears at a different location in the image. An efficient model for shape should cover all possible states of the object and preserve the local linkage to its intrinsic appearance.
 
-	\section{Why disentangle causal factors?}
+
+\section{Why disentangle causal factors?}
 	On the one hand, there are pragmatic reasons to aim at extracting disentangled factors from images: to successfully transfer a representation between different tasks, typically only a few factors are relevant \cite{Bengio:2013bu}.
 	Efficient transfer and multi-task learning should account for this.
-	On the other hand, learning to capture external mechanisms in appropriate internal representations, can be seen as a goal in its own.
+	On the other hand, learning to capture external mechanisms in appropriate internal representations, can be seen as a step to automate reasoning itself.
 	Once disentangled, a factor can be manipulated individually to make a targeted change.
 	This enables machines to reason about the world \cite{Pearl:2018im}, by simulating changes to factors internally in their model of the world.
-	Thought experiments like \textit{"imagine, how ridiculous you would look, if you wore that hot pants"} are managable tasks for human imagination, but are out of the league for currently used generative image models \cite{Goodfellow:2014td, Kingma:2013tz}, that typically rely on uninterpretable vector spaces with entangled dimensions.
-	In the sense of generative modelling, disentangling factors could as well lead the way from a science of images to a science of imagination \cite{Mahadevan:2018tz}.
+	Thought experiments like \textit{"imagine, how ridiculous you would look, if you wore that hot pants"} are managable tasks for the human imagination, but are out of the league for currently used generative image models \cite{Goodfellow:2014td, Kingma:2013tz}, that typically rely on uninterpretable vector spaces with entangled dimensions.
+	Building imagination machines has been proposed as a goal for artificial intelligence research recently \cite{Mahadevan:2018tz}.
+	To imagine, is to manipulate of an internal model to generate internal images.
+	In this sense, in the context of generative modelling, disentangling factors could as well lead the way from a science of images to a science of imagination.
 
 	% \note{Data-driven algorithms for pattern recognition good recently}
 	% \note{how much and how to incorporate prior knowledge}
@@ -60,42 +36,70 @@
 		% \item Targeted changes $\rightarrow$ thought experiments; not possible for e.g. GAN, VAE\ \textit{"imagine, ..."}\ science of images $\Rightarrow$ science of imagination \cite{Mahadevan:2018tz}.
 	% \end{itemize}
 
-	\section{How not to disentangle?}
-
-
+\section{How not to disentangle.}
 	\begin{figure}[t]
 		\centering
 		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/notcausal}
-		\caption{The image captions are generated by a deep neural network (Neuraltalk2) \cite{karpathy15neuraltalk}. Apart from "common sense" psychology, an understanding in terms of causality is absent \cite{Tenenbaum:2018wm}. Instead, correlating associations are captioned. Human ability to narrate a story needs a causal treatment.}
+		\caption{The image captions are generated by a deep neural network (Neuraltalk2) \cite{karpathy15neuraltalk}. "Common sense" understanding of psychological and physical entities in terms of a causal model is absent \cite{Tenenbaum:2018wm}. Instead, the neural network captions a correlating associations.}
 		\label{fig:notcausal}
 	\end{figure}
-
+	Can machines tell a story? Observe your own mind, when viewing the images shown in Fig. \ref{fig:notcausal}; observe how the human mind immediately interprets and jumps to conclusions, tries to tell itself a story that explains an image, whereas the machine (in this case, NeuralTalk2 \cite{karpathy15neuraltalk}), is comically descriptive in contrast. \note{cite romantic storyteller}
+	The missing "common sense" may be due to a missing causal reasoning, due to a missing disentangled causal representation of the world.
 	But how to learn a disentangled representation from scratch, \ie from raw image data?
-	As we will find out, disentangling causal factors from raw image data, without any side information is impossible theoretically, and can only work based on statistical assumptions.
-	Lets consider an abstract example to illustrate this point:
+	As we will find out \todo{ref to sec}, disentangling causal factors from raw image data, without any side information is impossible theoretically, and can only work based on statistical assumptions. \note{enter bengio 2013}
+	Lets consider an abstract example to enter :
 	Given an image dataset of human persons that has strong variation in the pose and in the appearance of the persons, how to find these two underlying axes of variation (pose, appearance)? Lets suppose the distribution of varation follows a two-dimensional Gaussian distribution, one dimension for pose, one for appearance. The learning algorithm has access to random samples from this distribution. An intelligent data compression algorithm will be able to fit a function from the images to the two-dimensional subspace which explains (by assumption in this example) the varition in the dataset.
 	But are the two dimensions that the algorithms finds disentangled? No. In fact, a linear combination of pose and appearance and its orthogonal complement are equally valid. Just from observing a two-dimensional Gaussian, no meaning will be attached to the axes. In practice, this problem is often circumvented interpolating in the latent space afterwards and determining the axes of interest (here the pose or appearance axis). The meaning of pose and appearance as independent factors comes from the fact, that it is easily possible in the real world to change one factor without the other. A person moving without loosing clothes is a trivial example for that.
-	In summary, on the basis of dataset statistics one cannot disentangle arbitrary causal factor. The information about how to select the axes, \ie which factors separate, is not contained in raw data.
-	\note{statistical}
+	In summary, on the basis of dataset statistics one cannot disentangle arbitrary causal factors. The information about how to select the axes, \ie which factors separate, is not contained in raw data.
+	\todo{statistical}
 	Fitting a model to the data distribution, does in general not yield insights about how the data was generated.
 
-	\section{How can humans disentangle?}
-	Humans have access to richer data, than randomly sampled images from a data set. They observe the world in a temporal sequence, which already reveals a lot about how factors change and persevere across time.
-	Most importantly, humans interact with their environment. And anyone observing a human baby play can affirm that learning humans are obsessed with interaction.
-
-	3. Learning by interacting: knowing change by changing.
-	second rung on causal ladder (Pearl): intervention. (, acting) What happens if I do?
-	P(s, do(a))
-	Others: counterfactual (imagining), association.
-	In humans e.g. egomotion cues: how does image on retina change if I move.
-	\textit{Interaction is crucial.} $\rightarrow$ barometer example: How to find out the causal connection between a barometer and the weather.
-	There cannot be an abstract intelligence, which finds out about the world purely by observation. The intelligence has to interact with the world, it has to be in the world.
-	before this becomes too philosophical
-	infer causation from correlation
-	RCT
+\section{How can humans disentangle?}
+	The dichotomy between humans and machines is constructed, of course, since on a fundamental level humans are machines.
+	\note{explain performance gap lacking reasoning, causal discovery, }
+	But in this context the differing between humans and artificial machines shall refer to the current gap between human and machine learning performance.
+	So, what characteristics or advantages does the human mind have, that are lacking in data-driven machine learning?
 
 
-	\section{How to disentangle?}
+	\emph{Priors.}
+		Whether acquired or inherited, certain inductive priors seem to guide the human learning in its early phases \cite{Tenenbaum:2018wm}.
+		Archetypal knowledge of psychology \todo{(cite Jung)}, a universal grammar for language \todo{(cite Chomsky)} and causal intuitions on everyday physics \todo{(find cite)} are some of the cognitive priors, that could explain the intuitive psychology, the rapid language acquisition and the remarkable causal inference from limited amount of data.
+
+
+	\emph{Data.}
+		Not only quantity, but also quality of data. Machine learning on images is commonly posed as the task to learn from randomly sampled images from a data set. Humans do not perceive the world randomly.
+		To humans, the world appears in a temporal sequence, which reveals how factors change and persevere across time. Instead of focussing on datasets with static images, sampled at random so that the images may have nothing to do with each other, algorithms should use video datasets and harness the rich temporal information.\\
+		Most importantly, humans interact with their environment.
+		That means, humans know change, not only by observing change (as in a temporal sequence), but also by interacting directly: how elements of the world change is known by changing the world.
+		Anyone, who has watched a human infant play, can affirm that the learning mind is obsessed with interaction.
+		Whether consciously by performing controlled experiments or by subconscious cues \todo{cite egomotion paper}: \textit{Interaction is crucial for a learning mind.}
+
+		% causal inference
+		% 3. Learning by interacting: knowing change by changing.
+		% second rung on causal ladder (Pearl): intervention. (, acting) What happens if I do?
+		% P(s, do(a))
+		% Others: counterfactual (imagining), association.
+		% In humans e.g. egomotion cues: how does image on retina change if I move.
+
+	\emph{Models.}
+	% humans what model: imagination: e.g.
+		Humans are able to imagine. That presupposes an internal model of the world, to which specific changes of representational factors can be applied.
+		% So-called dreaming neural networks can distract from the fact that human imagination is make changes to the world that it did not observe.
+		In machine learning, fitting neural network models as functions to approximate datasets has seen tremendous progress recently, to the point, that it is considered a solved problem \todo{cite something, maybe bigGAN etc)}. This progress is mainly due to the effectiveness of neural networks to fit high-dimensional functions. But a probabilistic model to a dataset, however complex and rich, is not a causal model. Even if one were to obtain a probabilistic model over all images the world (one could start with \eg ImageNet \todo{cite imagenet}), this would tell very little about the real-world (causal) relationships between objects.
+		\note{ One could hope for relationships to emerge by data compression alone, but }
+		\note{finding out vectors, latent space a posteriori
+		A step towards intelligence would be to automate the finding of "meaning" in these latent spaces. But meaning has to come from somewhere, and will not emerge from the data itself.}
+
+	What can we learn from these differences? An algorithm to understand the world: should contain useful \textit{prior} assumptions to efficiently use \textit{data} that contains the necessary causal relationships and interactions, to learn a useful \textit{model} of the world.
+
+	% factors are defined by change only
+	% takehome message: \todo{todo}
+		% model causal inference
+		% model model
+		% model interaction
+
+
+\section{How to disentangle?}
 	change factor $\rightarrow$  image change equivariantly, leave others invariant
 	$\rightarrow$  equivariance, invariance
 
@@ -103,23 +107,25 @@
 	Intelligent pattern recognition algorithms, fuelled by sensory data as learning material alone, may ultimately drive the way to a full-blown artificial intelligence, reasoning about the world on its own. - That is the reasoning behind data-driven and assumptionless machine learning approaches that have conquered several research communities.
 	A theoretical objection to driving-only-with-data comes from the causal literature: For an understanding of the world, an algorithm needs to model causal processes, that cause an image to be generated.
 
-	\section{Contributions}
-	In this thesis, two hypotheses are proposed and validated:
-	\textbf{Hypothesis \emph{i)}}: Learning object shape requires abstracting away the objects appearance. This is aided by a disentangled generative modelling of both factors.
-	\textbf{Hypothesis \emph{ii)}}: Learning disentanglement from raw data without any assumptions is fundamentally constrained \cite{Pearl:2018im}. In accordance with the causal literature: disentangling causal factors will need assumptions on causal model and/or interactional data (instead of raw data).
-	\note{need to interact with the world, need to change, need to model physical reality -> image transformations, analyis-by-synthesis}
-	To test these hypotheses, we \textit{explain}, \textit{validate} and \textit{evaluate} a method for unsupervised shape learning, developed by \todo{Lorenz \etal\ 2018}.
+\section{Contributions}
+	This thesis makes two theses:
+	\begin{itemize}
+		\item  \textit{Hypothesis \emph{i)}: Unsupervised learning of object shape benefits from abstracting away the shapes complement, namely the object appearance. Explaining away the appearance factor can be achieved by a disentangled generative modelling of both factors.}
+		\item \textit{Hypothesis \emph{ii)}: Learning unsupervised disentanglement without any assumptions is fundamentally constrained. In accordance with the literature on causal learning (\cite{Pearl:2018im}), disentangling causal factors requires model assumptions and/or interactional data - instead of observational (raw) data.}
+	\end{itemize}
+	% \emph{ii)} Following the need to interact with the world, need to change, need to model physical reality -> image transformations, analyis-by-synthesis}
+	To address these hypotheses, we \textit{explain}, \textit{validate} and \textit{evaluate} a method for unsupervised shape learning: \textit{Unsupervised Part-wise Disentanglement of Shape and Appearance} developed by \todo{Lorenz \etal\ 2018}.
 
 
-	To explain, we give an overview over state-of-the-art disentangling methods, situate the proposed method in relation to these and analyze future directions and important aspects for disentangling causal factors.
+	To \textit{explain}, we give an overview over state-of-the-art unsupervised disentangling literature and situate the proposed method in relation to the literature. In particular, we carve out the necessary aspects of an approach for disentangling causal factors and analyze the current state of research in order to indicate future directions.
 
 
-	To validate, we show that the proposed method outperforms the state-of-the-art for unsupervised learning of object shape on various datasets, featuring human and animal faces and bodies.
-	We also contribute self-made video datasets for disentangling human pose and appearance, for articulated animal motion and for articulated composite objects (pair dancing salsa). We highlight challenges of the different datasets and how the method tackles them.
+	To \textit{validate}, we show that the proposed method outperforms the state-of-the-art for unsupervised learning of object shape on miscellaneous datasets, featuring human and animal faces and bodies.
+	We also contribute several self-made video datasets for disentangling human pose from appearance, for articulated animal motion and for articulated composite objects. We highlight the specific challenges of these datasets and elucidate how the proposed method tackles them.
 
 
-	To evaluate, we perform a ablation studies on critical components of the method. In particular, we compare to a method which does make the goal of disentangling explicit.
-			% may be a petty detail or a simple hack/trick (reconstruction on other image) but makes all the difference in terms of causal information
-	In addition, we evaluate the disentanglement performance against a shape-supervised state-of-the-art disentanglement method and perform favorably, proving that a disentanglement is in fact achieved.
-	In short, the results are an above average performance in unsupervised object shape learning. The first disentanglement of articulated object shape from its appearance.
+	To \textit{evaluate}, we perform ablation studies on critical components of the method. In addition, we compare to a part-wise shape learning method which does make the goal of disentangling explicit.
+	To show that the disentanglement is indeed achieved, we evaluate the disentanglement performance against a shape-supervised state-of-the-art disentanglement method and perform favorably.
 
+
+	In short, our results a big improvement upon the state-of-the-art in unsupervised object shape learning. This confirms the first hypothesis. To complement the learned shape in a generative process, object appearance is disentangled from shape. The achieved disentanglement confirms the second hypothesis.
