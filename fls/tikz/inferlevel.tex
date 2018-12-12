@@ -1,0 +1,22 @@
+\begin{tikzpicture}
+	% Define nodes
+	\node[obs]                               (x) {$\mathbf{x}$};
+	\node[latent, above=of x, xshift=-1.3cm] (z1) {$\mathbf{z_1}$};
+	\node[latent, above=of x, xshift=1.3cm]   (zn) {$\mathbf{z_N}$};
+	\node[latent, above=of x]   (zi) {$\mathbf{z_i}$};
+	\node[auto=false, above=of x, yshift=0.2cm, xshift=0.7cm] (dots) {$\cdots$}  ;
+	\node[auto=false, above=of x, yshift=0.2cm, xshift=-0.6cm] (dots1) {$\cdots$}  ;
+
+	\node[latent, below=of x, xshift=-1.3cm] (ez1) {$\mathbf{\hat z_1}$};
+	\node[latent, below=of x, xshift=1.3cm]   (ezn) {$\mathbf{\hat z_N}$};
+	\node[latent, below=of x]   (ezi) {$\mathbf{\hat z_i}$};
+	\node[auto=false, below=of x, yshift=0.2cm, xshift=0.7cm] (dots2) {$\cdots$}  ;
+	\node[auto=false, below=of x, yshift=0.2cm, xshift=-0.6cm] (dots3) {$\cdots$}  ;
+
+	\edge {z1,zi,zn} {x} ; %
+	\edge {x} {ez1,ezi,ezn} ; %
+	% Plates
+	% \plate {yx} {(x)(y)} {$N$} ;
+	% \plate {} {(w)(y)(yx.north west)(yx.south west)} {$M$} ;
+\end{tikzpicture}
+
