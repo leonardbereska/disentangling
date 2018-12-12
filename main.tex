@@ -18,9 +18,9 @@
 	\usepackage{amsmath}
 	\usepackage{graphicx}
 	\usepackage[english]{babel}
-	\usepackage{natbib}
+	% \usepackage{natbib}
 
-	\usepackage{hyperref}
+	\usepackage[pagebackref=true,breaklinks=true,letterpaper=true,colorlinks,bookmarks=false]{hyperref}
 	\usepackage{csquotes}
 	\usepackage{times}
 	\usepackage{epsfig}
@@ -86,9 +86,10 @@
 	% \chapter{Lists}
 	% \listoffigures
 	% \listoftables
-	\bibliography{frm/mend2}{}
-	\citestyle{egu}
-	\bibliographystyle{plainnat}
+	\bibliography{lib}{}
+	% \citestyle{egu}
+	\bibliographystyle{ieee}
+	% \bibliographystyle{plainnat}
 	% \include{frm/deposition}
 	% \end{appendix}
 \end{document}
