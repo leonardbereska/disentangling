@@ -13,11 +13,11 @@
 		The Achilles' heel of supervised learning lies in the need for a viable supervision signal. To get labels it is usually requiring to manually annotate the data. The human effort in this is costly, error-prone and not scalable to the ever-growing vast amounts of raw data.
 
 	\subsection{Unsupervised}\label{sec:unsupervised}
-		{Unsupervised learning} is the endeavour to learn about structures and patterns in unlabelled data. In this paradigm, the learning algorithm has access to the samples of the data distribution $x \sim p(x)$. The task is usually framed as a form of density estimation, \ie to model the entire distribution in a probabilitstic model (cf. sec. \ref{sec:genmodel}).
+		{Unsupervised learning} is the endeavour to learn about structures and patterns in unlabelled data. In this paradigm, the learning algorithm has access to the samples of the data distribution $x \sim p(x)$. The task is usually framed as a form of density estimation, \ie to model the entire distribution in a probabilistic model (cf. sec. \ref{sec:genmodel}).
 
 		\note{much harder also unspecified}
 		\todo{finish section}
-		connection between unsupervised and supervised learning, cite dlb.
+		connection between unsupervised and supervised learning, \cite{goodfellow16dlb}.
 
 		model-free vs model-based
 		rigid enough to be useful, flexible enough to useful
@@ -47,7 +47,7 @@
 		The components $h_j$ are called hidden units or neurons. Neural networks can also comprise multiple hidden layers via $h_j  =  a (\sum_i w_{ji} h_i + b_i)$.
 		It can be shown theoretically, that in the limit of infinite hidden units $h_j$ they can approximate any (continuous) function arbitrarily close \cite{cybenko89approx} \todo{cite other}.
 		In practice, however, networks with more that one layer, referred to as deep neural networks, seem to work better.
-		\note{feature hierarchy cite{zeiler14vis}}
+		\note{feature hierarchy \cite{zeiler14vis}}
 
 		For processing image data, one constrains the weight matrices to be only locally connected and to share weights across locations to enforce translation invariance, resulting in \textit{convolutional} neural networks.
 
@@ -79,15 +79,15 @@
 		In the current machine learning contexts, all functions ($e, d$) and or moments ($\mu, \Sigma$) are modelled with neural networks.
 
 	\subsection{Adversarial Formulations}\label{sec:adversarial}
-		\textit{Generative Adversarial Networks} (GAN) consist of two neural networks competing in a zero-sum game. A generator network $G$ is generating images based on a latent code $z$ sampled from a distribution $p(z)$. The discriminator network $D$ is a binary classifier with the task to classify an image as originating from the data distribution $p_{data}$ or from the distribution produced by $G$. The loss function of $G$ is the negative of the loss of $D$, such that one can formulate the optimization in a minmax form:
+		\textit{Generative Adversarial Networks} (GAN) \cite{goodfellow14gan} consist of two neural networks competing in a zero-sum game. A generator network $G$ is generating images based on a latent code $z$ sampled from a distribution $p(z)$. The discriminator network $D$ is a binary classifier with the task to classify an image as originating from the data distribution $p_{data}$ or from the distribution produced by $G$. The loss function of $G$ is the negative of the loss of $D$, such that one can formulate the optimization in a minmax form:
 		\begin{equation}
 			% \begin{split}
 				\min_D \max_G - \frac{1}{2} \mathds{E}_{x\sim p_{data}}[\log D(x)] - \frac{1}{2}\mathds{E}_{z\sim p(z)}[\log (1-D(G(z)))]
 			% \end{split}
 		\end{equation}
-		The discriminator can also be interpreted as a learned similarity metric to measure the closeness of an image to the data distribution. \cite{Larsen2015AutoencodingMetric}. The generator is then optimized to make the output indiscriminable from the data distribution.
+		The discriminator can also be interpreted as a learned similarity metric to measure the closeness of an image to the data distribution \cite{larsen15vaegan}. The generator is then optimized to make the output indiscriminable from the data distribution.
 
-		There are many variants and extensions to this basic principle of learning with an adversarial task. For example, one can learn a discriminator on for a set of image patches \cite{Isola2017image}. \note{add triple gan, ...}
+		There are many variants and extensions to this basic principle of learning with an adversarial task. For example, one can learn a discriminator on for a set of image patches \cite{isola17image2image}. \note{add triple gan, ...}
 
 \section{Disentangling Representations}\label{sec:disentangled}
 	In supervised learning, a performance measure is naturally induced by the metric that is being optimized. In the unsupervised setting, judging the performance of a model is less straightforward. For example, when modelling an image domain, one could subjectively rate the quality of the generated image. But even for a qualitative assessment the question arises, how to rate the quality of the latent representation?
@@ -95,10 +95,10 @@
 	\subsection{Learning Representations}
 
 	\begin{quote}
-		{Disentangle as many factors as possible, discarding as little information about the data as is practical.} - \cite{Bengio2013rep} % Y. Bengio, A. Courville and P. Vincent \cite{Bengio2013rep}
+		{Disentangle as many factors as possible, discarding as little information about the data as is practical.} - \cite{bengio13rep} % Y. Bengio, A. Courville and P. Vincent \cite{Bengio2013rep}
 	\end{quote}
 
-	According to \cite{Bengio2013rep} a representation is useful, if it can be applied to many - in advance unknown - different tasks, while being trained on only one particular task.
+	According to \cite{bengio13rep} a representation is useful, if it can be applied to many - in advance unknown - different tasks, while being trained on only one particular task.
 	As the downstream tasks can be multifarious, the essential \textit{information} should be contained in the representation.
 	For some tasks only a subset of aspects of the data will be necessary, that is why \textit{disentangled factors} make a representation particularly practical - so goes their reasoning.\\
 	The latent representation $z$ learned by generative models captures the essential \textit{information} of the data distribution. That is made sure by requiring the ability to generate samples from the original data distribution from it.
@@ -147,19 +147,16 @@
 			\centering
 			\input{fls/tikz/causes.tex}
 			\caption{}
-			\label{fig:s1}
 		\end{subfigure}
 		\begin{subfigure}{0.3\linewidth}
 			\centering
 			\input{fls/tikz/caused.tex}
 			\caption{}
-			\label{fig:s2}
 		\end{subfigure}
 		\begin{subfigure}{0.3\linewidth}
 			\centering
 			\input{fls/tikz/latentcause.tex}
 			\caption{}
-			\label{fig:s2}
 		\end{subfigure}
 		\caption{Correlation implies causation - if $x_1$ and $x_2$ correlate, a) $x_1$ may cause $x_2$,  b) $x_1$ may be caused by $x_2$ or c) both are contingent on a latent cause $z$}
 		\label{fig:reichenbach}
@@ -178,7 +175,7 @@
 
 	lacking the tools to accurately estimate causality, researchers shied away from making causal statement. Developing machines with human-like abilities requires discovery and reasoning in terms of causal models. Recently (in the past 30 years), overshadowed by the prominent success of data-driven deep learning, the field of causality has emerged to mathematical rigor.
 
-	- ladder of causation: association, intervention, counterfactual
+	- ladder of causation: association, intervention, counter-factual
 	- current machine learning mostly on level of association (correlations estimated from "pure" data)
 	-> purely data-driven approach can only go so far
 	humans seem to have innate assumptions on coherence, causality, physics etc. introducing inductive biases
@@ -199,7 +196,7 @@
 
 	example: Gaussian
 	only with access to p(x)
-	hopes to find factors p(a, b) = p(a) p(b) (InfoGAN, BetaVAE)
+	hopes to find factors p(a, b) = p(a) p(b) (\cite{chen16infogan}, \cite{higgins16betavae})
 	what if not full-filled?
 	two-dimensional Gaussian: axis x and y are independent factors.
 	in general any superposition of x and y which is orthogonal, can be found
@@ -215,12 +212,12 @@
 
 	\subsection{Assumptions in Analysis-by-Synthesis}
 		Inverse graphics
-		Capsules, Tieleman
+		Capsules, Tieleman \cite{tieleman14thesis}
 	make model as good as we can implementing as many assumptions as we can and only leave the rest to powerful model
 	Synthesis known, analysis only indirectly by observing cognition
 
 	leaving synthesis to learning from scratch, can meet practical/computational limits \eg\ convolutional neural networks better than fully connected neural models.
-	But can also be ultimately impossible. Modelling synthesis explicitly with a causal model about image generation, by knowledge about the physical world enables answering interventional and counterfactional questions. (mathematically impossible to learn from ''pure'' data alone)
+	But can also be ultimately impossible. Modelling synthesis explicitly with a causal model about image generation, by knowledge about the physical world enables answering interventional and counter-factual questions. (mathematically impossible to learn from ''pure'' data alone)
 
 
 
