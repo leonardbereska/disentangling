@@ -2,8 +2,24 @@
 \chapter{Experiments}
 
 \section{Shape Learning}
+	% \todo{insert figure: input{txt/fig_shape1.tex}}
+	Fig. \ref{fig:shape} visualizes the learned shape representation.
+	To quantitatively evaluate the shape estimation, we measure how well groundtruth landmarks (only during testing) are predicted from it.
+	The part means $\mu[\sigma_i(x)]$ (cf. (\ref{eq:equiv})) serve as our landmark estimates and we measure the error when linearly regressing the human-annotated groundtruth landmarks from our estimates.
+	For this, we follow the protocol of Thewlis \etal \cite{Thewlis:2017wi}, fixing the network weights after training the model, extracting unsupervised landmarks and training a single linear layer without bias.
+	The performance is quantified on a test set by the mean error and the percentage of correct landmarks (PCK).
+	We extensively evaluate our model on a diverse set of datasets, each with specific challenges. An overview over the challenges implied by each dataset is given in Tab. \ref{tab:challenges}.
+	On all datasets we outperform the state-of-the-art by a significant margin.
+
+
 	\subsection{Landmark Discovery}
+		On the object classes of human faces, cat faces, and birds (datasets CelebA, Cat Head, and CUB-200-2011) our model predicts landmarks consistently across different instances, cf. Fig. \ref{fig:kp_mania}.
+		Tab. \ref{tab:static} compares against the state-of-the-art. Due to different breeds and species the Cat Head, CUB-200-2011 exhibit large variations between instances. Especially on these challenging datasets we outperform competing methods by a large margin.
+		Fig. \ref{fig:compare} also provides a direct visual comparison to \cite{Zhang:2018vz} on CUB-200-2011. It becomes evident that our predicted landmarks track the object much more closely. In contrast, \cite{Zhang:2018vz} have learned a slightly deformable, but still rather rigid grid.
+		This is due to their separation constraint, which forces landmarks to be mutually distant. We do not need such a problematic bias in our approach, since the localized, part-based representation and reconstruction guides the shape learning and captures the object and its articulations more closely.
+		% \input{txt/fig_shape2.tex}
 		\subsubsection{Human Faces}
+		\todo{make figures}
 		\subsubsection{Human Bodies}
 		Human, Olympic, Penn
 		\subsubsection{Animal Faces/Bodies}
@@ -15,23 +31,52 @@
 		Dancing pair as object.
 		\subsubsection{Object/Background Separation}
 			Complexly cluttered background is actually favorable for the method. Correlations of object with background will belong to object.
-	\subsection{Transformations}
-	\subsubsection{Parity}
-	birds parity
-	salsa parity
-	\subsubsection{Rotation, Scaling, Translation}
-		on Cats -> black cats different set of KP than rest -> connect these samples via transformation to reach intra-class consistency
-	\subsubsection{Mimicking Appearance}
-	Color, Contrast, Hue
-	\subsection{Natural Changes}
-	Video data: Penn, Own
+		\subsubsection{Object Articulation}
+			Object articulation makes consistent landmark discovery challenging.
+			Fig. \ref{fig:kp_mania} shows that our model exhibits strong landmark consistency under articulation and covers the full human body meaningfully.
+			Even fine-grained parts such as the arms are tracked across heavy body articulations, which are frequent in the Human3.6M and Penn Action datasets.
+			Despite further complications such as viewpoint variations or blurred limbs our model can detect landmarks on Penn Action of similar quality as in the more constrained Human3.6M dataset.
+			Additionally, complex background clutter as in BBC Pose and Penn Action, does not hinder finding the object.
+			Experiments on the Dogs Run dataset underlines that even completely dissimilar dog breeds can be related via semantic parts.
+			Tab. \ref{tab:bbcpose} and Tab. \ref{tab:human} summarize the quantitative evaluations: we outperform other unsupervised and semi-supervised methods by a large margin on both datasets.
+			On Human3.6M, our approach achieves a large performance gain even compared to methods that utilize optical flow supervision.
+			On BBC Pose, we outperform \cite{Jakab:2018wc} by $6.1\%$, reducing the performance gap to supervised methods significantly.
+	\subsection{Effect of Transformations}
+		\note{in this section: effect of transformations on learning, disentangling}
+		\note{effectively connecting samples from the dataset, spreading the}
+		\subsubsection{Parity}
+		birds parity
+		salsa parity
+		\subsubsection{Rotation, Scaling, Translation}
+			on Cats -> black cats different set of KP than rest -> connect these samples via transformation to reach intra-class consistency
+		\subsubsection{Mimicking Appearance}
+		Color, Contrast, Hue
+		\subsection{Natural Changes}
+		Video data: Penn, Own
 \section{Disentangling Generative Factors}
+	Disentangled representations of object shape and appearance allow to alter both properties individually to synthesize new images. The ability to flexibly control the generator allows, for instance, to change the pose of a person or their clothing. In contrast to previous work \cite{Esser:2018ue, Denton:2017uf, Ma:2017uu, Ma:2017wq, deBem:2018wp, Jakab:2018wc},
+	we achieve this ability without requiring supervision \textit{and} using a flexible part-based model instead of a holistic representation. This allows to explicitly control the parts of an object that are to be altered. We quantitatively compare against \emph{supervised} state-of-the-art disentangled synthesis of human figures. Also we qualitatively evaluate our model on unsupervised synthesis of still images, video-to-video translation, and local editing for appearance transfer.
+
+
 	t-SNE of Shape Representation
+	t-SNE of Appearance Representation
 	\subsection{Disentangling Pose and Appearance}
+	On Deep Fashion \cite{Liu:2015vj, Liu:2016vv}, a benchmark dataset for supervised disentangling methods, the task is to separate person ID (appearance) from body pose (shape) and then synthesize new images for previously unseen persons from the test set in eight different poses. We randomly sample the target pose and appearance conditioning from the test set. Fig. \ref{fig:allswaps} shows qualitative results.
+	We quantitatively compare against supervised state-of-the-art disentangling \cite{Esser:2018ue} by evaluating \emph{i)} invariance of appearance against variation in shape by the re-identification error and \emph{ii)} invariance of shape against variation in appearance by the distance in pose between generated and pose target image.
+
 	\subsubsection{ReID}
 	t-SNE of IDs
 	Own, Other (stronger statement)
+	To evaluate appearance we fine-tune an ImageNet-pretrained \cite{Russakovsky2015imagenet} Inception-Net \cite{Szegedy2015inception} with a re-identification (ReID) algorithm \cite{Xiao:2017} via a triplet loss \cite{Hermans:2017} to the Deep Fashion training set.
+	On the generated images we evaluate the standard metrics for ReID, mean average precision (mAP) and rank-1, -5, and -10 accuracy in Tab. \ref{tab:reid}.
+	Although our approach is unsupervised it is competitive compared to the supervised VU-Net \cite{Esser:2018ue}.
+
+
+
 	\subsubsection{Pose}
+	To evaluate shape, we extract keypoints using the pose estimator \cite{Cao:2017vv}. Tab. \ref{tab:pose} reports the difference between generated and pose target in percentage of correct keypoints (PCK). As would be expected, VU-Net performs better, since it is trained with exactly the keypoints of \cite{Cao:2017vv}. Still our approach achieves an impressive PCK without supervision underlining the disentanglement of appearance and shape.
+
+
 	PCK Curve
 	\subsection{Factorizing into Parts}
 		Own Dataset: Move KP
