@@ -110,7 +110,7 @@ def make_bib(bib_name, new_bib_name):
                     new_title = '{'+new_title+'}'
                     new_link = '\href{run:'+new_link+'}'
                     new_title = new_link+new_title
-                    new_title = '\ttitle={}'.format('{'+new_title+'}\n')
+                    new_title = '\ttitle={}'.format('{'+new_title+'},\n')
                     if link is not None:
                         line = new_title
                 f_new.write(line)
