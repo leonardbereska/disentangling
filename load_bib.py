@@ -40,11 +40,13 @@ def save_pdf(link, savename):
         # r = http.request('GET', link)
         # with open(savename, 'wb') as fout:
             # fout.write(r.data)
-
-    bashCommand = "curl -o {} {}".format(savename, link)
-    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
-    print('saved as {}'.format(savename))
+    if osp.exists(savename):
+        print('{} exists already'.format(savename))
+    else:
+        bashCommand = "curl -o {} {}".format(savename, link)
+        process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+        output, error = process.communicate()
+        print('saved as {}'.format(savename))
 
 def get_link(title):
     if title.find('\href')!=-1:
@@ -61,6 +63,8 @@ def load_bib(bib_name):
     curdir = osp.abspath('.')
     bib_path = osp.join(curdir, bib_name)
     print("Path: {}".format(bib_path))
+    print('Creating library..')
+    add_dir('library')
     with open(bib_path, 'r') as f:
         # txt = f.read()
         line = f.readline()
@@ -75,7 +79,6 @@ def load_bib(bib_name):
                 if line.find('title')==1:
                     link = get_link(line)
                     if link is not None:
-                        add_dir('library')
                         savepath = osp.join(curdir, 'library', filename+'.pdf')
                         save_pdf(link, savepath)
                 if (line.find('}')==1):  # end of entry
@@ -117,7 +120,7 @@ def make_bib(bib_name, new_bib_name):
 def main():
     bib_name="lib.bib"
     new_bib_name="lib_new.bib"
-    # load_bib(bib_name)
+    load_bib(bib_name)
     make_bib(bib_name, new_bib_name)
 
 main()
