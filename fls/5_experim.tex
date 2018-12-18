@@ -65,11 +65,11 @@
 		% Dataset & Cat Head &  & MAFL & & CUB\\
 		  % \# Landmarks &10 & 20  & 10 & 30 &10  \\
 		  % \hline
-		 % Thewlis \cite{Thewlis:2017wi}
+		 % Thewlis \cite{thewlis17}
 		 % & 26.76 & 26.94 & 6.32 & 5.76 & -  \\
-		 % Jakab \cite{Jakab:2018wc}
+		 % Jakab \cite{jakab18}
 		 % & - & - & 4.69 & \textbf{3.08} & - \\
-		 % Zhang \cite{Zhang:2018vz}
+		 % Zhang \cite{zhang18}
 		 % & 15.35 & 14.84 & 3.46 & 3.15 & 5.36 \\
 		  % Ours & \textbf{9.88}  & \textbf{9.30} & \textbf{3.24} & 3.11 & \textbf{3.91}  \\ \hline  % image length is 600: 32.15 , 23.51
 		% \end{tabular}
@@ -85,11 +85,11 @@
 		Dataset & Cat Head &  & MAFL & CUB\\
 		  \# Landmarks &10 & 20  & 10 &10  \\
 		  \hline
-		 Thewlis \cite{Thewlis:2017wi}
+		 Thewlis \cite{thewlis17}
 		 & 26.76 & 26.94 & 6.32  & -  \\
-		 Jakab \cite{Jakab:2018wc}
+		 Jakab \cite{jakab18}
 		 & - & - & 4.69 & - \\
-		 Zhang \cite{Zhang:2018vz}
+		 Zhang \cite{zhang18}
 		 & 15.35 & 14.84 & 3.46 & 5.36 \\
 		  Ours & \textbf{9.88}  & \textbf{9.30} & \textbf{3.24} & \textbf{3.91}  \\ \hline  % image length is 600: 32.15 , 23.51
 		\end{tabular}
@@ -97,7 +97,7 @@
 
 	Fig. \ref{fig:shape} visualizes the learned shape representation.
 	To quantitatively evaluate the shape estimation, we measure how well groundtruth landmarks (only during testing) are predicted from it.
-	The part means $\mu[\sigma_i(x)]$ (cf. (\ref{eq:equiv})) serve as our landmark estimates and we measure the error when linearly regressing the human-annotated groundtruth landmarks from our estimates.
+	The part means $\mu[\sigma_i(x)]$ \todo{make compatible with method} serve as our landmark estimates and we measure the error when linearly regressing the human-annotated groundtruth landmarks from our estimates.
 	For this, we follow the protocol of Thewlis \etal \cite{thewlis17}, fixing the network weights after training the model, extracting unsupervised landmarks and training a single linear layer without bias.
 	The performance is quantified on a test set by the mean error and the percentage of correct landmarks (PCK).
 	We extensively evaluate our model on a diverse set of datasets, each with specific challenges. An overview over the challenges implied by each dataset is given in Tab. \ref{tab:challenges}.
@@ -123,11 +123,11 @@
 			\hline
 			BBC Pose &   &    { Accuracy}  \\
 			 \hline
-			supervised & Charles \cite{Charles:2013tb} &
+			supervised & Charles \cite{charles13bbcpose} &
 			   79.9\%  \\ % 79.90
-			 & Pfister \cite{Pfister:2015uo}  &
+			 & Pfister \cite{pfister15flowingconv}  &
 			  88.0\%  \\ \hline % 88.01
-			unsupervised &Jakab \cite{Jakab:2018wc} &
+			unsupervised &Jakab \cite{jakab18} &
 			 68.4\%  \\  % 68.44
 			  &Ours &  \textbf{74.5}\% \\
 			% test pck = 0.7484605918670523
@@ -146,13 +146,13 @@
 			\hline
 			 Human3.6M   & &  { Error w.r.t. image size}  \\
 			 \hline
-			 supervised & Newell \cite{Newell:2016vq}
+			 supervised & Newell \cite{newell16hourglass}
 			  &2.16  \\  \hline
-			 semi-supervised & Zhang \cite{Zhang:2018vz}
+			 semi-supervised & Zhang \cite{zhang18}
 			  & 4.14  \\ \hline
-			 unsupervised & Thewlis \cite{Thewlis:2017wi}
+			 unsupervised & Thewlis \cite{thewlis17}
 			 & 7.51  \\
-			  & Zhang \cite{Zhang:2018vz}
+			  & Zhang \cite{zhang18}
 				& 4.91 \\
 			  & Ours& \textbf{2.79} \\
 			\hline
@@ -195,26 +195,7 @@
 		\subsection{Natural Changes}
 		Video data: Penn, Own
 \section{Disentangling Generative Factors}
-		%
-	% SHOW DISENTANGLING: SHAPE
-	% \begin{figure}[t]\label{fig:shape}
-		% \begin{subfigure}{0.5\textwidth}
-		% \centering
-		% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{mat/shape6white}\caption{}
-		% \label{fig:shape_penn}
-		% \end{subfigure}
-		% \begin{subfigure}{0.5\textwidth}
-		% \centering
-		% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{mat/shape_tennis}\caption{}
-		% \label{fig:shape_tennis}
-		% \end{subfigure}
-		% %\begin{subfigure}{0.5\textwidth}
-		% %\centering
-		% %\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{mat/shape_yoga}\caption{}
-		% %\label{fig:shape_yoga}
-		% %\end{subfigure}
-		% \caption{Shape representation on Penn Action. For visualization, all part activation maps are plotted in one image. (a) Different instances, showing intra-class consistency and (b) a time sequence, showing consistency and smoothness under motion.}
-	% \end{figure}
+		
 	% POSE APPEARANCE SWAP
 	\begin{figure}[t]
 		\centering
@@ -226,23 +207,23 @@
 		\label{fig:allswaps}
 	\end{figure}
 	\begin{table}
-	\caption{Mean average precision (mAP) and rank-n accuracy for person re-identification on synthesized images after performing shape/appearance swap. Input images from Deep Fashion test set. Note \cite{Esser:2018ue} is supervised w.r.t. shape.}
+	\caption{Mean average precision (mAP) and rank-n accuracy for person re-identification on synthesized images after performing shape/appearance swap. Input images from Deep Fashion test set. Note \cite{esser18} is supervised w.r.t. shape.}
 	\label{tab:reid}
 	\begin{tabular}{l|cccr}
 		\hline
 		& mAP & rank-1 & rank-5 & rank-10 \\ \hline
-		VU-Net \cite{Esser:2018ue} & 88.7\% & 87.5\% & {98.7}\% & {99.5}\% \\
+		VU-Net \cite{esser18} & 88.7\% & 87.5\% & {98.7}\% & {99.5}\% \\
 		Ours & {90.3}\% & {89.4}\% &{98.2}\% & {99.2}\% \\ \hline
 	\end{tabular}
 \end{table}
 \begin{table}
-	\caption{Percentage of Correct Keypoints (PCK) for pose estimation on shape/appearance swapped generations.\;$\alpha$ is pixel distance divided by image diagonal. Note that \cite{Esser:2018ue} serves as upper bound, as it uses the groundtruth shape estimates.}
+	\caption{Percentage of Correct Keypoints (PCK) for pose estimation on shape/appearance swapped generations.\;$\alpha$ is pixel distance divided by image diagonal. Note that \cite{esser18} serves as upper bound, as it uses the groundtruth shape estimates.}
 	%shape supervision.}
 	\label{tab:pose}
 	\begin{tabular}{l|cccr}
 		\hline
 		$\alpha$ & $2.5\%$ &  $5\%$ & $7.5\%$ & $10\%$ \\ \hline
-		VU-Net \cite{Esser:2018ue} & {95.2}\% & {98.4}\% & {98.9}\% & {99.1}\% \\
+		VU-Net \cite{esser18} & {95.2}\% & {98.4}\% & {98.9}\% & {99.1}\% \\
 		Ours & 85.6\% & 94.2\% &96.5\% & 97.4\% \\ \hline
 	\end{tabular}
 \end{table}
