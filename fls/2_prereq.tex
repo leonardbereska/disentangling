@@ -9,7 +9,7 @@
 		A supervised algorithm has access to data-label pairs  $(y_i, x_i) \sim p(y, x)$, in order to estimate the connection between data points and labels, either in form of a conditional probability $p(y|x)$, or in form of a deterministic function $y = f(x)$.
 		The label $y$ can be either discrete (\eg information about an object class) or continuous (\eg the location of an object part in an image).
 		\note{insert example for landmarks}
-		Recent advances, in particular the effectiveness of neural network models (cf. sec. \ref{sec:neuralnetworks}) on big datasets, have led to huge progress on problems that can be formulated as regression or classification. That is why On many traditional computer vision problems, such as \eg object recognition, image classification or human pose estimation, machines are now performing on a superhuman level; hence, many supervised problems are now considered to be essentially solved.\\
+		Recent advances, in particular the effectiveness of neural network models (cf. sec. \ref{sec:neuralnetworks}) on big datasets, have led to huge progress on problems that can be formulated as regression or classification. That is why on many traditional computer vision problems, such as \eg object recognition, image classification or human pose estimation, machines are now performing on a superhuman level; hence, many supervised problems are now considered to be essentially solved.\\
 		The Achilles' heel of supervised learning lies in the need for a viable supervision signal. To get labels it is usually requiring to manually annotate the data. The human effort in this is costly, error-prone and not scalable to the ever-growing vast amounts of raw data.
 
 	\subsection{Unsupervised}\label{sec:unsupervised}
@@ -180,7 +180,7 @@
 	-> purely data-driven approach can only go so far
 	humans seem to have innate assumptions on coherence, causality, physics etc. introducing inductive biases
 
-
+	\note{multiple levels of interaction, we consider here only one level}
 	measure: p(x)
 	assume causal model: p(x | a, s)
 	want: p(s) and p(a)
