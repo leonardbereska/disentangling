@@ -8,35 +8,24 @@
 		The term {supervised learning} denotes the task to learn a mapping from data points $x_i$ to target labels $y_i$.
 		A supervised algorithm has access to data-label pairs  $(y_i, x_i) \sim p(y, x)$, in order to estimate the connection between data points and labels, either in form of a conditional probability $p(y|x)$, or in form of a deterministic function $y = f(x)$.
 		The label $y$ can be either discrete (\eg information about an object class) or continuous (\eg the location of an object part in an image).
-		\note{insert example for landmarks}
-		Recent advances, in particular the effectiveness of neural network models (cf. sec. \ref{sec:neuralnetworks}) on big datasets, have led to huge progress on problems that can be formulated as regression or classification. That is why on many traditional computer vision problems, such as \eg object recognition, image classification or human pose estimation, machines are now performing on a superhuman level; hence, many supervised problems are now considered to be essentially solved.\\
-		The Achilles' heel of supervised learning lies in the need for a viable supervision signal. To get labels it is usually requiring to manually annotate the data. The human effort in this is costly, error-prone and not scalable to the ever-growing vast amounts of raw data.
+		Recent advances, in particular the effectiveness of neural network models (cf. sec. \ref{sec:neuralnetworks}) on big datasets, have led to huge progress on problems that can be formulated as regression or classification. That is why on many traditional computer vision problems, such as \eg object recognition, image classification or human pose estimation, machines are now performing on a superhuman level; hence, these problems are now considered to be essentially solved.\\
+		The Achilles' heel of supervised learning lies in the need for a viable supervision signal. To get labels, it is usually required to manually annotate the data. The human effort in this is costly, error-prone and not scalable to the ever-growing vast amounts of raw data.
 
 	\subsection{Unsupervised}\label{sec:unsupervised}
-		{Unsupervised learning} is the endeavour to learn about structures and patterns in unlabelled data. In this paradigm, the learning algorithm has access to the samples of the data distribution $x \sim p(x)$. The task is usually framed as a form of density estimation, \ie to model the entire distribution in a probabilistic model (cf. sec. \ref{sec:genmodel}).
-
-		\note{much harder also unspecified}
-		\todo{finish section}
-		connection between unsupervised and supervised learning, \cite{goodfellow16dlb}.
-
-		model-free vs model-based
-		rigid enough to be useful, flexible enough to useful
-		recently data-driven -> flexible
-
-		limits of unsupervised learning?
-		how much prior modelling should be employ?
-		-> as much as possible as long as it is good? (link post Inference)
-
-		modeling data distribution $p(y, x)$
-		sampling from distribution possible
-		e.g. outlier detection where $p(x)$ has low probability
-
-		\note{talk about data compression}
-		\note{what does unsupervised even mean? no prior assumptions, no knowledge at all? unspecified.. read on this.}
-		\todo{notion of truly unsupervised learning actually harmful to progress, ill-defined -> intro}
+		{Unsupervised learning} is the endeavour to learn about structures and patterns in unlabelled data. In this paradigm, the learning algorithm has access to the samples of the data distribution $x \sim p(x)$. The task is usually framed as a form of density estimation, \ie to model the entire distribution in a probabilistic generative model (cf. sec. \ref{sec:genmodel}).
+		Unsupervised learning is considered much harder than supervised learning. There are several complication in the design of unsupervised algorithms:
+		\begin{itemize}
+			\item Naturally, without supervision, the goal of learning is not specified, hence surrogate objectives have to be formulated. The lack of specification renders the evaluation often arbitrary and subjective\todo{cite evaluation of generative models}.
+			\item It is a priori not clear, how much a priori knowledge should be embedded. To introduce no artificial bias, some argue for a purely data-driven approach. Others argue for the importance of certain inductive priors to guide learning \cite{tenenbaum18think}. A related modeling choice is, if the algorithm should be model-free or model-based\todo{cite huszar article}. \note{In this work we argue for using more prior knowledge and modeling assumptions to obtain strong constraints.}
+		\end{itemize}
+		\todo{connection between unsupervised and supervised learning, \cite{goodfellow16dlb}.}
+		\note{A possible framing of the goal is data compression.}
+		\note{e.g. outlier detection where $p(x)$ has low probability}
+		\note{What does unsupervised even mean? No prior assumptions, no knowledge at all? Unspecified.. read on this.}
+		\note{Notion of truly unsupervised learning is actually harmful to progress.}
 
 	\subsection{Artificial Neural Networks}\label{sec:neuralnetworks}
-		Artificial neural networks are a powerful and flexible tool for function approximation. In their principles they are inspired by biological neural networks. An artificial network is model for a function $y = f(x)$ with vector input $x = \{ x_i | i = 1 \ldots n \}$ and vector output $y = \{ y_j | j = 1 \ldots m \}$:
+		Artificial neural networks are a powerful and flexible tool for function approximation. In their principles they are inspired by biological neurophysiology. An artificial network is a model for a function $y = f(x)$ with vector input $x = \{ x_i | i = 1 \ldots n \}$ and vector output $y = \{ y_j | j = 1 \ldots m \}$:
 		\begin{equation} \label{eq1}
 			\begin{split}
 				h_j & =  a (\sum_i w_{ji} x_i + b_i)  \\
@@ -45,15 +34,12 @@
 		\end{equation},
 		with weight matrices $w, w'$, non-linear so-called activation functions $a, a'$ (\eg $a(x)=0$ for $x<0$, $a(x)=x$ for $x>=0$) and bias vectors $b, b'$.
 		The components $h_j$ are called hidden units or neurons. Neural networks can also comprise multiple hidden layers via $h_j  =  a (\sum_i w_{ji} h_i + b_i)$.
-		It can be shown theoretically, that in the limit of infinite hidden units $h_j$ they can approximate any (continuous) function arbitrarily close \cite{cybenko89approx} \todo{cite other}.
-		In practice, however, networks with more that one layer, referred to as deep neural networks, seem to work better.
-		\note{feature hierarchy \cite{zeiler14vis}}
+		It can be shown, that in the limit of infinite hidden units $h_j$ they can approximate any (continuous) function arbitrarily close \cite{cybenko89approx, hornik91approx}.
+		In practice, however, networks with more that one layer, referred to as deep neural networks, seem to work better. This may be due to the possibility of building a hierarchical feature representation \cite{zeiler14vis}.
 
-		For processing image data, one constrains the weight matrices to be only locally connected and to share weights across locations to enforce translation invariance, resulting in \textit{convolutional} neural networks.
-
-		longstanding model gained hype-status as working together
-		optimization via gradient descent has proven successful (for deep networks called backpropagation)
-		differentiable
+		For processing image data, the weight matrices can be constrained to be only locally connected and to share weights across locations to enforce translation invariance, resulting in \textit{convolutional} neural networks.
+		\note{Optimization via gradient descent has proven successful (for deep networks called backpropagation).}
+		\note{Need to be differentiable, (differentiable programming).}
 
 \section{Generative Models}\label{sec:genmodel}
 	\begin{quote}
@@ -61,8 +47,8 @@
 	\end{quote}
 	Learning and understanding structure in data by being able to generate, is the rationale behind generative modelling.
 	Generative models are mostly applied for unsupervised learning and can be contrasted to discriminative models. While discriminative models are used to model posterior conditionals $p(y|x)$ (\eg for supervised learning (cf. sec. \ref{sec:supervised}), generative models capture the complete data distribution $p(x)$ in an estimate $\hat p(x)$\todo{cite{bishop06ml}}. Thus, after estimation, one can generate samples from this model $\hat p$, hence the name generative model.
-	The currently predominant formulations for learning generative models are built on either autoencoding or adversarial formulations:
-	\note{useful for outlier search}
+	\note{Generative modeling can be used for outlier search, where regions with low probability under the model are taken as indicative for an outlier.}
+	The currently predominant generative models are built on either autoencoding or adversarial formulations:
 
 	\subsection{Autoencoding Formulations}\label{sec:autoencoding}
 		An autoencoding model is learning by reconstructing samples of data, $\hat x = f(x)$. To enforce data compression (otherwise the identity function is a trivial solution of autoencoding) the function has an information bottleneck, namely an inferred latent code $z$ of reduced dimension. The autoencoder is then the chain of an encoding function $z = e(x)$ and a decoding function $\hat x = d(z) = d(e(x))$.
@@ -90,7 +76,7 @@
 		There are many variants and extensions to this basic principle of learning with an adversarial task. For example, one can learn a discriminator on for a set of image patches \cite{isola17image2image}. \note{add triple gan, ...}
 
 \section{Disentangling Representations}\label{sec:disentangled}
-	In supervised learning, a performance measure is naturally induced by the metric that is being optimized. In the unsupervised setting, judging the performance of a model is less straightforward. For example, when modelling an image domain, one could subjectively rate the quality of the generated image. But even for a qualitative assessment the question arises, how to rate the quality of the latent representation?
+	In supervised learning, a performance measure is naturally induced by the metric that is being optimized. In the unsupervised setting, judging the performance of a model is less straightforward. For example, when modelling an image domain, one could subjectively rate the quality of the generated image. \todo{introduce latent representation in data compression framing }But even for a qualitative assessment the question arises, how to rate the quality of the latent representation?
 
 	\subsection{Learning Representations}
 
