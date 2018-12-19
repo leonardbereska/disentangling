@@ -13,7 +13,7 @@
 
 	\subsection{Unsupervised}\label{sec:unsupervised}
 		{Unsupervised learning} is the endeavour to learn about structures and patterns in unlabelled data. In this paradigm, the learning algorithm has access to the samples of the data distribution $x \sim p(x)$. The task is usually framed as a form of density estimation, \ie to model the entire distribution in a probabilistic generative model (cf. sec. \ref{sec:genmodel}).
-		Unsupervised learning is considered much harder than supervised learning. There are several complication in the design of unsupervised algorithms:
+		Unsupervised learning is considered much harder than supervised learning. There are several complications in the design of unsupervised algorithms:
 		\begin{itemize}
 			\item Naturally, without supervision, the goal of learning is not specified, hence surrogate objectives have to be formulated. The lack of specification renders the evaluation often arbitrary and subjective\todo{cite evaluation of generative models}.
 			\item It is a priori not clear, how much a priori knowledge should be embedded. To introduce no artificial bias, some argue for a purely data-driven approach. Others argue for the importance of certain inductive priors to guide learning \cite{tenenbaum18think}. A related modeling choice is, if the algorithm should be model-free or model-based\todo{cite huszar article}. \note{In this work we argue for using more prior knowledge and modeling assumptions to obtain strong constraints.}
@@ -46,7 +46,7 @@
 	    What I cannot create, I do not understand. - R. Feynman
 	\end{quote}
 	Learning and understanding structure in data by being able to generate, is the rationale behind generative modelling.
-	Generative models are mostly applied for unsupervised learning and can be contrasted to discriminative models. While discriminative models are used to model posterior conditionals $p(y|x)$ (\eg for supervised learning (cf. sec. \ref{sec:supervised}), generative models capture the complete data distribution $p(x)$ in an estimate $\hat p(x)$\todo{cite{bishop06ml}}. Thus, after estimation, one can generate samples from this model $\hat p$, hence the name generative model.
+	Generative models are mostly applied for unsupervised learning and can be contrasted to discriminative models. While discriminative models are used to model posterior conditionals $p(y|x)$ (\eg for supervised learning (cf. sec. \ref{sec:supervised}), generative models capture the complete data distribution $p(x)$ in an estimate $\hat p(x)$\todo{cite{bishop06ml}}. Thus, after estimation, one can generate samples from this model $\hat p$. Hence the name generative model.
 	\note{Generative modeling can be used for outlier search, where regions with low probability under the model are taken as indicative for an outlier.}
 	The currently predominant generative models are built on either autoencoding or adversarial formulations:
 
@@ -71,35 +71,33 @@
 				\min_D \max_G - \frac{1}{2} \mathds{E}_{x\sim p_{data}}[\log D(x)] - \frac{1}{2}\mathds{E}_{z\sim p(z)}[\log (1-D(G(z)))]
 			% \end{split}
 		\end{equation}
-		The discriminator can also be interpreted as a learned similarity metric to measure the closeness of an image to the data distribution \cite{larsen15vaegan}. The generator is then optimized to make the output indiscriminable from the data distribution.
-
+		The generator is then optimized to make the output indiscriminable from the data distribution.
+		The discriminator can be interpreted as a learned similarity metric, to measure the closeness of an image to the data distribution \cite{larsen15vaegan}.
 		There are many variants and extensions to this basic principle of learning with an adversarial task. For example, one can learn a discriminator on for a set of image patches \cite{isola17image2image}. \note{add triple gan, ...}
 
 \section{Disentangling Representations}\label{sec:disentangled}
-	In supervised learning, a performance measure is naturally induced by the metric that is being optimized. In the unsupervised setting, judging the performance of a model is less straightforward. For example, when modelling an image domain, one could subjectively rate the quality of the generated image. \todo{introduce latent representation in data compression framing }But even for a qualitative assessment the question arises, how to rate the quality of the latent representation?
+	In supervised learning, a performance measure is naturally induced by the metric that is being optimized. In the unsupervised setting, judging the performance of a model is less straightforward. For example, when modelling an image domain, one could subjectively rate the quality of the generated image. \todo{introduce latent representation in data compression framing } How to rate the quality of the latent representation?
 
 	\subsection{Learning Representations}
 
 	\begin{quote}
-		{Disentangle as many factors as possible, discarding as little information about the data as is practical.} - \cite{bengio13rep} % Y. Bengio, A. Courville and P. Vincent \cite{Bengio2013rep}
+		{Disentangle as many factors as possible, discarding as little information about the data as is practical.} - Bengio \etal \cite{bengio13rep} % Y. Bengio, A. Courville and P. Vincent \cite{Bengio2013rep}
 	\end{quote}
 
-	According to \cite{bengio13rep} a representation is useful, if it can be applied to many - in advance unknown - different tasks, while being trained on only one particular task.
+	According to Bengio \etal \cite{bengio13rep},  a representation is useful, if it can be applied to many - in advance unknown - different tasks, while being trained on only one particular task.
 	As the downstream tasks can be multifarious, the essential \textit{information} should be contained in the representation.
-	For some tasks only a subset of aspects of the data will be necessary, that is why \textit{disentangled factors} make a representation particularly practical - so goes their reasoning.\\
+	For some tasks only a subset of aspects of the data will be necessary, that is why \textit{disentangled factors} make a representation particularly practical.\\
 	The latent representation $z$ learned by generative models captures the essential \textit{information} of the data distribution. That is made sure by requiring the ability to generate samples from the original data distribution from it.
-	How then to reach the second goal, the \textit{disentanglement} of generative factors:
+	How then to reach the second goal, the \textit{disentanglement} of generative factors?
 
-	\subsection{Disentangling as Equivariance and Invariance}
-		The
-		definition of factor by change static ...
-		factors should represent elements of real world
-
-		- change in element -> corresponding change in representational factor
-		- leave other factors representing other elements invariant
-
-		Formally, this can be posed as an inference problem: a number of latent variables $\mathbf{z_1}\ldots\mathbf{z_N}$ has interacted in certain ways to cause the existence of the observed image $\mathbf{x}$. An inference algorithm aims at recovering these latent variables from the observation, \ie the image. These recoveries can be seen as estimates $\mathbf{\hat z_i}$ for - or a representation of - the true latent variables $\mathbf{z_i}$. A graphical model of the process is shown in figure \ref{fig:infer}.
-		A disentangled representation should then represent each causal element and its state independently: A change in the real causal element $\mathbf{z_i}$ should correspond to an equivalent change in the abstract representational factor $\mathbf{\hat z_i}$, while leaving the other factors $\mathbf{\hat z_j}, j\neq i$, that represent other causes, unchanged.
+	\subsection{Disentangling by Equivariance and Invariance}
+		What is a factor? As outlined in the introduction (cf. sec. \ref{sec:intro}), factors in a representation should correspond to elements of the world. A change in an element in the world, should then lead to:
+		\begin{itemize}
+			\item a corresponding change in the representational factor
+			\item and leave other factors, that represent other elements, unchanged.
+		\end{itemize}
+		Formally, to reach such a representation, can be posed as an inference problem: a number of latent variables $\mathbf{z_1}\ldots\mathbf{z_N}$ has interacted in certain ways to cause the existence of the observed image $\mathbf{x}$. An inference algorithm aims at recovering these latent variables from the observation, \ie the image. These recoveries can be seen as estimates $\mathbf{\hat z_i}$ for - or a representation of - the true latent variables $\mathbf{z_i}$. A graphical model of the process is shown in figure \ref{fig:infer}.
+		A disentangled representation should then simultaneously full-fill equivariance and invariance of factors and elements. A change in $\mathbf{z_i}$ should \textit{equivariantly} change in the abstract representational factor $\mathbf{\hat z_i}$, while leaving the other factors $\mathbf{\hat z_j}, j\neq i$, that represent other causes, \textit{invariant}.
 
 		\begin{figure}[ht]
 			\centering
@@ -107,9 +105,9 @@
 			\caption{Disentangling causal factors means to infer an estimate - \ie a representation - from an image}
 			\label{fig:infer}
 		\end{figure}
-		mathematically,..
-		$f \circ g (x) = ... $
-
+		\todo{mathematically,.. $f \circ g (x) = ... $}
+		This is already assuming a certain causal model. The latent factor could interact differently e.g. }
+		\todo{draw arbitrary causal}
 
 \section{Theoretical Impediments from Causality}\label{sec:causality}
  	\note{factors are causal}
@@ -207,4 +205,4 @@
 
 
 
-\section{Object Shape and Appearance}
+% \section{Object Shape and Appearance}
