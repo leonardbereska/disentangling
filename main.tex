@@ -41,6 +41,9 @@
 	\newcommand\todo[1]{\textcolor{red}{#1}}
 	\renewcommand\todo[1]{}
 
+	\newcommand\toread[1]{\textcolor{green}{#1}}
+	\renewcommand\toread[1]{}
+
 	\newcommand\expr[1]{\textcolor{red}{#1}}
 	\renewcommand\expr[1]{}
 
@@ -75,26 +78,26 @@
 	\tableofcontents
 	\newpage
 
-	% \input{fls/1_intro.tex}
+	\input{fls/1_intro.tex}
 	\input{fls/2_prereq.tex}
-	% \input{fls/3_literat.tex}
-	% \input{fls/4_method.tex}
-	% \input{fls/5_experim.tex}
-	% \input{fls/6_discuss.tex}
+	\input{fls/3_literat.tex}
+	\input{fls/4_method.tex}
+	\input{fls/5_experim.tex}
+	\input{fls/6_discuss.tex}
 
 	% \input{fls/0_contrib.tex}
-	\part{Appendix}
-	\begin{appendix}
-	\chapter{Datasets}
-	\input{fls/7_datasets.tex}
-	\chapter{Lists}
-	\listoffigures
-	\listoftables
+	% \part{Appendix}
+	% \begin{appendix}
+	% \chapter{Dataset Preprocessing}
+	% \input{fls/7_datasets.tex}
+	% \chapter{Lists}
+	% \listoffigures
+	% \listoftables
 	\bibliography{lib_new}{}
 	% \citestyle{egu}
 	% \bibliographystyle{ieee}
 	\bibliographystyle{unsrt}
 	% \bibliographystyle{plainnat}
 	% \include{frm/deposition}
-	\end{appendix}
+	% \end{appendix}
 \end{document}

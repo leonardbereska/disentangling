@@ -1,53 +1,34 @@
 %&tex
 % \chapter{Literature Review: Disentangling}
-\chapter{Analysis of Literature on Disentangling}
+\chapter{Analysis of Literature on Disentangling}\label{sec:literature}
+	% \note{Goal of this section: analyse disentangling (with causal insights, situatate method within this
+	In the following, we analyze the computer vision literature on disentangling generative factors \wrt the causal inference insights (cf. sec. \ref{sec:causality}.
+	In this thesis the focus is on disentangling the factors of object shape and appearance and therefore we also review the unsupervised shape learning.
+	\note{focusing on factors makes sense, because arbitrary factors impossible (cite schoelkopf)}
+	\todo{research for papers connecting disentangling and causality}
+	\todo{read schoelkopf}
 
-\todo{research for papers connecting disentangling and causality}
 
-\section{Learning Object Shape}
-for estimating shape $s$ from images $x$ the task is
-$p(s|x)$
-representation of shape can be landmarks
-
-
-Disentangling generative factors definition
-model-free vs model-based approaches:
-\begin{itemize}
-	\item model-based $\rightarrow$ more flexible, transferable, modular combination (like parts)
-\end{itemize}
-parts as regional attention (cite attention paper)
-parts/compositionality is key to creativity -> new combination of known parts
-
-% link to causality: ladder of causal reasoning needs intervention
 
 \section{Analysis-by-Synthesis}
-	Capsules, Tieleman \cite{tieleman14thesis}
-	make model as good as we can implementing as many assumptions as we can and only leave the rest to powerful model
-	Synthesis known, analysis only indirectly by observing cognition
-
-	leaving synthesis to learning from scratch, can meet practical/computational limits \eg\ convolutional neural networks better than fully connected neural models.
-	But can also be ultimately impossible. Modelling synthesis explicitly with a causal model about image generation, by knowledge about the physical world enables answering interventional and counterfactual questions. (mathematically impossible to learn from ''pure'' data alone)
-
-% \section{Causal Learning}
-	% Pearl
-	% Ladder of Causation: rung one seen, rung two seeable, rung three cannot be seen.
-	% Barometer example, best neural network will not know -> theoretical proof (look up in Pearl) -> need interaction with the world / or causal assumptions.
+	\toread{Tieleman, Capsules}
+	\todo{write section}
+	% Capsules, Tieleman \cite{tieleman14thesis}
+	% make model as good as we can implementing as many assumptions as we can and only leave the rest to powerful model
+	% Synthesis known, analysis only indirectly by observing cognition
+	% Yilderim
 
 \section{Disentangled Generative Models}
-	% In order to gain a conceptual understanding of the world, disentangling the underlying factors of variation is a crucial step, as has been argued in numerous works,~\cite{Desjardins2012dr, Bengio2013rep, Chen2016infogan, Higgins2016betavae, Eastwood2018dr}.
-	% %
-	Capturing essential information about data in a representation by being able to generate it is the rationale behind generative modelling. Currently the approaches in this direction are defined by adversarial \cite{goodfellow16dlb} and autoencoding \cite{kingma13vae} model formulations. Recently, the endeavour for disentangling explanatory factors in the latent representation is being made explicit in the objective functions \cite{burgess18betavae, chen16infogan} of these models. So far, however, these attempts are limited to rigid objects without articulation and disentangle holistic image factors like illumination, object rotation or total shape and global appearance. \cite{denton17disvideo} \ % TODO ref disentangling models % TODO capsules
-
-\section{Disentangling Shape and Appearance}
-	Factorizing an object representation into shape and appearance is a popular ansatz for representation learning.
-	Recently, a lot of progress has been made in this direction by conditioning generative models on shape information \cite{esser18, ma17poseguided, debem18dgpose, ma17disperson, siarohin18deformgan, balakrishnan18unseenposes}.
-	While most of them explain the object holistically, only few also introduce a factorization into parts \cite{siarohin18deformgan, balakrishnan18unseenposes}.
-	In contrast to these shape-supervised approaches, we learn both shape and appearance without any supervision.
-
-	For unsupervised disentangling, several generative frameworks have been proposed ~\cite{higgins16betavae, chen16infogan, li18analogy, denton17disvideo, shu18shapeappear, xing18shapeappear}.
-	However, these works use holistic models and show results on rather rigid objects and simple datasets, while we explicitly tackle strong articulation with a part-based formulation.
+	In order to gain a conceptual understanding of the world, disentangling the underlying factors of variation is a crucial step, as has been argued in numerous works,~\cite{Desjardins2012dr, Bengio2013rep, Chen2016infogan, Higgins2016betavae, Eastwood2018dr}. \todo{fix reference}
+	% Capturing essential information about data in a representation by being able to generate it is the rationale behind generative modelling.
+	% Currently the approaches in this direction are defined by adversarial \cite{goodfellow16dlb} and autoencoding \cite{kingma13vae} model formulations.
+	Recently, the endeavour for disentangling explanatory factors in the latent representation of generative models is being made explicit in the objective functions \cite{burgess18betavae, chen16infogan} of these models. So far, however, these attempts are limited to rigid objects without articulation and disentangle holistic image factors like illumination, object rotation or total shape and global appearance. \cite{denton17disvideo} \ % TODO ref disentangling models % TODO capsules
 
 \section{Part-based Representation Learning}
+	\note{parts as regional attention (cite attention paper)}
+	\note{parts/compositionality is key to creativity -> new combination of known parts}
+
+
 	Describing an object as an assembly of parts is a classical paradigm for learning an object representation in computer vision \cite{ross06parts} with linkage to human perceptual theories \cite{biederman87recognition}.
 	What constitutes a part, is the defining question in this scheme.
 	Defining parts by e.g. (\emph{i}) visual/semantic features (object detection), or by (\emph{ii}) geometric shape, behavior under (\emph{iii}) viewpoint changes or (\emph{iv}) object articulation, in general leads to a different partition of the object.
@@ -56,8 +37,13 @@ parts/compositionality is key to creativity -> new combination of known parts
 	To solve such a discriminative task, parts will be based on the semantic connection to the object and can ignore their spatial arrangement and articulation of the object instance. Our method instead is driven by a generative process and aims at more generic modeling of the object as a whole. Hence, parts have to encode both spatial structure and visual appearance accurately. To our best knowledge unsupervised part learning and the proposed split in shape and appearance description for a part has only been used in pre-deep learning approaches \cite{ross06parts, nguyen13nonnegative, cootes98activeappear}.
 
 
-\section{Landmark Learning}
-	There is an extensive literature on landmarks as compact representations of object structure.
+% \section{Landmark Learning}
+\section{Unsupervised Learning of Object Shape}
+	\note{for estimating shape $s$ from images $x$ the task is
+	$p(s|x)$}
+	\note{representation of shape can be landmarks}
+
+	There is an extensive literature on landmarks as compact representations of object shape.
 	Most approaches, however, make use of manual landmark annotations as supervision signal. Landmark learning has been applied to human faces \cite{wu17faceocclu, ranjan16hyperface, yu16deform, zhang16facealign, zhu15facecoarse, zhang14facemultitask, pedersoli14facedeform} and bodies \cite{ionescu11posestructured, toshev14deeppose, pfister15flowingconv, wei16posemachine, newell16hourglass, lim18posetransform, cao17affinityfield}.
 
 	To tackle the problem without supervision, Thewlis \etal \cite{thewlis17} proposed enforcing equivariance of landmark locations under artificial transformations of images. The equivariance idea had been formulated in earlier work \cite{lenc16covariant} and has since been extended to learn a dense object-centric coordinate frame \cite{thewlis17dense}. However, enforcing only equivariance encourages consistent landmarks at %easily
@@ -95,3 +81,14 @@ parts/compositionality is key to creativity -> new combination of known parts
 	% Thus, parts are learned which meaningfully capture the variance in shape as well as in appearance of an object class.
     %In contrast to all these works (\cite{Thewlis:2017wi, Zhang:2018vz, Jakab:2018wc}) we take the extend of parts into account when formulation the equivariance constraint.
     % In addition, we make the goal of disentangling shape and appearance on a part based level explicit with our formulation and show quantitative results on this.
+
+\section{Disentangling Shape and Appearance}
+	Factorizing an object representation into shape and appearance is a popular ansatz for representation learning.
+	Recently, a lot of progress has been made in this direction by conditioning generative models on shape information \cite{esser18, ma17poseguided, debem18dgpose, ma17disperson, siarohin18deformgan, balakrishnan18unseenposes}.
+	While most of them explain the object holistically, only few also introduce a factorization into parts \cite{siarohin18deformgan, balakrishnan18unseenposes}.
+	In contrast to these shape-supervised approaches, we learn both shape and appearance without any supervision.
+
+	For unsupervised disentangling, several generative frameworks have been proposed ~\cite{higgins16betavae, chen16infogan, li18analogy, denton17disvideo, shu18shapeappear, xing18shapeappear}.
+	However, these works use holistic models and show results on rather rigid objects and simple datasets, while we explicitly tackle strong articulation with a part-based formulation.
+
+
