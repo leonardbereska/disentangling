@@ -2,6 +2,7 @@
 \chapter{Experiments}
 %
 \begin{table}
+	\centering
 	\caption{Difficulties of datasets: articulation, intra-class variance, background clutter and viewpoint variation}
 	\label{tab:challenges}
 	\begin{tabular}{l|rrrr}
@@ -41,7 +42,7 @@
 	% SHOW DISCOVERY
 	\begin{figure}[htp]
 		\centering
-		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/kp_mania}
+		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=.6\linewidth]{fig/kp_mania}
 		\caption{{Unsupervised discovery of landmarks on diverse object classes such as human or cat faces and birds and for highly articulated human bodies and running dogs.}}
 		%(from CelebA, CUB-200-2011 and Cat Head)
 		% and on articulated objects such as human bodies and running dogs.}}
@@ -50,7 +51,7 @@
 	\end{figure}
 	\begin{figure}[htp]
 		\centering
-		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/birds1x3}
+		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=.7\linewidth]{fig/birds1x3}
 		\caption{Comparing discovered keypoints against \cite{zhang18} on CUB-200-2011. We improve on object coverage and landmark consistency. Note our flexible part placement compared to a rather rigid placement of \cite{zhang18} due to their part separation bias.}
 		\label{fig:compare}
 	\end{figure}
@@ -195,48 +196,52 @@
 		\subsection{Natural Changes}
 		Video data: Penn, Own
 \section{Disentangling Generative Factors}
-		
+
 	% POSE APPEARANCE SWAP
 	\begin{figure}[t]
 		\centering
-		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/swappy}
+		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=.7\linewidth]{fig/swappy}
 		\caption{Transferring shape and appearance on Deep Fashion. Without annotation the model estimates shape, 2nd column. Target appearance is extracted from images in top row to synthesize images. Note that we trained without image pairs only using synthetic transformations.
 		%for training we had no image pairs but only synthetic transformations.
 		%without being explicitly trained for this task.
 		All images are from test set.}
 		\label{fig:allswaps}
 	\end{figure}
+
 	\begin{table}
-	\caption{Mean average precision (mAP) and rank-n accuracy for person re-identification on synthesized images after performing shape/appearance swap. Input images from Deep Fashion test set. Note \cite{esser18} is supervised w.r.t. shape.}
-	\label{tab:reid}
-	\begin{tabular}{l|cccr}
-		\hline
-		& mAP & rank-1 & rank-5 & rank-10 \\ \hline
-		VU-Net \cite{esser18} & 88.7\% & 87.5\% & {98.7}\% & {99.5}\% \\
-		Ours & {90.3}\% & {89.4}\% &{98.2}\% & {99.2}\% \\ \hline
-	\end{tabular}
-\end{table}
-\begin{table}
-	\caption{Percentage of Correct Keypoints (PCK) for pose estimation on shape/appearance swapped generations.\;$\alpha$ is pixel distance divided by image diagonal. Note that \cite{esser18} serves as upper bound, as it uses the groundtruth shape estimates.}
-	%shape supervision.}
-	\label{tab:pose}
-	\begin{tabular}{l|cccr}
-		\hline
-		$\alpha$ & $2.5\%$ &  $5\%$ & $7.5\%$ & $10\%$ \\ \hline
-		VU-Net \cite{esser18} & {95.2}\% & {98.4}\% & {98.9}\% & {99.1}\% \\
-		Ours & 85.6\% & 94.2\% &96.5\% & 97.4\% \\ \hline
-	\end{tabular}
-\end{table}
-% BBC THUMB
-%
-\begin{figure}[t]
-	\centering
-	\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/bbcthumb}
-	\caption{Video-to-video translation on BBC Pose. Top-row: target appearances, left: target pose.
-	%The target appearances are from the train set, while the target pose is from the test set.
-	Note that even fine details in shape are accurately captured. See supplementary for videos.}
-	\label{fig:bbcthumb}
-\end{figure}
+		\centering
+		\caption{Mean average precision (mAP) and rank-n accuracy for person re-identification on synthesized images after performing shape/appearance swap. Input images from Deep Fashion test set. Note \cite{esser18} is supervised w.r.t. shape.}
+		\label{tab:reid}
+		\begin{tabular}{l|cccr}
+			\hline
+			& mAP & rank-1 & rank-5 & rank-10 \\ \hline
+			VU-Net \cite{esser18} & 88.7\% & 87.5\% & {98.7}\% & {99.5}\% \\
+			Ours & {90.3}\% & {89.4}\% &{98.2}\% & {99.2}\% \\ \hline
+		\end{tabular}
+	\end{table}
+	\begin{table}
+		\centering
+		\caption{Percentage of Correct Keypoints (PCK) for pose estimation on shape/appearance swapped generations.\;$\alpha$ is pixel distance divided by image diagonal. Note that \cite{esser18} serves as upper bound, as it uses the groundtruth shape estimates.}
+		%shape supervision.}
+		\label{tab:pose}
+		\begin{tabular}{l|cccr}
+			\hline
+			$\alpha$ & $2.5\%$ &  $5\%$ & $7.5\%$ & $10\%$ \\ \hline
+			VU-Net \cite{esser18} & {95.2}\% & {98.4}\% & {98.9}\% & {99.1}\% \\
+			Ours & 85.6\% & 94.2\% &96.5\% & 97.4\% \\ \hline
+		\end{tabular}
+	\end{table}
+
+	% BBC THUMB
+
+	\begin{figure}[t]
+		\centering
+		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=.7\linewidth]{fig/bbcthumb}
+		\caption{Video-to-video translation on BBC Pose. Top-row: target appearances, left: target pose.
+		%The target appearances are from the train set, while the target pose is from the test set.
+		Note that even fine details in shape are accurately captured. See supplementary for videos.}
+		\label{fig:bbcthumb}
+	\end{figure}
 
 	Disentangled representations of object shape and appearance allow to alter both properties individually to synthesize new images. The ability to flexibly control the generator allows, for instance, to change the pose of a person or their clothing. In contrast to previous work \cite{esser18, denton17disvideo, ma17poseguided, ma17disperson, debem18dgpose, jakab18},
 	we achieve this ability without requiring supervision \textit{and} using a flexible part-based model instead of a holistic representation. This allows to explicitly control the parts of an object that are to be altered. We quantitatively compare against \emph{supervised} state-of-the-art disentangled synthesis of human figures. Also we qualitatively evaluate our model on unsupervised synthesis of still images, video-to-video translation, and local editing for appearance transfer.
@@ -253,38 +258,41 @@
 	We quantitatively compare against supervised state-of-the-art disentangling \cite{esser18} by evaluating \emph{i)} invariance of appearance against variation in shape by the re-identification error and \emph{ii)} invariance of shape against variation in appearance by the distance in pose between generated and pose target image.
 
 	\subsubsection{ReID}
-	t-SNE of IDs
-	Own, Other (stronger statement)
+	\begin{itemize}
+		\item t-SNE of IDs
+		\item Own, Other (stronger statement)
+	\end{itemize}
 	To evaluate appearance we fine-tune an ImageNet-pretrained \cite{russakovsky15imagenet} Inception-Net \cite{szegedy15inception} with a re-identification (ReID) algorithm \cite{xiao17reidjoint} via a triplet loss \cite{hermans17reidtriplet} to the Deep Fashion training set.
 	On the generated images we evaluate the standard metrics for ReID, mean average precision (mAP) and rank-1, -5, and -10 accuracy in Tab. \ref{tab:reid}.
 	Although our approach is unsupervised it is competitive compared to the supervised VU-Net \cite{esser18}.
 
 
-
 	\subsubsection{Pose}
 	To evaluate shape, we extract keypoints using the pose estimator \cite{cao17affinityfield}. Tab. \ref{tab:pose} reports the difference between generated and pose target in percentage of correct keypoints (PCK). As would be expected, VU-Net performs better, since it is trained with exactly the keypoints of \cite{cao17affinityfield}. Still our approach achieves an impressive PCK without supervision underlining the disentanglement of appearance and shape.
 
+	\begin{itemize}
+		\item PCK Curve
+	\end{itemize}
 
-	PCK Curve
 	\subsection{Factorizing into Parts}
 	% PART SWAPS
 	\begin{figure}[t]
-		\begin{subfigure}{0.49\linewidth}
+		\begin{subfigure}{0.24\linewidth}
 		\centering
 		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/part_head}\caption{}
 		\label{fig:part3_00}
 		\end{subfigure}
-		\begin{subfigure}{0.49\linewidth}
+		\begin{subfigure}{0.24\linewidth}
 		\centering
 		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/part_body}\caption{}
 		\label{fig:part3_11}
 		\end{subfigure}
-		\begin{subfigure}{0.49\linewidth}
+		\begin{subfigure}{0.24\linewidth}
 		\centering
 		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/part_legs}\caption{}
 		\label{fig:part3_21}
 		\end{subfigure}
-		\begin{subfigure}{0.49\linewidth}
+		\begin{subfigure}{0.24\linewidth}
 		\centering
 		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/part_shoe}\caption{}
 		\label{fig:part3_30}
@@ -292,8 +300,11 @@
 		\caption{Swapping part appearance on Deep Fashion. Appearances can be exchanged for parts individually and without altering shape. We show part-wise swaps for (a) head (b) torso (c) legs, (d) shoes. All images are from the test set.}
 		\label{fig:partswaps}
 	\end{figure}
-		Own Dataset: Move KP
-		DeepFashion: exchange parts
+	\begin{itemize}
+		\item Own Dataset: Move KP
+		\item DeepFashion: exchange parts
+	\end{itemize}
+
 \section{Follow-Up}
 	\begin{itemize}
 		\item make generative:(KP distribution estimation, variational features).
