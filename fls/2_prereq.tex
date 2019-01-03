@@ -17,7 +17,7 @@
 		\begin{itemize}
 			\item Naturally, without supervision, the goal of learning is not specified, hence surrogate objectives have to be formulated. The lack of specification renders the evaluation often arbitrary and subjective\todo{cite evaluation of generative models}.
 			\item It is a priori not clear, how much a priori knowledge should be embedded. To introduce no artificial bias, some argue for a purely data-driven approach. Others argue for the importance of certain inductive priors to guide learning \cite{tenenbaum18think}.
-			A related modeling choice is, if the algorithm should be model-free or model-based\todo{cite huszar article}.
+			A related modeling choice is, if the algorithm should be model-free or model-based\todo{ cite huszar article}.
 			\note{model-free vs model-based approaches:}
 			\note{model-based $\rightarrow$ more flexible, transferable, allows for modular combination (like parts)}
 
@@ -80,7 +80,7 @@
 		\end{equation}
 		The generator is then optimized to make the output indiscriminable from the data distribution.
 		The discriminator can be interpreted as a learned similarity metric, to measure the closeness of an image to the data distribution \cite{larsen15vaegan}.
-		There are many variants and extensions to this basic principle of learning with an adversarial task. For example, one can learn a discriminator on for a set of image patches \cite{isola17image2image}. \note{add triple gan, ...}
+		There are many variants and extensions to this basic principle of learning with an adversarial task. For example, one can learn a discriminator on for a set of image patches \cite{isola17image2image}.
 
 \section{Disentangling Representations}\label{sec:disentangled}
 	In supervised learning, a performance measure is naturally induced by the metric, that is being optimized. In the unsupervised setting, judging the performance of a model is less straightforward.
@@ -102,10 +102,10 @@
 
 	\subsection{Disentangling by Equivariance and Invariance}
 		What is a factor? As outlined in the introduction (cf. sec. \ref{sec:intro}), factors in a representation should correspond to elements of the world.
-		\note{In general, these factors can interact in complicated ways to finally result in an image (cf. Fig. \ref{}). Here, we only consider the case where multiple independent factors each have an influence (cf. Fig. \ref{fig:inferlevel}).}
+		In general, these factors can interact in complicated ways to finally result in an image. Here, we only consider the case where multiple independent factors each have an influence (cf. Fig. \ref{fig:inferlevel}).
 		A change in an element, should then lead to: \emph{i)} a corresponding change in the representational factor and \emph{ii)} leave other factors, that represent other elements, unchanged.
 		Formally, this can be seen as inference: a number of latent variables $\mathbf{z_1}\ldots\mathbf{z_N}$ interacted to cause the existence of the observed image $\mathbf{x}$. The task is now to infer estimates for these latent variables $\mathbf{\hat z_i}$. A graphical model of the process is shown in figure \ref{fig:infer}.
-		A disentangled representation should simultaneously fullfill equivariance and invariance: A change in $\mathbf{z_i}$ should: \emph{i)} \textit{equivariantly} change in the abstract representational factor $\mathbf{\hat z_i}$, \emph{ii)} while leaving the other factors $\mathbf{\hat z_j}, j\neq i$, that represent other causes, \textit{invariant}.
+		A disentangled representation should simultaneously fulfill equivariance and invariance: A change in $\mathbf{z_i}$ should: \emph{i)} \textit{equivariantly} change in the abstract representational factor $\mathbf{\hat z_i}$, \emph{ii)} while leaving the other factors $\mathbf{\hat z_j}, j\neq i$, that represent other causes, \textit{invariant}.
 		\begin{figure}[ht]
 			\centering
 			\input{fls/tikz/inferlevel.tex}
@@ -117,10 +117,10 @@
 
 \section{Theoretical Impediments from Causality}\label{sec:causality}
 	For us, generative factors represent causal elements.
-	Learning a disentangled representation is then causal inference from image data.
-	In accordance with the causal literature, we can make statements about the type of knowledge, that can be gained by learning from "raw" image data, raw data meaning images $x$ sampled from $p(x)$.
+	Learning a disentangled representation is then understood as causal inference from image data.
+	In accordance with the causal literature, we can make statements about the type of knowledge, that can be gained by the type of data provided. It turns out that from "raw" image data, raw data meaning images $x$ sampled from $p(x)$, without further assumptions, it is impossible learn a disentangled representation $z$. We start with a short intro to causal learning (\ref{sec:causallearning}), the conclusions for disentangling (\ref{sec:requirements}), 
 
-	\subsection{Causal Learning}
+	\subsection{Causal Learning}\label{sec:causallearning}
 		\begin{figure}[t]
 			\begin{subfigure}{0.3\linewidth}
 				\centering
@@ -144,7 +144,9 @@
 		\note{Causal learning is a hard problem: instead of only learning statistical measures from data, model also needs to be learned (\cite{peters17elements})}
 		% Statistic background $\rightarrow$ correlation is not causation.
 		% Reichenbachs principle \cite{reichenbach56time}
-		% $\rightarrow$ barometer example: How to find out the causal connection between a barometer and the weather. Highly capable machine learning algorithm that learns only with access to an image dataset showing the barometer and the weather. -> will be able to capture the correlation between needle position and weather condition, but never understand causal direction, since it is not in the data.
+		% $\rightarrow$ barometer example: How to find out the causal connection between a barometer and the weather. 
+		
+		%Highly capable machine learning algorithm that learns only with access to an image dataset showing the barometer and the weather. -> will be able to capture the correlation between needle position and weather condition, but never understand causal direction, since it is not in the data.
 		% Imagine how a human would go about solving this problem. Having a mechanistic model of the world he could reason about the precise causal mechanism relating weather to humidity to needle position.
 		% - model of influences (humidity -> barometer)
 		% What if no prior knowledge? A child-level simple solution is to force the needle to move with a finger. The weather will not change. Hence causality has to go other way or third latent variable influencing both.
@@ -155,16 +157,20 @@
 		% e.g.  RCT
 
 		% lacking the tools to accurately estimate causality, researchers shied away from making causal statement. Developing machines with human-like abilities requires discovery and reasoning in terms of causal models. Recently (in the past 30 years), overshadowed by the prominent success of data-driven deep learning, the field of causality has emerged to mathematical rigor.
+		
+		% pearl distinguishes between three types of questions that can be answered by different types of knowledge: 
+		% 1. 2. 3. 
+		% fundamentally different concepts with different
 
 		\note{ladder of causation: association, intervention, counter-factual}
 
 
-	\subsection{Disentangling requires Interventions or Model Assumptions}
+	\subsection{Disentangling requires Interventions or Model Assumptions}\label{sec:requirements}
 		% It can be proven mathematically (Pearl) that interventional data or at least certain (which) causal assumptions about the world are necessary to estimate certain quantities.
-		This means that "purely" unsupervised disentangling, \ie estimating $\mathbf{\hat z_i}$ from samples $x \sim p(x)$, is impossible.
-		\note{A rigorous argument for this can be found in todo{cite schoelkopf}}% for estimation of causal factors "raw data" insufficient -> need interventional data or model assumptions.
+		This means that "purely" unsupervised disentangling, \ie estimating $\mathbf{\hat z_i}$ from samples $x \sim p(x)$, is impossible. A rigorous argument for this can be found in \cite{locatello18challenging}.
+		% for estimation of causal factors "raw data" insufficient -> need interventional data or model assumptions.
 		% so far fitting curve p(x) to data manifold
-		Current machine learning operates mostly on the level of association, estimating (comlex) correlations from raw data.
+		Current machine learning operates mostly on the level of association, estimating (complex) correlations from raw data.
 		As we have seen, this purely data-driven approach can only go so far.
 		In contrast, humans seem to have the ability to interact with their environment and have innate assumptions on coherence, causality, physics etc., which introduce inductive priors.
 		To bring \emph{i)} interventions and \emph{ii)} model assumptions to computer vision, we \emph{i)} apply changes to an image, which are assumed to change only one factor and \emph{ii)} model the causal process of the image generation in the theme of analysis-by-synthesis.
