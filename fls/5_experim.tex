@@ -160,17 +160,11 @@
 			\end{tabular}
 		\end{table}
 
-		\subsubsection{Human Faces}
-		\todo{make figures}
-		\subsubsection{Human Bodies}
-		Human, Olympic, Penn
-		\subsubsection{Animal Faces/Bodies}
-		Dogs, Cats, Birds
 		\subsubsection{Composite Objects/Scenes}
-		What is an object? What is a scene?
-		compositional nature of reality
-		Bird on twig object? Bird can also fly, but neural networks learn by correlation in data (-> ref to these ''failure modes''
-		Dancing pair as object.
+			What is an object? What is a scene?
+			compositional nature of reality
+			Bird on twig object? Bird can also fly, but neural networks learn by correlation in data (-> ref to these ''failure modes''
+			Dancing pair as object.
 		\subsubsection{Object/Background Separation}
 			Complexly cluttered background is actually favorable for the method. Correlations of object with background will belong to object.
 		\subsubsection{Object Articulation}
@@ -246,13 +240,9 @@
 	Disentangled representations of object shape and appearance allow to alter both properties individually to synthesize new images. The ability to flexibly control the generator allows, for instance, to change the pose of a person or their clothing. In contrast to previous work \cite{esser18, denton17disvideo, ma17poseguided, ma17disperson, debem18dgpose, jakab18},
 	we achieve this ability without requiring supervision \textit{and} using a flexible part-based model instead of a holistic representation. This allows to explicitly control the parts of an object that are to be altered. We quantitatively compare against \emph{supervised} state-of-the-art disentangled synthesis of human figures. Also we qualitatively evaluate our model on unsupervised synthesis of still images, video-to-video translation, and local editing for appearance transfer.
 
-
-	t-SNE of Shape Representation
-	t-SNE of Appearance Representation
-
+	\todo{t-SNE of Shape Representation, t-SNE of Appearance Representation}
 
 	\subsection{Disentangling Pose and Appearance}
-
 
 	On Deep Fashion \cite{liu16deepfashion, liu16deepfashionwild}, a benchmark dataset for supervised disentangling methods, the task is to separate person ID (appearance) from body pose (shape) and then synthesize new images for previously unseen persons from the test set in eight different poses. We randomly sample the target pose and appearance conditioning from the test set. Fig. \ref{fig:allswaps} shows qualitative results.
 	We quantitatively compare against supervised state-of-the-art disentangling \cite{esser18} by evaluating \emph{i)} invariance of appearance against variation in shape by the re-identification error and \emph{ii)} invariance of shape against variation in appearance by the distance in pose between generated and pose target image.

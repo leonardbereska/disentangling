@@ -159,7 +159,7 @@
 		\note{ladder of causation: association, intervention, counter-factual}
 
 
-	\subsection{Unsupervised Disentangling requires Interventions or Model Assumptions}
+	\subsection{Disentangling requires Interventions or Model Assumptions}
 		% It can be proven mathematically (Pearl) that interventional data or at least certain (which) causal assumptions about the world are necessary to estimate certain quantities.
 		This means that "purely" unsupervised disentangling, \ie estimating $\mathbf{\hat z_i}$ from samples $x \sim p(x)$, is impossible.
 		\note{A rigorous argument for this can be found in todo{cite schoelkopf}}% for estimation of causal factors "raw data" insufficient -> need interventional data or model assumptions.
@@ -182,12 +182,13 @@
 %
 		% $p(x| do(s), do(a))$
 
-	\subsection{Image Transformations are Interventions}
+	\subsection{Image Transformation as Intervention}
 		\note{we harness intervention}
 		$p(x| do(a), b)$
 		\note{in computer vision an intervention is an image transformation if ..}
 
-	\subsection{Analysis-by-Synthesis as Model Assumptions}
+	\subsection{Analysis-by-Synthesis as Model Assumption}
+		\note{what is analysis-by-synthesis?}
 		% Inverse graphics
 		% Capsules \todo{cite capsules}, Tieleman \cite{tieleman14thesis}
 		% make model as good as we can implementing as many assumptions as we can and only leave the rest to powerful model
