@@ -2,32 +2,37 @@
 % \chapter{Literature Review: Disentangling}
 \chapter{Analysis of Literature on Disentangling}\label{sec:literature}
 	% \note{Goal of this section: analyse disentangling (with causal insights, situatate method within this
-	In the following, we analyze the computer vision literature on disentangling generative factors \wrt the causal inference insights (cf. sec. \ref{sec:causality}.
+	In the following, we analyze the computer vision literature on disentangling generative factors \wrt the causal inference insights (cf. sec. \ref{sec:causality}).
 	In this thesis the focus is on disentangling the factors of object shape and appearance and therefore we also review the unsupervised shape learning.
 	\note{focusing on factors makes sense, because arbitrary factors impossible (cite schoelkopf)}
 	\todo{research for papers connecting disentangling and causality}
-	\todo{read schoelkopf}
-
 
 
 \section{Analysis-by-Synthesis}
-	\toread{Tieleman, Capsules}
-	\todo{write section}
-	% Capsules, Tieleman \cite{tieleman14thesis}
-	% make model as good as we can implementing as many assumptions as we can and only leave the rest to powerful model
-	% Synthesis known, analysis only indirectly by observing cognition
-	% Yilderim
+	Analysis-by-synthesis is a theme that originates from the research on language perception \eg \cite{bever10anabysyn}, but has also been successfully applied to visual perception.
+	The idea is, to guide the perception (analysis) by a model for generation (synthesis).
+	In computational vision this can be formulated in autoencoder models \cite{tieleman14thesis}.
+	In vision, the domain-specific knowledge about the image generation (decoding) exceeds the knowledge about computational cognition (encoding).
+	Hence, the domain-specific knowledge is used to constrain the decoder, while the encoder is generic.
+	\note{This is the reason why analysis-by-synthesis makes sense in the first place.}
+	\note{A related idea are capsules, which encode the geometric parameters (as generative factors) of entities like objects or object parts \cite{sabour17capsule}. transforming ae \cite{hinton11tranformae}}
+	For disentangling generative factors the analysis-by-synthesis scheme has been applied to computer vision earlier \cite{kulkarni15dcign, yildirim15anabysyn, desjardins12genentangle}, however with the use of label information for the factors.
+	In contrast, we apply image transformations to emulate the labels.
+	Additionally, we choose a specific model for the interaction of shape and appearance with a local part-based model on shape and a corresponding part appearance that is linked to a part location.
+
+
 
 \section{Disentangled Generative Models}
-	In order to gain a conceptual understanding of the world, disentangling the underlying factors of variation is a crucial step, as has been argued in numerous works,~\cite{Desjardins2012dr, Bengio2013rep, Chen2016infogan, Higgins2016betavae, Eastwood2018dr}. \todo{fix reference}
-	% Capturing essential information about data in a representation by being able to generate it is the rationale behind generative modelling.
-	% Currently the approaches in this direction are defined by adversarial \cite{goodfellow16dlb} and autoencoding \cite{kingma13vae} model formulations.
-	Recently, the endeavour for disentangling explanatory factors in the latent representation of generative models is being made explicit in the objective functions \cite{burgess18betavae, chen16infogan} of these models. So far, however, these attempts are limited to rigid objects without articulation and disentangle holistic image factors like illumination, object rotation or total shape and global appearance. \cite{denton17disvideo} \ % TODO ref disentangling models % TODO capsules
+	In order to gain a conceptual understanding of the world, disentangling the underlying factors of variation is a crucial step, as has been argued in numerous works,~\cite{desjardins12genentangle, bengio13rep, chen16infogan, higgins16betavae, eastwood18disquantify}.
+	Capturing essential information about data in a representation by being able to generate it is the rationale behind generative modelling.
+	Currently the approaches in this direction are defined by adversarial \cite{goodfellow16dlb} and autoencoding \cite{kingma13vae} model formulations.
+	Recently, the endeavour for disentangling explanatory factors in the latent representation of generative models is being made explicit in the objective functions \cite{burgess18betavae, chen16infogan} of these models. So far, however, these attempts are limited to rigid objects without articulation and disentangle holistic image factors like illumination, object rotation or total shape and global appearance \cite{denton17disvideo}.
+	\note{Generic approaches are \cite{worrall17encdec, li18analogy}}
+
 
 \section{Part-based Representation Learning}
 	\note{parts as regional attention (cite attention paper)}
 	\note{parts/compositionality is key to creativity -> new combination of known parts}
-
 
 	Describing an object as an assembly of parts is a classical paradigm for learning an object representation in computer vision \cite{ross06parts} with linkage to human perceptual theories \cite{biederman87recognition}.
 	What constitutes a part, is the defining question in this scheme.
@@ -88,7 +93,7 @@
 	While most of them explain the object holistically, only few also introduce a factorization into parts \cite{siarohin18deformgan, balakrishnan18unseenposes}.
 	In contrast to these shape-supervised approaches, we learn both shape and appearance without any supervision.
 
-	For unsupervised disentangling, several generative frameworks have been proposed ~\cite{higgins16betavae, chen16infogan, li18analogy, denton17disvideo, shu18shapeappear, xing18shapeappear}.
+	For unsupervised disentangling, several generative frameworks have been proposed~\cite{higgins16betavae, chen16infogan, li18analogy, denton17disvideo, shu18shapeappear, xing18shapeappear}.
 	However, these works use holistic models and show results on rather rigid objects and simple datasets, while we explicitly tackle strong articulation with a part-based formulation.
-
+	\note{shu different understanding of shape: shape as surface not as arrangement of parts}
 

@@ -120,7 +120,7 @@ def make_bib(bib_name, new_bib_name):
 def main():
     bib_name="lib.bib"
     new_bib_name="lib_new.bib"
-    # load_bib(bib_name)
+    load_bib(bib_name)
     make_bib(bib_name, new_bib_name)
 
 main()

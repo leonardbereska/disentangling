@@ -1,6 +1,6 @@
 %&tex
 \chapter{Prerequisites on Learning Disentanglement}\label{sec:prerequisites}
-\begin{comment}
+
 \section{Learning from Data}
 	{Learning from data} is commonly understood as the ability of algorithms to improve their performance on a task with experience accumulated from the observation of data \cite{goodfellow16dlb}. The source of data is usually a dataset - set of data points $X = \{x_i | i \in \{1\ldots n\} \}$, which are sampled from a probability distribution $x_i \sim p(x)$.
 
@@ -16,7 +16,7 @@
 		Unsupervised learning is considered much harder than supervised learning. There are several complications in the design of unsupervised algorithms:
 		\begin{itemize}
 			\item Naturally, without supervision, the goal of learning is not specified, hence surrogate objectives have to be formulated. The lack of specification renders the evaluation often arbitrary and subjective\todo{cite evaluation of generative models}.
-			\item It is a priori not clear, how much a priori knowledge should be embedded. To introduce no artificial bias, some argue for a purely data-driven approach. Others argue for the importance of certain inductive priors to guide learning \cite{tenenbaum18think}.
+			\item It is a priori not clear, how much prior knowledge should be embedded. To introduce no artificial bias, some argue for a purely data-driven approach. Others argue for the importance of certain inductive priors to guide learning \cite{tenenbaum18think}.
 			A related modeling choice is, if the algorithm should be model-free or model-based\todo{ cite huszar article}.
 			\note{model-free vs model-based approaches:}
 			\note{model-based $\rightarrow$ more flexible, transferable, allows for modular combination (like parts)}
@@ -72,7 +72,7 @@
 		In the current machine learning contexts, all functions ($e, d$) and or moments ($\mu, \Sigma$) are modelled with neural networks.
 
 	\subsection{Adversarial Formulations}\label{sec:adversarial}
-		\textit{Generative Adversarial Networks} (GAN) \cite{goodfellow14gan} consist of two neural networks competing in a zero-sum game. A generator network $G$ is generating images based on a latent code $z$ sampled from a distribution $p(z)$. The discriminator network $D$ is a binary classifier with the task to classify an image as originating from the data distribution $p_{data}$ or from the distribution produced by $G$. The loss function of $G$ is the negative of the loss of $D$, such that one can formulate the optimization in a minmax form:
+		\textit{Generative adversarial networks} (GAN) \cite{goodfellow14gan} consist of two neural networks competing in a zero-sum game. A generator network $G$ is generating images based on a latent code $z$ sampled from a distribution $p(z)$. The discriminator network $D$ is a binary classifier with the task to classify an image as originating from the data distribution $p_{data}$ or from the distribution produced by $G$. The loss function of $G$ is the negative of the loss of $D$, such that one can formulate the optimization in a minmax form:
 		\begin{equation}
 			% \begin{split}
 				\min_D \max_G - \frac{1}{2} \mathds{E}_{x\sim p_{data}}[\log D(x)] - \frac{1}{2}\mathds{E}_{z\sim p(z)}[\log (1-D(G(z)))]
@@ -84,9 +84,9 @@
 
 \section{Disentangling Representations}\label{sec:disentangled}
 	In supervised learning, a performance measure is naturally induced by the metric, that is being optimized. In the unsupervised setting, judging the performance of a model is less straightforward.
+	How to rate the quality of the latent representation?
 	\note{For example, when modelling an image domain, one could subjectively rate the quality of the generated image.}
 	\todo{introduce latent representation in data compression framing }
-	How to rate the quality of the latent representation?
 
 	\subsection{Learning Representations}
 
@@ -114,7 +114,8 @@
 		\end{figure}
 		\todo{mathematically,.. $f \circ g (x) = ... $}
 		\todo{draw other: arbitrary causal}
-\end{comment}
+
+
 \section{Theoretical Impediments from Causality}\label{sec:causality}
 	Generative factors represent causal elements.
 	Learning a disentangled representation of generative factors is then understood as causal inference.
@@ -165,9 +166,7 @@
 
 
 	\subsection{Disentangling requires Interventions or Model Assumptions}\label{sec:requirements}
-		% It can be proven mathematically (Pearl) that interventional data or at least certain (which) causal assumptions about the world are necessary to estimate certain quantities.
 		The results from the study of causal inference also entail that "purely" unsupervised disentangling, \ie estimating $\mathbf{\hat z_i}$ from samples $x \sim p(x)$, is impossible. A rigerous proof for this can be found in \cite{locatello18challenging}.
-		% for estimation of causal factors "raw data" insufficient -> need interventional data or model assumptions.
 		% so far fitting curve p(x) to data manifold
 		Current machine learning operates mostly on the level of association, estimating (complex) correlations from raw data.
 		As we have seen, this purely data-driven approach can only go so far.
@@ -178,26 +177,29 @@
 		% assume causal model: p(x | a, s)
 		% want: p(s | x) and p(a | x)
 %
-		% encoding
-		% $p(s | x )$
-		% $p(a | x) = p(a | s, x) p(s | x)$
+% encoding
+% $p(s | x )$
+% $p(a | x) = p(a | s, x) p(s | x)$
 %
-		% decoding
-		% $p(x) = p(x | a, s) p(a) p(s)$
+% decoding
+% $p(x) = p(x | a, s) p(a) p(s)$
 %
-		% $p(x| do(s), do(a))$
+% $p(x| do(s), do(a))$
 
 	\subsection{Image Transformation as Intervention}\label{sec:transform}
-		\note{we harness intervention}
+		\begin{figure}[htp]
+			\centering
+			\input{fls/tikz/trans.tex}
+			\caption{An image $\mathbf{x}$ is assumed to be generated from the factors of shape $\sigma$ and appearance $\alpha$. Implementing an intervention with a transformation of factors, means changeing one factor without changing the other.}
+			\caption{}
+			\label{fig:intervene}
+		\end{figure}
 		% $p(x| do(a), b)$
-		\note{in computer vision an intervention is an image transformation if ..}
+		To disentangle shape $\sigma$ and appearance $\alpha$, we can emulate interventions by image transformations. Under the assumption that certain transformations only lead to a change in shape, while leaving appearance invariant or vice versa, we obtain access to interventional data. %of the type x | s, a , x | do(s), a
 
-	\subsection{Analysis-by-Synthesis as Model Assumption}\label{sec:anabysyn}
-		\note{what is analysis-by-synthesis?}
-		% Inverse graphics
-		% Capsules \todo{cite capsules}, Tieleman \cite{tieleman14thesis}
-		% make model as good as we can implementing as many assumptions as we can and only leave the rest to powerful model
-		% Synthesis known, analysis only indirectly by observing cognition
-		%
-		% leaving synthesis to learning from scratch, can meet practical/computational limits \eg\ convolutional neural networks better than fully connected neural models.
-		% But can also be ultimately impossible. Modelling synthesis explicitly with a causal model about image generation, by knowledge about the physical world enables answering interventional and counter-factual questions. (mathematically impossible to learn from ''pure'' data alone)
+	\subsection{Analysis-by-Synthesis to Model Assumptions}\label{sec:anabysyn}
+		Additional assumptions can be made about the image generation process in the regime of analysis-by-synthesis:
+		The key idea is, that the process of how an image is generated from underlying factors (graphics), is much better known that estimating the factors from the image (inverse graphics)\todo{ look up definition for inverse graphics}.
+		One can combine a model for analysis and a model for synthesis to reconstruct an image (autoencoding, cf. sec \ref{sec:autoencoding}).
+		Herein the synthesis can be tightly constrained to fit the assumptions about reality \cite{tieleman14thesis}.
+		Assumptions about how shape and appearance interact enable disentanglement.

@@ -1,14 +1,15 @@
 \begin{tikzpicture}
 	% Define nodes
 	\node[obs]                               (x) {$\mathbf{x}$};
-	\node[latent, above=of x, xshift=-1.3cm] (z1) {$\mathbf{p_1}$};
-	\node[latent, above=of x, xshift=1.3cm]   (zn) {$\mathbf{p_N}$};
-	\node[latent, above=of zn, xshift=-0.7cm]   (sn) {$\mathbf{s_N}$};
-	\node[latent, above=of zn, xshift=0.7cm]   (an) {$\mathbf{a_N}$};
-	\node[latent, above=of z1, xshift=-0.7cm]   (s1) {$\mathbf{s_1}$};
-	\node[latent, above=of z1, xshift=0.7cm]   (a1) {$\mathbf{a_1}$};
+	\node[latent, above=of x, xshift=-1.3cm] (z1) {$\sigma_{\mathbf{x}}$};
+	\node[latent, above=of x, xshift=1.3cm]   (zn) {$\alpha_{\mathbf{x}}$};
+	\node[latent, above=of zn, xshift=-0.75cm]   (sn) {$\alpha^1_{\mathbf{x}}$};
+	\node[latent, above=of zn, xshift=0.75cm]   (an) {$\alpha^n_{\mathbf{x}}$};
+	\node[latent, above=of z1, xshift=-0.75cm]   (s1) {$\sigma^1_{\mathbf{x}}$};
+	\node[latent, above=of z1, xshift=0.75cm]   (a1) {$\sigma^n_{\mathbf{x}}$};
 	% \node[latent, above=of x]   (zi) {$\mathbf{p_i}$};
-	\node[auto=false, above=of x, yshift=0.2cm] (dots) {$\cdots$}  ;
+	\node[auto=false, above=of z1, yshift=0.2cm] (dots) {$\cdots$}  ;
+	\node[auto=false, above=of zn, yshift=0.2cm] (dots) {$\cdots$}  ;
 	% \node[auto=false, above=of x, yshift=0.2cm, xshift=-0.6cm] (dots1) {$\cdots$}  ;
 	% Connect the nodes
 	\edge {z1,zn} {x} ; %
