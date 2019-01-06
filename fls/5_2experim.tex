@@ -130,21 +130,21 @@
 		\item Own Dataset: Move KP
 		\item DeepFashion: exchange parts
 	\end{itemize}
-	% \begin{figure}[htp]
-		% \centering
-		% \begin{subfigure}{0.8\linewidth}
-		% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/movekp2}
-		% \end{subfigure}
-%
-		% \begin{subfigure}{0.8\linewidth}
-		% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/pose}
-		% \end{subfigure}
+	\begin{figure}[htp]
+		\centering
+		\begin{subfigure}{1.\linewidth}
+		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/8arm}\caption{}
+		\end{subfigure}
+
+		\begin{subfigure}{1.\linewidth}
+			\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/8head}\caption{}
+		\end{subfigure}
 		% \begin{subfigure}{0.8\linewidth}
 		% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/app}
 		% \end{subfigure}
-		% \caption{}
-		% \label{fig:pckcurve}
-	% \end{figure}
+		\caption{Moving individual body landmarks for conditional generation (a) arm (b) head.}
+		\label{fig:movekp}
+	\end{figure}
 \section{Follow-Up}
 	\begin{itemize}
 		\item make generative:(KP distribution estimation, variational features).
