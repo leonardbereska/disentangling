@@ -1,7 +1,7 @@
 %&tex
 
 \chapter{Object Shape Learning}
-\begin{comment}
+% \begin{comment}
 	% PENN SHAPES
 	\begin{figure}[htp]
 		\begin{subfigure}{1.\textwidth}
@@ -225,7 +225,7 @@
 				\end{tabular}
 			\end{table}
 
-\end{comment}
+% \end{comment}
 
 \section{Challenges}\label{sec:challenges}
 	%DATASET CHALLENGES
@@ -272,7 +272,7 @@
 
 		Complexly cluttered background - as long as no correlations to the object exist - is actually favorable for the method. Correlations of object with background will belong to object.
 
-\begin{comment}
+% \begin{comment}
 	\subsection{Object Articulation}\label{sec:articulation}
 		Object articulation makes consistent landmark discovery challenging.
 		Fig.~\ref{fig:kp_bodies} shows that our model exhibits strong landmark consistency under articulation and covers the full human body meaningfully.
@@ -386,12 +386,12 @@
 			\end{table}
 
 			%  COMPARISON TO JAKAB
-			\begin{figure}[!ht]
-				\centering
-				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{mat/bbc8}
-				\caption{{Comparison of regression results of our method (bottom rows) to \cite{jakab18} (top rows) on BBC POSE. For visualization by Jakab \etal (from their paper) ground truth is in circles and the corresponding regression in the same color. For our visualization the red dots mark the ground truth, the colored circles the regressed locations. The color coding is in terms of the error \wrt the image edge length.}}
-				\label{fig:bbc8}
-			\end{figure}
+			% \begin{figure}[!ht]
+				% \centering
+				% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{mat/bbc8}
+				% \caption{{Comparison of regression results of our method (bottom rows) to \cite{jakab18} (top rows) on BBC POSE. For visualization by Jakab \etal (from their paper) ground truth is in circles and the corresponding regression in the same color. For our visualization the red dots mark the ground truth, the colored circles the regressed locations. The color coding is in terms of the error \wrt the image edge length.}}
+				% \label{fig:bbc8}
+			% \end{figure}
 
 	\subsection{Ablating Contributions}\label{sec:ablation}
 		% ABLATION STUDY
@@ -427,4 +427,4 @@
 		The key difference to the most competitive approach \cite{zhang18} is the emphasis on disentanglement via a crossed reconstruction with shape and appearance transformations.
 		Enforcing disentanglement via targeted transformations enhances the shape representation in two ways: \emph{(i)} it asserts that no appearance information is encoded in the shape representation and vice versa and \emph{(ii)} it requires visual features to be equivariant under a spatial transformation.
 		With regards to the considerations earlier, the crucial role of the transformations are to be expected, as they enable to reach a \textit{disentanglement}.
-\end{comment}
+% \end{comment}
