@@ -32,7 +32,7 @@
 \section{Diverse Object Categories}\label{sec:results}
 	% On the object classes of human faces, cat faces, and birds and human and animal bodies our model predicts landmarks consistently across different instances.
 	We test our approach on a diverse set of object classes ranging from human and cat faces to articulated bodies and animals. In the following we go through the results sorted by object category. Where possible we compared to state-of-the-art methods quantitatively in terms of unsupervised landmark prediction, additionally we show qualitative results.
-	\subsection{Human and Cat Faces}
+	\subsection{Human and Cat Faces}\label{sec:kp_faces}
 		% FACES
 		\begin{figure}[htp]
 			\centering
@@ -81,7 +81,7 @@
 			\end{table}
 			Tab.~\ref{tab:faces} compares against the state-of-the-art.
 			Our approach outperform competing methods by a large margin, with particularly good performance on the more challenging Cat Head dataset.
-	\subsection{Human Bodies}
+	\subsection{Human Bodies}\label{sec:kp_humanbodies}
 		% BODIES
 		\begin{figure}[htp]
 			\centering
@@ -177,7 +177,7 @@
 
 
 
-	\subsection{Animal Bodies}
+	\subsection{Animal Bodies}\label{sec:kp_animalbodies}
 		% DOGS, BIRDS
 		\begin{figure}[htp]
 			\centering
@@ -225,7 +225,6 @@
 				\end{tabular}
 			\end{table}
 
-\end{comment}
 
 \section{Challenges}\label{sec:challenges}
 	%DATASET CHALLENGES
@@ -246,72 +245,99 @@
 			\hline
 		\end{tabular}
 	\end{table}
-	An overview over the challenges implied by each of the presented dataset is given in Tab.~\ref{tab:challenges}. We address the main difficulties in the following: background clutter~\ref{sec:background}, articulation~\ref{sec:articulation}, intra-class variance~\ref{sec:intraclass} and viewpoint variation~\ref{sec:viewpoint}.
+	An overview over the challenges implied by each of the presented datasets is given in Tab.~\ref{tab:challenges}. We address the main difficulties in the following: background clutter~\ref{sec:background}, intra-class variance~\ref{sec:intraclass}, articulation and viewpoint variation~\ref{sec:articulation}.
 	We discuss how the method overcomes these challenges.
 
-
-\begin{comment}
 	\subsection{Background Clutter}\label{sec:background}
+
 
 		The question how to separate background from object goes deeper than one might think. Fundamentally the question is equivalent to: \textit{What is an object?}
 		If an unsupervised algorithm is posed the task of finding the object in an image dataset - under the assumption that the object is present in all images - the object is a structure common to these images.
 		By this definition background is everything that is not strongly correlated with the object itself.
 		This dataset-specific object category can be unintuitive: for example for a bird sitting on a twig, the twig can considered as part of the object, if the dataset shows only birds on twigs (\eg two landmarks are on feet/twig on CUB-200-2011 dataset,  cf. Fig.~\ref{fig:kp_animals}).
-		This dataset-biased pre-categorical thinking of unsupervised algorithms can be seen as a failure, or as a feature: on a dataset of Salsa-dancing humans our method identified the pair of dancers as an object (cf. Fig.~\ref{fig:salsa}).
+		This dataset-biased pre-categorical thinking of unsupervised algorithms can be seen as a failure, or as a feature: on a dataset of Salsa-dancing humans our method identified the pair of dancers as an object (cf. Fig.~\ref{fig:parity}). \todo{better figure here, make salsa dataset}
 		Technically, we allow the algorithm to focus on the reconstruction of only the object, and not background by a local weighting around the part activation (refer to Sec.~\ref{sec:implementationdetails}). The fundamental issue of strong object-background correlations cannot be solved technically, but requires different data. \todo{look up (and reference to) dataset bias} Interestingly, on with the constrained but repetetive background of the Human3.6M dataset, where traditional background subtraction methods are easily applied, our method struggles: several parts are assigned to background objects. On the other hand, complexly cluttered backgrounds - as long as no correlations to the object exist - such as the background TV screen in the BBCPose dataset (cf. Fig.~\ref{fig:bbcthumb5}) are actually favorable for the method. This is due to the crossed reconstruction objective: if reconstructing the background of the target image is possible with the information of the source appearance image, the algorithm will try to do so by assigning parts to the background, if not, not.
 
-\end{comment}
-	\subsection{Object Articulation}\label{sec:articulation}
-		Object articulation makes consistent landmark discovery challenging. why?
-		human bodies section shows can
 
+	\subsection{Object Articulation and Viewpoint Variation}\label{sec:articulation}
+		Object articulation and viewpoint variation makes consistent landmark discovery challenging. In contrast to rigid bodies that can vary in orientation and scale, articulated objects have many degrees of freedom more. Part assignment consistency means equivariance \wrt changes in shape due to articulation. Equivariance is enforced twice in the method (cf. Sec. \ref{sec:framework}).
+		We showed previously that the method can deal with strongly articulated human and animal bodies (cf. Sec. \ref{sec:kp_humanbodies, sec:kp_animalbodies}).
+		\todo{Viewpoint variation, cnns bad at viewpoint}
+		% no grid -> Zhang
+		% % ill-posed fundamentally if reconstruction, cf.\ bbcpose to see that from trainset possible.
 
-		Fig.~\ref{fig:kp_bodies} shows that our model exhibits strong landmark consistency under articulation and covers the full human body meaningfully.
-		Even fine-grained parts such as the arms are tracked across heavy body articulations, which are frequent in the Human3.6M and Penn Action datasets.
-		Despite further complications such as viewpoint variations or blurred limbs our model can detect landmarks on Penn Action of similar quality as in the more constrained Human3.6M dataset.
-		% Additionally, complex background clutter as in BBC Pose and Penn Action, does not hinder finding the object.
-		% Experiments on the Dogs Run dataset underlines that even completely dissimilar dog breeds can be related via semantic parts.
-		% Tab.~\ref{tab:bbcpose} and Tab.~\ref{tab:human} summarize the quantitative evaluations: we outperform other unsupervised and semi-supervised methods by a large margin on both datasets.
-		% On Human3.6M, our approach achieves a large performance gain even compared to methods that utilize optical flow supervision.
-		% On BBC Pose, we outperform \cite{jakab18} by $6.1\%$, reducing the performance gap to supervised methods significantly.
-
-\begin{comment}
 	\subsection{Intra-Class Variation}\label{sec:intraclass}
+		Intra-class variation can be both in shape and in appearance. Due to different breeds and species the animal datasets - Dogs Run, CUB-200-2011, Cat Head - present the highest degree of variability within the object class. The method in part coincidentally generalizes and in part inherently enforces in due to the data augmentation with shape and appearance transformations (see also Sec. \ref{sec:transformations}).
 
-		on cat head, human mislabelling is the most common failure mode
+\end{comment}
 
-	\subsection{Viewpoint Variation}\label{sec:viewpoint}
-		ill-posed fundamentally if reconstruction, cf.\ bbcpose to see that from trainset possible.
-		especially difficult for CNNs~\cite{sabour17capsule}
-
-
-\section{Analysis}
-	\subsection{Transformations}\label{sec:transformations}
+\section{Transformational Effects}\label{sec:transformations}
 		\note{in this section: effect of transformations on learning, disentangling}
 		\note{effectively connecting samples from the dataset, spreading the}
 		\note{schedule transformations with exponential}
+		\note{as data augmentation}
+		\note{as blurring of data points}
+		\todo{make blurring of data points figure}
 
-		\subsubsection{Parity}
-			birds parity
-			salsa parity
 
-		\subsubsection{Rotation, Scaling, Translation}
-			on Cats -> black cats different set of KP than rest -> connect these samples via transformation to reach intra-class consistency
+		\begin{figure}[htp]
+			\begin{subfigure}{0.40\linewidth}
+				\centering
+				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/other/trans}
+				\caption{}
+			\end{subfigure}
+			\begin{subfigure}{0.40\linewidth}
+				\centering
+				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/other/trans2}
+				\caption{}
+			\end{subfigure}
+			\caption{Effect of transformations on data distribution: (a) Data points (red) can be connected via a shape $s$ and an appearance $a$ transformation. (b) Applying transformations effectively blurs the data distribution.}
+			\label{fig:trans}
+		\end{figure}
 
-		\subsubsection{Mimicking Appearance}
+		In this section we discuss the effect of the transformations on learning a consistent and comprehensive representation.
+		Since strong image transformations can make the learning curve for the algorithm too steep, we exponetially schedule the increase in magnitude, finally resulting in image changes as shown in Fig. \ref{fig:coloraugm}.
+		In effect, the transformations teach the algorithm what changes in shape and appearance are. Assuming that samples from the data distribution are - showing the same object class - related via a change in shape and appearance, the transformations blur the distribution. This data augmentation is sketched in Fig. \ref{fig:trans}.
+
+
+		\subsection{Spatial Transformations}\label{sec:warps}
+			We perform thin-plate spline (TPS) warps to mimick spatial transformations. These changes incorporate rotation, scaling and translation as a special case. While irreplacable for calculating the direct equivariance loss\todo{ reference to equation}, they can result in artificial shape changes. After all, most objects - such as human beings or animals, do not warp, but articulate their parts/limbs.
+			Natural shape changes are needed to learn a model of the objects articulation. These changes are presented in video data. Hence, for videos we enforce the reconstruction to function across different frames. This results in a much stabler performance and greater part consistency especially for highly articulated parts such as arms.
+
+		\subsection{Appearance Transformations}
 			% COLOR
 			\begin{figure}[htp]
 				\centering
-				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=.8\linewidth]{fig/shape/coloraugm}
-				\caption{Examples for shape and appearance transformation on CUB-200-2011.}
 				\label{fig:compare}
+				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=.8\linewidth]{fig/shape/coloraugm}
+				\caption{Examples for shape and appearance transformation on CUB-200-2011. Images from the upper row relate to images directly below.}
 			\end{figure}
 
+			We mimick appearance changes with image transformations in color, contrast, hue and brightness. Exemplars for the combined effect of spatial and appearance transformations are shown in Fig. \ref{fig:coloraugm}.
+			Especially for datasets with high intra-class appearance variance, connecting the data points via appearance changes is crucial. On Cat Head for example, without them, the method assigned different landmarks to black cats than to other-color cats. The model will incur no loss, as long as it always has to reconstruct black cats from images of black cats.
+			% Ideally one would want more "natural" appearance changes as well, this could be
 
-			Color, Contrast, Hue
-			\subsection{Natural Changes in Video Data}
-			Video data: Penn, Own
 
+		\subsection{Parity}
+			\begin{figure}[t]
+				\centering
+				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/shape/parity}
+				\caption{Parity changes: the images of the upper and lower row relate via the usual transformations and an additional parity flip. For the bird (1-5th column) images induced artificially, for the dancing humans (6-7th column) via sampling different frames from a video.}
+				\label{fig:parity}
+			\end{figure}
+			biggest failure mode of the model
+			hard to correct
+			obviously no loss for object images which are symmetrical under parity transformations, such as frontal view human beings.
+			frontal and back view too similar
+
+			birds parity
+			salsa parity
+			Since the human body appearances in the frontal and back views are similar, we do not expect our discovered landmarks to distinguish the left and right sides of the human body, which means that a landmark at the left leg in the frontal view can locate the right leg in the back view.
+
+		 	solution: big change in features under parity -> salsa
+			solution II: if object not symmetric under parity (side view bird), incorporate parity flips in equivariance loss -> problem carefully schedule this since landmarks will tend to crowd at the mirror axis otherwise. succeeded in birds!
+
+			\begin{comment}
 	\section{Comparative Advantages}
 		\subsection{Non-Disentangling}
 			% HUMAN3.6M DETAILED RESULTS
@@ -323,10 +349,28 @@
 				Actions & {\footnotesize All} & {\footnotesize Directions} & {\footnotesize Discussion} &  {\footnotesize Waiting }& {\footnotesize Greeting }& {\footnotesize Posing} & {\footnotesize Walking} \\
 				\hline
 				Newell \cite{hourglass} (supervised)
-				&2.16 &1.88 &1.92 &2.15 &1.62 &1.88 &2.21 \\
+				& 2.16 & 1.88 & 1.92 & 2.15 & 1.62 & 1.88 & 2.21 \\
 				Zhang \cite{Zhang18}  (semi-supervised)
 				& 4.14 & 5.01 & 4.61 & 4.76 & 4.45 & 4.91 & 4.61 \\  \hline
 				Thewlis \cite{thewlis17}  (unsupervised)
+				& 7.51 & 7.54 & 8.56 & 7.26 & 6.47 & 7.93 & 5.40 \\
+				Ours (unsupervised) & \textbf{2.79} & \textbf{2.58} & \textbf{2.26} & \textbf{2.87} & \textbf{3.08} & \textbf{2.67} & \textbf{3.35}\\
+				\hline
+				\end{tabular}
+				\caption{{Comparison with unsupervised, semi-supervised and supervised methods for annotated landmark prediction on the Human 3.6M testing sets for selected actions. The
+				error is in \% regarding the edge length of the image. All methods predict 16 landmarks, from which the 32 ground truth landmarks are regressed.}}
+				\label{tab:gtregressionhuman}
+			\end{table}
+
+			% COMPARE ZHANG
+			\begin{figure}[htp]
+				\centering
+				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/shape/comp}
+				\caption{Comparing discovered keypoints against \cite{zhang18} on CUB-200-2011. We improve on object coverage and landmark consistency. Note our flexible part placement compared to a rather rigid placement of \cite{zhang18} due to their part separation bias.}
+				\label{fig:compare}
+			\end{figure}
+
+			Fig. \ref{fig:compare} provides a direct visual comparison to \cite{zhang18} on CUB-200-2011. It becomes evident that our predicted landmarks track the object much more closely. In contrast, \cite{zhang18} have learned a slightly deformable, but still rather rigid grid.
 				& 7.51 & 7.54 & 8.56 & 7.26 & 6.47 & 7.93 & 5.40 \\
 				Ours (unsupervised) & \textbf{2.79} & \textbf{2.58} & \textbf{2.26} & \textbf{2.87} & \textbf{3.08} & \textbf{2.67} & \textbf{3.35}\\
 				\hline
@@ -388,28 +432,14 @@
 
 
 	\subsection{Failure Modes}\label{sec:failuremodes}
+		\todo{search for failure modes}
+		% on cat head, human mislabelling is the most common failure mode
+	% background keypoints
+	% discuss "overfitting" what does that even mean? - @domili
 
 	\subsection{Ablating Contributions}\label{sec:ablation}
 		% ABLATION STUDY
 		\begin{table}
-			\centering
-			\begin{tabular}{l|cr}
-				\hline
-				Dataset & Cat Head    \\
-				\# Landmarks &  20 \\ \hline
-				full model &  9.30 \\ \hline
-				w/o $\mathcal{L}_{\textrm{eq}}$   & 11.32 \\
-				w/o $\mathcal{L}_{\textrm{rec}}$   & 35.0 \\
-				w/o appearance transform & 12.46 \\
-				w/o shape transform & 14.72 \\ \hline
-			\end{tabular}
-			\caption{{Ablation studies on Cat Head dataset. We ablate the reconstruction loss $\mathcal{L}_{\textrm{rec}}$, equivariance loss $\mathcal{L}_{\textrm{eq}}$, the color augmentation and the crossing task}}
-			\label{tab:ablation}
-		\end{table}
-
-		% what is the color augmentation: explain before
-		\todo{what is the crossing task}
-		We ablate the main components of our proposed framework: reconstruction loss $\mathcal{L}_{\textrm{rec}}$, the equivariance loss $\mathcal{L}_{\textrm{eq}}$, the appearance augmentation and the crossing task for disentangling shape and appearance. For the ablation study we use the Cat Head dataset, following the already introduced train-test setup on the task of landmark ground truth regression. Tab. \ref{tab:ablation} illustrates the ablation results.\\
 		Leaving out the reconstruction task naturally leads to the largest drop in performance since only training on equivariance leads to collapsed landmark solutions as discussed in \cite{zhang18}.
 		Training our model without color augmentations or appearance crossing between image pairs (i.e. the crossing task) weakens, respectively neglects the disentanglement of appearance and shape and hence the performance of our model significantly. % here specifically tackling intra-class variance
 		Note that without the crossing task our models performs on par with Zhang \etal \cite{zhang18}, indicating, that this novel task could be explaining overall performance gain \wrt \cite{zhang18}. %This performance drop would be larger on datasets with articulation.
