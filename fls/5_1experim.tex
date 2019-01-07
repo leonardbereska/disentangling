@@ -1,7 +1,7 @@
 %&tex
 
 \chapter{Object Shape Learning}
-% \begin{comment}
+\begin{comment}
 	% PENN SHAPES
 	\begin{figure}[htp]
 		\begin{subfigure}{1.\textwidth}
@@ -225,7 +225,7 @@
 				\end{tabular}
 			\end{table}
 
-% \end{comment}
+\end{comment}
 
 \section{Challenges}\label{sec:challenges}
 	%DATASET CHALLENGES
@@ -250,31 +250,22 @@
 	We discuss how the method overcomes these challenges.
 
 
-
+\begin{comment}
 	\subsection{Background Clutter}\label{sec:background}
 
-		The question how to separate background from the object goes deeper than one might think. Fundamentally the question is: what is the object?
-		For our algorithm the object is a common structure across all images which are presented to it. For it an object consists of parts which share a certain variance in feature space.
+		The question how to separate background from object goes deeper than one might think. Fundamentally the question is equivalent to: \textit{What is an object?}
+		If an unsupervised algorithm is posed the task of finding the object in an image dataset - under the assumption that the object is present in all images - the object is a structure common to these images.
+		By this definition background is everything that is not strongly correlated with the object itself.
+		This dataset-specific object category can be unintuitive: for example for a bird sitting on a twig, the twig can considered as part of the object, if the dataset shows only birds on twigs (\eg two landmarks are on feet/twig on CUB-200-2011 dataset,  cf. Fig.~\ref{fig:kp_animals}).
+		This dataset-biased pre-categorical thinking of unsupervised algorithms can be seen as a failure, or as a feature: on a dataset of Salsa-dancing humans our method identified the pair of dancers as an object (cf. Fig.~\ref{fig:salsa}).
+		Technically, we allow the algorithm to focus on the reconstruction of only the object, and not background by a local weighting around the part activation (refer to Sec.~\ref{sec:implementationdetails}). The fundamental issue of strong object-background correlations cannot be solved technically, but requires different data. \todo{look up (and reference to) dataset bias} Interestingly, on with the constrained but repetetive background of the Human3.6M dataset, where traditional background subtraction methods are easily applied, our method struggles: several parts are assigned to background objects. On the other hand, complexly cluttered backgrounds - as long as no correlations to the object exist - such as the background TV screen in the BBCPose dataset (cf. Fig.~\ref{fig:bbcthumb5}) are actually favorable for the method. This is due to the crossed reconstruction objective: if reconstructing the background of the target image is possible with the information of the source appearance image, the algorithm will try to do so by assigning parts to the background, if not, not.
 
-		If presented only images with birds sitting on twigs, the twig itself could as well be part of the object, couldn't it?
-
-		dataset bias
-
-		gaussian weighting (show image)
-
-		prevent parts from explaining background, but
-
-		What is an object? What is a scene? On a fundamental level, if only presented certain images with correlations to background \eg bird, twig, how to distinguish?
-		compositional nature of reality
-		Bird on twig object? Bird can also fly, but neural networks learn by correlation in data (-> ref to these failure modes)
-		Dancing pair as object.
-		human3.6m background too easy
-
-		Complexly cluttered background - as long as no correlations to the object exist - is actually favorable for the method. Correlations of object with background will belong to object.
-
-% \begin{comment}
+\end{comment}
 	\subsection{Object Articulation}\label{sec:articulation}
-		Object articulation makes consistent landmark discovery challenging.
+		Object articulation makes consistent landmark discovery challenging. why?
+		human bodies section shows can
+
+
 		Fig.~\ref{fig:kp_bodies} shows that our model exhibits strong landmark consistency under articulation and covers the full human body meaningfully.
 		Even fine-grained parts such as the arms are tracked across heavy body articulations, which are frequent in the Human3.6M and Penn Action datasets.
 		Despite further complications such as viewpoint variations or blurred limbs our model can detect landmarks on Penn Action of similar quality as in the more constrained Human3.6M dataset.
@@ -284,6 +275,7 @@
 		% On Human3.6M, our approach achieves a large performance gain even compared to methods that utilize optical flow supervision.
 		% On BBC Pose, we outperform \cite{jakab18} by $6.1\%$, reducing the performance gap to supervised methods significantly.
 
+\begin{comment}
 	\subsection{Intra-Class Variation}\label{sec:intraclass}
 
 		on cat head, human mislabelling is the most common failure mode
@@ -393,6 +385,10 @@
 				% \label{fig:bbc8}
 			% \end{figure}
 
+
+
+	\subsection{Failure Modes}\label{sec:failuremodes}
+
 	\subsection{Ablating Contributions}\label{sec:ablation}
 		% ABLATION STUDY
 		\begin{table}
@@ -427,4 +423,4 @@
 		The key difference to the most competitive approach \cite{zhang18} is the emphasis on disentanglement via a crossed reconstruction with shape and appearance transformations.
 		Enforcing disentanglement via targeted transformations enhances the shape representation in two ways: \emph{(i)} it asserts that no appearance information is encoded in the shape representation and vice versa and \emph{(ii)} it requires visual features to be equivariant under a spatial transformation.
 		With regards to the considerations earlier, the crucial role of the transformations are to be expected, as they enable to reach a \textit{disentanglement}.
-% \end{comment}
+\end{comment}
