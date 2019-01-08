@@ -3,6 +3,7 @@
 
 \section{Learning from Data}
 	{Learning from data} is commonly understood as the ability of algorithms to improve their performance on a task with experience accumulated from the observation of data \cite{goodfellow16dlb}. The source of data is usually a dataset - set of data points $X = \{x_i | i \in \{1\ldots n\} \}$, which are sampled from a probability distribution $x_i \sim p(x)$.
+	In general, these data points are multi-dimensional. In computer vision in particular, data are images $\mathbf{x}$ with height $h$ and width $w$, so that the dimension is $\mathbf{x} \in \mathbb{R}$.
 
 	\subsection{Supervised}\label{sec:supervised}
 		The term {supervised learning} denotes the task to learn a mapping from data points $x_i$ to target labels $y_i$.
@@ -13,23 +14,22 @@
 
 	\subsection{Unsupervised}\label{sec:unsupervised}
 		{Unsupervised learning} is the endeavour to learn about structures and patterns in unlabelled data. In this paradigm, the learning algorithm has access to the samples of the data distribution $x \sim p(x)$. The task is usually framed as a form of density estimation, \ie to model the entire distribution in a probabilistic generative model (cf. sec. \ref{sec:genmodel}).
-		Unsupervised learning is considered much harder than supervised learning. There are several complications in the design of unsupervised algorithms:
+		Unsupervised learning is considered much harder than supervised learning \cite{bishop06ml}. There are several complications in the design of unsupervised algorithms:
 		\begin{itemize}
-			\item Naturally, without supervision, the goal of learning is not specified, hence surrogate objectives have to be formulated. The lack of specification renders the evaluation often arbitrary and subjective\todo{cite evaluation of generative models}.
-			\item It is a priori not clear, how much prior knowledge should be embedded. To introduce no artificial bias, some argue for a purely data-driven approach. Others argue for the importance of certain inductive priors to guide learning \cite{tenenbaum18think}.
+			\item Naturally, without supervision, \textit{the goal of learning is not specified}, hence surrogate objectives have to be formulated. The lack of specification renders the evaluation often arbitrary and subjective\todo{cite evaluation of generative models}.
+			\item It is a priori not clear, \textit{how much prior knowledge should be embedded}. To introduce no artificial bias, some argue for a purely data-driven approach. Others argue for the importance of certain inductive priors to guide learning \cite{tenenbaum18think}.
 			A related modeling choice is, if the algorithm should be model-free or model-based\todo{ cite huszar article}.
 			\note{model-free vs model-based approaches:}
 			\note{model-based $\rightarrow$ more flexible, transferable, allows for modular combination (like parts)}
-
-
-			\note{In this work we argue for using more prior knowledge and modeling assumptions to obtain strong constraints.}
+			{In this work we argue for using more prior knowledge and modeling assumptions to obtain strong constraints.}
+				\todo{it is not clearly defined: what is unsupervised?}
 
 		\end{itemize}
 		\todo{connection between unsupervised and supervised learning, \cite{goodfellow16dlb}.}
 		\note{A possible framing of the goal is data compression.}
 		\note{e.g. outlier detection where $p(x)$ has low probability}
 		\note{What does unsupervised even mean? No prior assumptions, no knowledge at all? Unspecified.. read on this.}
-		\note{Notion of truly unsupervised learning is actually harmful to progress.}
+		\note{notion of truly unsupervised learning is actually harmful to progress.}
 
 	\subsection{Artificial Neural Networks}\label{sec:neuralnetworks}
 		Artificial neural networks are a powerful and flexible tool for function approximation. In their principles they are inspired by biological neurophysiology. An artificial network is a model for a function $y = f(x)$ with vector input $x = \{ x_i | i = 1 \ldots n \}$ and vector output $y = \{ y_j | j = 1 \ldots m \}$:
@@ -45,7 +45,7 @@
 		In practice, however, networks with more that one layer, referred to as deep neural networks, seem to work better. This may be due to the possibility of building a hierarchical feature representation \cite{zeiler14vis}.
 
 		For processing image data, the weight matrices can be constrained to be only locally connected and to share weights across locations to enforce translation invariance, resulting in \textit{convolutional} neural networks.
-		\note{Optimization via gradient descent has proven successful (for deep networks called backpropagation).}
+		To optimize these weights via gradient descent has proven successful (for deep networks this is called backpropagation).
 		\note{Need to be differentiable, (differentiable programming).}
 
 \section{Generative Models}\label{sec:genmodel}
@@ -53,14 +53,14 @@
 	    What I cannot create, I do not understand. - R. Feynman
 	\end{quote}
 	Learning and understanding structure in data by being able to generate, is the rationale behind generative modelling.
-	Generative models are mostly applied for unsupervised learning and can be contrasted to discriminative models. While discriminative models are used to model posterior conditionals $p(y|x)$ (\eg for supervised learning (cf. sec. \ref{sec:supervised}), generative models capture the complete data distribution $p(x)$ in an estimate $\hat p(x)$\todo{cite{bishop06ml}}. Thus, after estimation, one can generate samples from this model $\hat p$. Hence the name generative model.
+	Generative models are mostly applied for unsupervised learning and can be contrasted to discriminative models. While discriminative models are used to model posterior conditionals $p(y|x)$ (\eg for supervised learning (cf. sec. \ref{sec:supervised}), generative models capture the complete data distribution $p(x)$ in an estimate $\hat p(x)$ \cite{bishop06ml}. Thus, after estimation, one can generate samples from this model $\hat p$. Hence the name generative model.
 	\note{Generative modeling can be used for outlier search, where regions with low probability under the model are taken as indicative for an outlier.}
 	The currently predominant generative models are built on either autoencoding or adversarial formulations:
 
 	\subsection{Autoencoding Formulations}\label{sec:autoencoding}
 		An autoencoding model is learning by reconstructing samples of data, $\hat x = f(x)$. To enforce data compression (otherwise the identity function is a trivial solution of autoencoding) the function has an information bottleneck, namely an inferred latent code $z$ of reduced dimension. The autoencoder is then the chain of an encoding function $z = e(x)$ and a decoding function $\hat x = d(z) = d(e(x))$.
 
-		Whereas the conventional autoencoder consists of deterministic mappings $e, d$, the \textit{variational autoencoder} models the probability distribution $p(x)$. More specifically, it maximizes a lower bound to the logarithmic likelihood $\log p(x)$ of data $x$. This so-called variational lower bound $\mathcal{L}$ is given by:
+		Whereas the conventional autoencoder consists of deterministic mappings $e, d$, the \textit{variational autoencoder} \cite{kingma16vae} models the probability distribution $p(x)$. More specifically, it maximizes a lower bound to the logarithmic likelihood $\log p(x)$ of data $x$. This so-called variational lower bound $\mathcal{L}$ is given by:
 		% \begin{equation}\label{eq:vae}
 			% \mathcal{L} = \underbrace{\mathds{E}_{z\sim q(z|x)}  \log p(x|z)}_{\textrm{reconstruction loss}}  - \underbrace{\textrm{KL}(q(z|x)||p(z))}_{\textrm{regularization}}
 		% \end{equation}
@@ -72,15 +72,15 @@
 		In the current machine learning contexts, all functions ($e, d$) and or moments ($\mu, \Sigma$) are modelled with neural networks.
 
 	\subsection{Adversarial Formulations}\label{sec:adversarial}
-		\textit{Generative adversarial networks} (GAN) \cite{goodfellow14gan} consist of two neural networks competing in a zero-sum game. A generator network $G$ is generating images based on a latent code $z$ sampled from a distribution $p(z)$. The discriminator network $D$ is a binary classifier with the task to classify an image as originating from the data distribution $p_{data}$ or from the distribution produced by $G$. The loss function of $G$ is the negative of the loss of $D$, such that one can formulate the optimization in a minmax form:
+		\textit{Generative adversarial networks} (GAN) \cite{goodfellow14gan} consist of two neural networks competing in a zero-sum game. A generator network $G$ is generating images based on a latent code $z$ sampled from a distribution $p(z)$. The discriminator network $D$ is a binary classifier with the task to classify an image as originating from the data distribution $p_{\textrm{data}}$ or from the distribution produced by $G$. The loss function of $G$ is the negative of the loss of $D$, such that one can formulate the optimization in a minmax form:
 		\begin{equation}
 			% \begin{split}
-				\min_D \max_G - \frac{1}{2} \mathds{E}_{x\sim p_{data}}[\log D(x)] - \frac{1}{2}\mathds{E}_{z\sim p(z)}[\log (1-D(G(z)))]
+			\min_D \max_G - \frac{1}{2} \mathds{E}_{x\sim p_{\texttrm{data}}}[\log D(x)] - \frac{1}{2}\mathds{E}_{z\sim p(z)}[\log (1-D(G(z)))]
 			% \end{split}
 		\end{equation}
 		The generator is then optimized to make the output indiscriminable from the data distribution.
 		The discriminator can be interpreted as a learned similarity metric, to measure the closeness of an image to the data distribution \cite{larsen15vaegan}.
-		There are many variants and extensions to this basic principle of learning with an adversarial task. For example, one can learn a discriminator on for a set of image patches \cite{isola17image2image}.
+		There are many variants and extensions to this basic principle of learning with an adversarial task. For example, one can learn a discriminator on for a set of image patches \cite{isola17image2image}. \todo{find more examples, of the gan zoo}
 
 \section{Disentangling Representations}\label{sec:disentangled}
 	In supervised learning, a performance measure is naturally induced by the metric, that is being optimized. In the unsupervised setting, judging the performance of a model is less straightforward.
@@ -101,7 +101,7 @@
 	How then to reach the second goal, the \textit{disentanglement} of generative factors?
 
 	\subsection{Disentangling by Equivariance and Invariance}
-		What is a factor? As outlined in the introduction (cf. sec. \ref{sec:intro}), factors in a representation should correspond to elements of the world.
+		What is a factor? As outlined in the introduction (cf. sec. \ref{sec:introduction}), factors in a representation should correspond to causal elements of the world.
 		In general, these factors can interact in complicated ways to finally result in an image. Here, we only consider the case where multiple independent factors each have an influence (cf. Fig. \ref{fig:inferlevel}).
 		A change in an element, should then lead to: \emph{i)} a corresponding change in the representational factor and \emph{ii)} leave other factors, that represent other elements, unchanged.
 		Formally, this can be seen as inference: a number of latent variables $\mathbf{z_1}\ldots\mathbf{z_N}$ interacted to cause the existence of the observed image $\mathbf{x}$. The task is now to infer estimates for these latent variables $\mathbf{\hat z_i}$. A graphical model of the process is shown in figure \ref{fig:infer}.
@@ -119,7 +119,8 @@
 \section{Theoretical Impediments from Causality}\label{sec:causality}
 	Generative factors represent causal elements.
 	Learning a disentangled representation of generative factors is then understood as causal inference.
-	In accordance with the causal literature, we can make statements about the type of knowledge, that can be gained by the type of data provided. It turns out that from "raw" image data - raw data meaning images $x$ sampled from $p(x)$, without further assumptions, it is impossible learn a disentangled representation $z$. We start with a primer for causal learning (sec. \ref{sec:causallearning}), outline which inductive biases are needed for disentanglement (sec. \ref{sec:requirements}) and assess how one can instantiate such biases for disentangling the factors of shape and appearance in images (sec. \ref{sec:transform}, sec. \ref{sec:anabysyn})).
+	In accordance with the causal literature, we can make statements about the type of knowledge, that can be gained by the type of data provided. It turns out that from "raw" image data, it is actually impossible learn a disentangled representation $z$ - raw data referring to images $x$ sampled from $p(x)$, without further assumptions.
+	To elucidate this fact, we start with a primer for causal learning (sec. \ref{sec:causallearning}), outline which inductive biases are needed for disentanglement (sec. \ref{sec:requirements}) and assess how one can instantiate such biases for disentangling the factors of shape and appearance in images (sec. \ref{sec:transform}, sec. \ref{sec:anabysyn})).
 
 	\subsection{Causal Learning}\label{sec:causallearning}
 		\begin{figure}[t]
@@ -143,13 +144,13 @@
 		\end{figure}
 
 		Learning to infer causality is harder than statistical learning. We outline the basic problem for the case of two variables $x_1, x_2$: statistical learning aims at estimating probabilistic properties such as $p(x_1, x_2)$ or  $p(x_2|x_1)$ from data.
-		A well-known theme is that statistical correlation does not imply causation. Less well-known is Reichenbachs principle \cite{peters17elements, reichenbach56time}, that states: if two random variables are statistically dependent, then there exists a third variable that influences both or a direct causal link between them (Fig. \ref{fig:reichenbach}).
+		It is a well-known theme in statistics is that correlation does not imply causation. Less well-known\todo{formulate differently} is Reichenbachs principle \cite{peters17elements, reichenbach56time}, that states: if two random variables are statistically dependent, then there exists a third variable that influences both or a direct causal link between them (Fig. \ref{fig:reichenbach}).
 		In addition to estimating the probability distribution, also the causal structure has to be inferred \cite{peters17elements}.
 
-		We start with an intuitive example problem:
+		We start with an intuitive example problem (adapted from \cite{pearl18why}):
 		How to learn the causal connection between a barometer and the weather? If the barometer is working well, there exists a clear correlation between the weather condition and the needle position. Given a dataset showing both barometer and corresponding weather condition, a capable machine learning algorithm will be able to capture this correlation. However, it will fail to understand the causal direction, since this is not possible from the data.
 		Imagine how a human would go about solving this problem:
-		Having a mechanistic model of the world he could reason about the precise causal mechanism relating weather to humidity to needle position. For example a model of: weather influencing air pressure influencing barometer needle position.
+		Having a mechanistic model of the world he could reason about the precise causal mechanism relating weather to humidity to needle position. A simple model could be: weather influences air pressure, pressure influences barometer needle position.
 		What if one has no prior knowledge? A solution of childlevel simplicity is, to force the needle to move with a finger. Without the power of voodoo magic, the weather will not change. Hence causality has to go other way or via a third latent variable influencing both \ie air pressure.
 		% There cannot be an abstract intelligence, which finds out about the world purely by observation. The intelligence has to interact with the world, it has to be in the world.
 		% e.g.  RCT

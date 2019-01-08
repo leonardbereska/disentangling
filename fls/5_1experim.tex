@@ -1,7 +1,7 @@
 %&tex
 
 \chapter{Object Shape Learning}
-\begin{comment}
+% \begin{comment}
 	% PENN SHAPES
 	\begin{figure}[htp]
 		\begin{subfigure}{1.\textwidth}
@@ -269,15 +269,13 @@
 	\subsection{Intra-Class Variation}\label{sec:intraclass}
 		Intra-class variation can be both in shape and in appearance. Due to different breeds and species the animal datasets - Dogs Run, CUB-200-2011, Cat Head - present the highest degree of variability within the object class. The method in part coincidentally generalizes and in part inherently enforces in due to the data augmentation with shape and appearance transformations (see also Sec. \ref{sec:transformations}).
 
-\end{comment}
 
 \section{Transformational Effects}\label{sec:transformations}
-		\note{in this section: effect of transformations on learning, disentangling}
-		\note{effectively connecting samples from the dataset, spreading the}
-		\note{schedule transformations with exponential}
+		% \note{in this section: effect of transformations on learning, disentangling}
+		% \note{effectively connecting samples from the dataset, spreading the}
+		\note{schedule transformations with exponential, formula}
 		\note{as data augmentation}
-		\note{as blurring of data points}
-		\todo{make blurring of data points figure}
+		% \note{as blurring of data points}
 
 
 		\begin{figure}[htp]
@@ -308,58 +306,55 @@
 			% COLOR
 			\begin{figure}[htp]
 				\centering
-				\label{fig:compare}
 				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=.8\linewidth]{fig/shape/coloraugm}
 				\caption{Examples for shape and appearance transformation on CUB-200-2011. Images from the upper row relate to images directly below.}
+				\label{fig:coloraugm}
 			\end{figure}
 
 			We mimick appearance changes with image transformations in color, contrast, hue and brightness. Exemplars for the combined effect of spatial and appearance transformations are shown in Fig. \ref{fig:coloraugm}.
-			Especially for datasets with high intra-class appearance variance, connecting the data points via appearance changes is crucial. On Cat Head for example, without them, the method assigned different landmarks to black cats than to other-color cats. The model will incur no loss, as long as it always has to reconstruct black cats from images of black cats.
-			% Ideally one would want more "natural" appearance changes as well, this could be
+			Especially for datasets with high intra-class appearance variance, connecting the data points via appearance changes is crucial. On Cat Head for example, without them, the method assigned different landmarks to black cats than to other-color cats. The model will incur no loss, as long as it always has to reconstruct black cats from images of black cats. If it has to relate black and white cats (\eg via color inversion) this intra-class inconsistency has to vanish.\\
+			Ideally one would want more "natural" appearance changes as well. This could be a line of future work (cf. Sec.~\ref{sec:futurework}).
 
 
 		\subsection{Parity}
-			\begin{figure}[t]
+			\begin{figure}[htp]
 				\centering
 				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/shape/parity}
 				\caption{Parity changes: the images of the upper and lower row relate via the usual transformations and an additional parity flip. For the bird (1-5th column) images induced artificially, for the dancing humans (6-7th column) via sampling different frames from a video.}
 				\label{fig:parity}
 			\end{figure}
-			biggest failure mode of the model
-			hard to correct
-			obviously no loss for object images which are symmetrical under parity transformations, such as frontal view human beings.
-			frontal and back view too similar
+			\todo{make parity failure image}
+			The model has problems with consistent part assignment under parity changes, if these changes do not change the object enough. For example human body appearance in frontal and back view are not dissimilar enough from each other. So the model can assign the same landmark to \eg the right arm in the frontal view and the left arm in the back view.
+			Similarly, there is no distinction, for dog or bird side views facing to the left or right. However, if features on the left and on the right are very different \eg for the dancing humans the model automatically learns the distinction (see Fig.~\ref{fig:parity}).
 
-			birds parity
-			salsa parity
-			Since the human body appearances in the frontal and back views are similar, we do not expect our discovered landmarks to distinguish the left and right sides of the human body, which means that a landmark at the left leg in the frontal view can locate the right leg in the back view.
+			A tentative solution to the problem can be to incorporate parity flips in the equivariance loss. This is impossible for parity-symmetrical objects (such as frontal view humans), but works \eg for side view dogs or birds. One has to be careful in scheduling these random parity flips, as landmarks tend to align along the mirror axis as a trivial solution. A successfully learned parity model for CUB-200-2011 is shown in Fig.~\ref{fig:parity}.
 
-		 	solution: big change in features under parity -> salsa
-			solution II: if object not symmetric under parity (side view bird), incorporate parity flips in equivariance loss -> problem carefully schedule this since landmarks will tend to crowd at the mirror axis otherwise. succeeded in birds!
 
-			\begin{comment}
-	\section{Comparative Advantages}
-		\subsection{Non-Disentangling}
+% \end{comment}
+
+\section{Comparative Advantages}
+		\subsection{Non-Disentangling Approach}
 			% HUMAN3.6M DETAILED RESULTS
 			\begin{table}[!ht]
 				\centering
-				\begin{tabular}{l|ccccccccr}
+				\begin{tabular}{lcccccr}
 				\hline
-				Dataset & Human3.6M &  &  &  & &  &  \\
-				Actions & {\footnotesize All} & {\footnotesize Directions} & {\footnotesize Discussion} &  {\footnotesize Waiting }& {\footnotesize Greeting }& {\footnotesize Posing} & {\footnotesize Walking} \\
+				Dataset & Human3.6M  &  &  & &  &  \\
+				Actions &  {\footnotesize Directions} & {\footnotesize Discussion} &  {\footnotesize Waiting }& {\footnotesize Greeting }& {\footnotesize Posing} & {\footnotesize Walking} \\
 				\hline
-				Newell \cite{hourglass} (supervised)
-				& 2.16 & 1.88 & 1.92 & 2.15 & 1.62 & 1.88 & 2.21 \\
-				Zhang \cite{Zhang18}  (semi-supervised)
-				& 4.14 & 5.01 & 4.61 & 4.76 & 4.45 & 4.91 & 4.61 \\  \hline
-				Thewlis \cite{thewlis17}  (unsupervised)
-				& 7.51 & 7.54 & 8.56 & 7.26 & 6.47 & 7.93 & 5.40 \\
-				Ours (unsupervised) & \textbf{2.79} & \textbf{2.58} & \textbf{2.26} & \textbf{2.87} & \textbf{3.08} & \textbf{2.67} & \textbf{3.35}\\
+				Newell \cite{newell16hourglass} (supervis.) %& 2.16
+					& 1.88 & 1.92 & 2.15 & 1.62 & 1.88 & 2.21 \\
+				Zhang \cite{zhang18}  (semi-superv.) %& 4.14
+					& 5.01 & 4.61 & 4.76 & 4.45 & 4.91 & 4.61 \\  \hline
+				Thewlis \cite{thewlis17}  (unsuperv.) % & 7.51
+					& 7.54 & 8.56 & 7.26 & 6.47 & 7.93 & 5.40 \\
+				Ours (unsuperv.) %& \textbf{2.79}
+					& \textbf{2.58} & \textbf{2.26} & \textbf{2.87} & \textbf{3.08} & \textbf{2.67} & \textbf{3.35}\\
 				\hline
 				\end{tabular}
 				\caption{{Comparison with unsupervised, semi-supervised and supervised methods for annotated landmark prediction on the Human 3.6M testing sets for selected actions. The
 				error is in \% regarding the edge length of the image. All methods predict 16 landmarks, from which the 32 ground truth landmarks are regressed.}}
-				\label{tab:gtregressionhuman}
+				\label{tab:humanactions}
 			\end{table}
 
 			% COMPARE ZHANG
@@ -370,44 +365,35 @@
 				\label{fig:compare}
 			\end{figure}
 
-			Fig. \ref{fig:compare} provides a direct visual comparison to \cite{zhang18} on CUB-200-2011. It becomes evident that our predicted landmarks track the object much more closely. In contrast, \cite{zhang18} have learned a slightly deformable, but still rather rigid grid.
-				& 7.51 & 7.54 & 8.56 & 7.26 & 6.47 & 7.93 & 5.40 \\
-				Ours (unsupervised) & \textbf{2.79} & \textbf{2.58} & \textbf{2.26} & \textbf{2.87} & \textbf{3.08} & \textbf{2.67} & \textbf{3.35}\\
-				\hline
-				\end{tabular}
-				\caption{{Comparison with unsupervised, semi-supervised and supervised methods for annotated landmark prediction on the Human 3.6M testing sets for selected actions. The
-				error is in \% regarding the edge length of the image. All methods predict 16 landmarks, from which the 32 ground truth landmarks are regressed.}}
-				\label{tab:gtregressionhuman}
-			\end{table}
+			The method of Zhang \etal \cite{zhang18} is similar to our method, but does not disentangle shape from appearance.
+			\note{Zhang similar, but not disentangling, why does that fail, why do we suceed?}
+			In Tab.~\ref{tab:humanactions} we list the detailed results of a comparison to Zhang \etal~\cite{zhang18}.
+			Fig. \ref{fig:compare} provides a direct visual comparison to \cite{zhang18} on CUB-200-2011.\todo{reference table}
+			It becomes evident that our predicted landmarks track the object much more closely.
+			In contrast, \cite{zhang18} have learned a slightly deformable, but still rather rigid grid.
+			This is due to their separation constraint, which forces landmarks to be mutually distant.
+			We do not need such a problematic bias in our approach, since the localized, part-based representation and reconstruction guides the shape learning and captures the object and its articulations more closely.
 
-			% COMPARE ZHANG
-			\begin{figure}[htp]
-				\centering
-				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/shape/comp}
-				\caption{Comparing discovered keypoints against \cite{zhang18} on CUB-200-2011. We improve on object coverage and landmark consistency. Note our flexible part placement compared to a rather rigid placement of \cite{zhang18} due to their part separation bias.}
-				\label{fig:compare}
-			\end{figure}
+		\subsection{Holistic Approach}
 
-			Fig. \ref{fig:compare} provides a direct visual comparison to \cite{zhang18} on CUB-200-2011. It becomes evident that our predicted landmarks track the object much more closely. In contrast, \cite{zhang18} have learned a slightly deformable, but still rather rigid grid.
-			This is due to their separation constraint, which forces landmarks to be mutually distant. We do not need such a problematic bias in our approach, since the localized, part-based representation and reconstruction guides the shape learning and captures the object and its articulations more closely.
-
-		\subsection{Non-Factorizing}
-			\begin{itemize}
-				\item not factorizing into parts, holistic appearance
-				\item disentangle via video
-			\end{itemize}
+			The method of Jakab \etal \cite{jakab18} aims disentangling shape and appearance with video information. Shape is then - similar to ours - defined by the change between consecutive frames. However, they do not model the link between local parts of shape and appearance, but use a holistic appearance embedding. Constrained by reality.
+			% \begin{itemize}
+				% \item not factorizing into parts, holistic appearance
+				% \item disentangle via video
+				% \item particularly good on wrists, (highly articulated parts)
+			% \end{itemize}
 
 			% BBCPOSE DETAILED RESULTS
-			\begin{table}[!ht]
+			\begin{table}[htp]
 				\centering
 				\begin{tabular}{l|ccccccr}
 				\hline
 				Dataset & BBCPose &  &  &  & &  &  \\
 				Landmarks & {\footnotesize Head} & {\footnotesize Wrists} &  {\footnotesize Elbows }& {\footnotesize Shoulders } & {\footnotesize Avg.}  \\
 				\hline
-				Charles et al. \cite{charles}  (supervised)&
+				Charles et al. \cite{charles13bbcpose}  (supervised)&
 				95.40 & 72.95 & 68.70 & 90.30 & 79.90  \\
-				Pfister et al.  \cite{pfister} (supervised) &
+				Pfister et al.  \cite{pfister15flowingconv} (supervised) &
 				98.00 & 88.45 & 77.10 & 93.50 & 88.01  \\ \hline
 				Jakab \cite{jakab18}  (unsupervised) &
 				76.10& 56.50& 70.70& 74.30 &68.44  \\
@@ -417,34 +403,54 @@
 				\hline
 				\end{tabular}
 				\caption{{Comparison with supervised and unsupervised methods for annotated landmark prediction on the BBCPose testing sets.
-				\%-age of points within d= 6-pixels of ground-truth is reported.}}
+				\%-age of points within 6 pixels of ground-truth is reported.}}
 				\label{tab:gtregressionhuman}
 			\end{table}
 
-			%  COMPARISON TO JAKAB
-			% \begin{figure}[!ht]
-				% \centering
-				% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{mat/bbc8}
-				% \caption{{Comparison of regression results of our method (bottom rows) to \cite{jakab18} (top rows) on BBC POSE. For visualization by Jakab \etal (from their paper) ground truth is in circles and the corresponding regression in the same color. For our visualization the red dots mark the ground truth, the colored circles the regressed locations. The color coding is in terms of the error \wrt the image edge length.}}
-				% \label{fig:bbc8}
-			% \end{figure}
+			 % COMPARISON TO JAKAB
+			\begin{figure}[htp]
+				\centering
+				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/shape/bbc8}
+				\caption{Comparison of regression results of our method (bottom rows) to \cite{jakab18} (top rows) on BBC POSE. For visualization by Jakab \etal (from their paper) ground truth is in circles and the corresponding regression in the same color. For our visualization the red dots mark the ground truth, the colored circles the regressed locations. The color coding is in terms of the error \wrt the image edge length.}
+				\label{fig:bbc8}
+			\end{figure}
 
 
 
-	\subsection{Failure Modes}\label{sec:failuremodes}
+% \begin{comment}
+	% \subsection{Failure Modes}\label{sec:failuremodes}
 		\todo{search for failure modes}
 		% on cat head, human mislabelling is the most common failure mode
 	% background keypoints
 	% discuss "overfitting" what does that even mean? - @domili
 
+
 	\subsection{Ablating Contributions}\label{sec:ablation}
-		% ABLATION STUDY
-		\begin{table}
-		Leaving out the reconstruction task naturally leads to the largest drop in performance since only training on equivariance leads to collapsed landmark solutions as discussed in \cite{zhang18}.
-		Training our model without color augmentations or appearance crossing between image pairs (i.e. the crossing task) weakens, respectively neglects the disentanglement of appearance and shape and hence the performance of our model significantly. % here specifically tackling intra-class variance
-		Note that without the crossing task our models performs on par with Zhang \etal \cite{zhang18}, indicating, that this novel task could be explaining overall performance gain \wrt \cite{zhang18}. %This performance drop would be larger on datasets with articulation.
-		Leaving out the explicit equivariance leads to the smallest drop in performance. This is not surprising, as equivariance is implicitly also enforced in the crossing framework.
-		% without local features (not done yet, should we?, could ablate local decoder, or part appearance)
+			% ABLATION STUDY
+			\begin{table}
+				\centering
+				\begin{tabular}{l|cr}
+					\hline
+					Dataset & Cat Head    \\
+					\# Landmarks &  20 \\ \hline
+					full model &  9.30 \\ \hline
+					w/o $\mathcal{L}_{\textrm{eq}}$   & 11.32 \\
+					w/o $\mathcal{L}_{\textrm{rec}}$   & 35.0 \\
+					w/o appearance transform & 12.46 \\
+					w/o shape transform & 14.72 \\ \hline
+				\end{tabular}
+				\caption{{Ablation studies on Cat Head dataset. We ablate the reconstruction loss $\mathcal{L}_{\textrm{rec}}$, equivariance loss $\mathcal{L}_{\textrm{eq}}$, the color augmentation and the crossing task}}
+				\label{tab:ablation}
+			\end{table}
+
+			% what is the color augmentation: explain before
+			\todo{what is the crossing task}
+			We ablate the main components of our proposed framework: reconstruction loss $\mathcal{L}_{\textrm{rec}}$, the equivariance loss $\mathcal{L}_{\textrm{eq}}$, the appearance augmentation and the crossing task for disentangling shape and appearance. For the ablation study we use the Cat Head dataset, following the already introduced train-test setup on the task of landmark ground truth regression. Tab. \ref{tab:ablation} illustrates the ablation results.\\
+			Leaving out the reconstruction task naturally leads to the largest drop in performance since only training on equivariance leads to collapsed landmark solutions as discussed in \cite{zhang18}.
+			Training our model without color augmentations or appearance crossing between image pairs (i.e. the crossing task) weakens, respectively neglects the disentanglement of appearance and shape and hence the performance of our model significantly. % here specifically tackling intra-class variance
+			Note that without the crossing task our models performs on par with Zhang \etal \cite{zhang18}, indicating, that this novel task could be explaining overall performance gain \wrt \cite{zhang18}. %This performance drop would be larger on datasets with articulation.
+			Leaving out the explicit equivariance leads to the smallest drop in performance. This is not surprising, as equivariance is implicitly also enforced in the crossing framework.
+			% without local features (not done yet, should we?, could ablate local decoder, or part appearance)
 
 	\subsection{Crucial role of Transformations}
 		The proposed method enables to abstract away object appearance from shape.
@@ -453,4 +459,4 @@
 		The key difference to the most competitive approach \cite{zhang18} is the emphasis on disentanglement via a crossed reconstruction with shape and appearance transformations.
 		Enforcing disentanglement via targeted transformations enhances the shape representation in two ways: \emph{(i)} it asserts that no appearance information is encoded in the shape representation and vice versa and \emph{(ii)} it requires visual features to be equivariant under a spatial transformation.
 		With regards to the considerations earlier, the crucial role of the transformations are to be expected, as they enable to reach a \textit{disentanglement}.
-\end{comment}
+% \end{comment}

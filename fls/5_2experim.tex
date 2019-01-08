@@ -3,7 +3,7 @@
 	% POSE APPEARANCE SWAP
 	\begin{figure}[t]
 		\centering
-		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=.7\linewidth]{fig/factor/swappy}
+		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=.5\linewidth]{fig/factor/swappy}
 		\caption{Transferring shape and appearance on Deep Fashion. Without annotation the model estimates shape, 2nd column. Target appearance is extracted from images in top row to synthesize images. Note that we trained without image pairs only using synthetic transformations.
 		%for training we had no image pairs but only synthetic transformations.
 		%without being explicitly trained for this task.
@@ -22,6 +22,7 @@
 			Ours & {90.3}\% & {89.4}\% &{98.2}\% & {99.2}\% \\ \hline
 		\end{tabular}
 	\end{table}
+
 	\begin{table}
 		\centering
 		\caption{Percentage of Correct Keypoints (PCK) for pose estimation on shape/appearance swapped generations.\;$\alpha$ is pixel distance divided by image diagonal. Note that \cite{esser18} serves as upper bound, as it uses the groundtruth shape estimates.}
@@ -35,25 +36,23 @@
 		\end{tabular}
 	\end{table}
 
-
 	Disentangled representations of object shape and appearance allow to alter both properties individually to synthesize new images. The ability to flexibly control the generator allows, for instance, to change the pose of a person or their clothing. In contrast to previous work \cite{esser18, denton17disvideo, ma17poseguided, ma17disperson, debem18dgpose, jakab18},
 	we achieve this ability without requiring supervision \textit{and} using a flexible part-based model instead of a holistic representation. This allows to explicitly control the parts of an object that are to be altered. We quantitatively compare against \emph{supervised} state-of-the-art disentangled synthesis of human figures. Also we qualitatively evaluate our model on unsupervised synthesis of still images, video-to-video translation, and local editing for appearance transfer.
-
-	\todo{t-SNE of Shape Representation, t-SNE of Appearance Representation}
+	% \todo{t-SNE of Shape Representation, t-SNE of Appearance Representation}
 
 	\section{Disentangling Pose and Appearance}
 
 	\paragraph{Deep Fashion} \cite{liu16deepfashion, liu16deepfashionwild} consists of ca. 53k in-shop clothes images in high-resolution of $256 \times 256$. We selected the images which are showing a full body (all keypoints visible, measured with the pose estimator by \cite{cao17affinityfield}) and used the provided train-test split. For comparison with Esser \etal \cite{esser18} we used their published code.
 
-
 	On Deep Fashion \cite{liu16deepfashion, liu16deepfashionwild}, a benchmark dataset for supervised disentangling methods, the task is to separate person ID (appearance) from body pose (shape) and then synthesize new images for previously unseen persons from the test set in eight different poses. We randomly sample the target pose and appearance conditioning from the test set. Fig. \ref{fig:allswaps} shows qualitative results.
 	We quantitatively compare against supervised state-of-the-art disentangling \cite{esser18} by evaluating \emph{i)} invariance of appearance against variation in shape by the re-identification error and \emph{ii)} invariance of shape against variation in appearance by the distance in pose between generated and pose target image.
 
-	\subsection{ReID}
-	\begin{itemize}
-		\item t-SNE of IDs
-		\item Own, Other (stronger statement)
-	\end{itemize}
+	\subsection{Person Re-Identification}
+	% \begin{itemize}
+		% \item t-SNE of IDs
+		% \item Own, Other (stronger statement)
+	% \end{itemize}
+	\note{reid more, for us only means}
 
 	\begin{figure}[htp]
 		\centering
@@ -61,19 +60,22 @@
 		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/tsne_img}
 		\end{subfigure}
 		\begin{subfigure}{0.49\linewidth}
-			\begin{subfigure}{0.49\linewidth}
-			\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/tsne10}
-			\end{subfigure}\begin{subfigure}{0.49\linewidth}
-			\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/tsne15}
-			\end{subfigure}
-
-			\begin{subfigure}{0.49\linewidth}
-			\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/tsne20}
-			\end{subfigure}
-			\begin{subfigure}{0.49\linewidth}
-			\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/tsne100}
-			\end{subfigure}
+		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/tsne_bubble}
 		\end{subfigure}
+		% \begin{subfigure}{0.49\linewidth}
+			% % \begin{subfigure}{0.49\linewidth}
+			% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/tsne10}
+			% \end{subfigure}\begin{subfigure}{0.49\linewidth}
+			% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/tsne15}
+			% \end{subfigure}
+%
+			% \begin{subfigure}{0.49\linewidth}
+			% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/tsne20}
+			% \end{subfigure}
+			% \begin{subfigure}{0.49\linewidth}
+			% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/tsne100}
+			% \end{subfigure}
+		% \end{subfigure}
 		\caption{Visualization of feature distribution for generated person. (Right) t-SNE (perplexity 16) of 10 generated IDs, (left) color-coded t-SNE (perplexity 12) for 10, 15, 20 and 100 IDs. Each ID has 8 samples. The different IDs are clearly separable, despite variation in pose: Hence, generated appearance is invariant to pose.}
 		\label{fig:pckcurve}
 	\end{figure}
@@ -84,14 +86,14 @@
 	Although our approach is unsupervised it is competitive compared to the supervised VU-Net \cite{esser18}.
 
 
-	\subsection{Pose}
+	\subsection{Pose Estimation}
 	\begin{figure}[htp]
 		\centering
 		% \begin{subfigure}{0.49\linewidth}
 		% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/pck18}
 		% \end{subfigure}
 		% \begin{subfigure}{0.49\linewidth}
-		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/factor/pck25}
+		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.7\linewidth]{fig/factor/pck25}
 		% \end{subfigure}
 		\caption{PCK Curve for VU-Net \cite{esser18} and Ours for re-estimating pose with a 25 keypoint human pose detector.}
 		\label{fig:pckcurve}
@@ -130,6 +132,7 @@
 		\item Own Dataset: Move KP
 		\item DeepFashion: exchange parts
 	\end{itemize}
+
 	\begin{figure}[htp]
 		\centering
 		\begin{subfigure}{1.\linewidth}
@@ -145,6 +148,7 @@
 		\caption{Moving individual body landmarks for conditional generation (a) arm (b) head.}
 		\label{fig:movekp}
 	\end{figure}
+
 \section{Follow-Up}
 	\begin{itemize}
 		\item make generative:(KP distribution estimation, variational features).
