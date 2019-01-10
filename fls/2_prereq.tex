@@ -60,7 +60,7 @@
 	\subsection{Autoencoding Formulations}\label{sec:autoencoding}
 		An autoencoding model is learning by reconstructing samples of data, $\hat x = f(x)$. To enforce data compression (otherwise the identity function is a trivial solution of autoencoding) the function has an information bottleneck, namely an inferred latent code $z$ of reduced dimension. The autoencoder is then the chain of an encoding function $z = e(x)$ and a decoding function $\hat x = d(z) = d(e(x))$.
 
-		Whereas the conventional autoencoder consists of deterministic mappings $e, d$, the \textit{variational autoencoder} \cite{kingma16vae} models the probability distribution $p(x)$. More specifically, it maximizes a lower bound to the logarithmic likelihood $\log p(x)$ of data $x$. This so-called variational lower bound $\mathcal{L}$ is given by:
+		Whereas the conventional autoencoder consists of deterministic mappings $e, d$, the \textit{variational autoencoder} \cite{kingma13vae} models the probability distribution $p(x)$. More specifically, it maximizes a lower bound to the logarithmic likelihood $\log p(x)$ of data $x$. This so-called variational lower bound $\mathcal{L}$ is given by:
 		% \begin{equation}\label{eq:vae}
 			% \mathcal{L} = \underbrace{\mathds{E}_{z\sim q(z|x)}  \log p(x|z)}_{\textrm{reconstruction loss}}  - \underbrace{\textrm{KL}(q(z|x)||p(z))}_{\textrm{regularization}}
 		% \end{equation}
@@ -72,10 +72,10 @@
 		In the current machine learning contexts, all functions ($e, d$) and or moments ($\mu, \Sigma$) are modelled with neural networks.
 
 	\subsection{Adversarial Formulations}\label{sec:adversarial}
-		\textit{Generative adversarial networks} (GAN) \cite{goodfellow14gan} consist of two neural networks competing in a zero-sum game. A generator network $G$ is generating images based on a latent code $z$ sampled from a distribution $p(z)$. The discriminator network $D$ is a binary classifier with the task to classify an image as originating from the data distribution $p_{\textrm{data}}$ or from the distribution produced by $G$. The loss function of $G$ is the negative of the loss of $D$, such that one can formulate the optimization in a minmax form:
+		\textit{Generative adversarial networks} (GAN) \cite{goodfellow14gan} consist of two neural networks competing in a zero-sum game. A generator network $G$ is generating images based on a latent code $z$ sampled from a distribution $p(z)$. The discriminator network $D$ is a binary classifier with the task to classify an image as originating from the data distribution $p_{\mathrm{data}}$ or from the distribution produced by $G$. The loss function of $G$ is the negative of the loss of $D$, such that one can formulate the optimization in a minmax form:
 		\begin{equation}
 			% \begin{split}
-			\min_D \max_G - \frac{1}{2} \mathds{E}_{x\sim p_{\texttrm{data}}}[\log D(x)] - \frac{1}{2}\mathds{E}_{z\sim p(z)}[\log (1-D(G(z)))]
+			\min_D \max_G - \frac{1}{2} \mathds{E}_{x \sim p_{\mathrm{data}}} [\log D(x)] - \frac{1}{2} \mathds{E}_{z\sim p(z)}[\log (1-D(G(z)))]
 			% \end{split}
 		\end{equation}
 		The generator is then optimized to make the output indiscriminable from the data distribution.
@@ -204,3 +204,6 @@
 		One can combine a model for analysis and a model for synthesis to reconstruct an image (autoencoding, cf. sec \ref{sec:autoencoding}).
 		Herein the synthesis can be tightly constrained to fit the assumptions about reality \cite{tieleman14thesis}.
 		Assumptions about how shape and appearance interact enable disentanglement.
+
+\todo{add shape and appearance}
+\todo{objects}

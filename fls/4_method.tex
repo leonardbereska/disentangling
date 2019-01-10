@@ -18,8 +18,9 @@
 	% \caption{An object is represented in parts. Each part has a distinct spatial extend (part shape) and a corresponding feature descriptor (part appearance). (a) input image, (b) model output of part shapes (each plotted in a different color), (c) schematic illustration of part appearances}
 	% \label{fig:representation}
 % \end{figure}
+	\todo{representation figure}
 	\todo{link to disentangling, causality stronger}
-	To capture an object in an abstract representation, we follow two key ideas: \emph{(i)} disassembling the object into its constituent parts and \emph{(ii)} disentangling spatial geometry (shape) from visual features (appearance). Hence, we model an object as a composition of parts, each part with a part appearance and a part shape, see Fig. \ref{fig:representation}. The part shape should correspond to the area in the image where the part is located, whereas the part appearance is a feature descriptor for that area. The overall object representation is then the collection of part shapes and part appearances. \\
+	To capture an object in an abstract representation, we follow two key ideas: \emph{(i)} disassembling the object into its constituent parts and \emph{(ii)} disentangling spatial geometry (shape) from visual features (appearance). Hence, we model an object as a composition of parts, each part with a part appearance and a part shape, as sketched in Fig. \ref{fig:representation}. The part shape should correspond to the area in the image where the part is located, whereas the part appearance is a feature descriptor for that area. The overall object representation is then the collection of part shapes and part appearances. \\
 	% \begin{equation}
 	%(a, s) = \cu{\sigma}_i ({\alpha}_i, {\sigma}_i)
 	%\end{equation}
@@ -28,7 +29,7 @@
 	% what do our representations entangle still?:
 	% shape: position, shape, size
 	% appearance: illumination, color, texture, material
-	The disentanglement of shape and appearance can be enforced by demanding that shape is invariant under the transformation of appearance and vice versa. This is realized in a two-stream auto-encoding formulation. Here, an image is reconstructed from a combination of shape and appearance, with shape extracted from the appearance-transformed image and appearance from a shape-transformed image. Additionally, the part shape is tied to the location of the part in the image: an equivariance loss encourages that the part shape moves in unison with the part in the image. We implement these objectives into a loss framework, which is explained in sec. \ref{sec:framework}. \\
+	The disentanglement of shape and appearance can be enforced by demanding that shape is invariant under the transformation of appearance and vice versa. This is realized in a two-stream autoencoding formulation. Here, an image is reconstructed from a combination of shape and appearance, with shape extracted from the appearance-transformed image and appearance from a shape-transformed image. Additionally, the part shape is tied to the location of the part in the image: an equivariance loss encourages that the part shape moves in unison with the part in the image. We implement these objectives into a loss framework, which is explained in sec. \ref{sec:framework}. \\
 	To assert a decomposition into independent local parts, we ensure their local modelling and treatment throughout the whole pipeline. This is highlighted when describing the architecture in sec. \ref{sec:architecture}.
 
 	\begin{figure}[htp]
@@ -63,8 +64,8 @@
 		{\sigma}_{s(\mathbf{x})} &= s({\sigma}_{\mathbf{x}}) \tag{equivariance of shape}
 	\label{eq:invar}
 	\end{align} % quad \forall i \leq n
-	Our method builds on the auto-encoding paradigm, with part shapes and part appearances assuming the role of the latent code.
-	To incorporate these constraints into the loss of an auto-encoder, we reconstruct an image $\mathbf{x}$ not from the shape and appearance $({\alpha}_\mathbf{x}, {\sigma}_\mathbf{x})$ determined from the original image $\mathbf{x}$, but from appropriately transformed images $({\alpha}_{s(\mathbf{x})}, {\sigma}_{a(\mathbf{x})})$.
+	Our method builds on the autoencoding paradigm, with part shapes and part appearances assuming the role of the latent code.
+	To incorporate these constraints into the loss of an autoencoder, we reconstruct an image $\mathbf{x}$ not from the shape and appearance $({\alpha}_\mathbf{x}, {\sigma}_\mathbf{x})$ determined from the original image $\mathbf{x}$, but from appropriately transformed images $({\alpha}_{s(\mathbf{x})}, {\sigma}_{a(\mathbf{x})})$.
 	If the invariance constraints, as formulated above, are full-filled, these transformations do not change the latent code.
 	Thus, the loss implicitly enforces invariance.
 	To obtain shape and appearance, we encode both $a(\mathbf{x})$ and $s(\mathbf{x})$ with an encoder $\mathrm{E}$.
@@ -90,7 +91,7 @@
 	Let us examine what this formulation means on the level of a single part: the part appearance $\alpha^i_{\mathbf{x}}$ is extracted at locations in the spatially transformed image ${\sigma}^i_{s(\mathbf{x})}$, but then used for reconstruction at the location in the original image ${\sigma}^i_{\mathbf{x}}$. For example in Fig.  \ref{fig:architecture} the appearance of the arm will be extracted in a raised position, but then these features are used for reconstructing an arm in a lowered position. For this to succeed, firstly, the appearance features need to be sufficiently abstract. Secondly, part locations of the two images have to refer to the same part and track the location of it consistently. This part assignment consistency is an implicit way to improve equivariance under the shape transformations.\\
 	%The shape also need to be invariant under appearance transformations, so part assignment needs to be consistent .
 	%For video data the crossing task can be run on images pairs that show the same object in a different articulation (i.e. different frames of the video), enforcing equivariance of $s$ with respect to natural shape transformations. \\
-	For a known shape transformation the equivariance of shape can also be encouraged explicitly with a loss. This has been used before in the context of unsupervised landmark learning by \cite{thewlis17, zhang18} as a point-wise loss on a part probability map, encouraging the exact location of a part to transform accordingly. In our case, the part shapes shall not encode probability, but instead the spatial extend of a part. In approximation, we want the first two moments ($\mu, \Sigma$) to transform correctly. Thereby the extend and orientation of the parts is penalized in addition to the mere position.
+	For a known shape transformation the equivariance of shape can also be encouraged explicitly with a loss. This has been used before in the context of unsupervised landmark learning by \cite{thewlis17, zhang18} as a point-wise loss on a part probability map, encouraging the exact location of a part to transform accordingly. In our case, the part shapes shall not encode probability, but instead the spatial extend of a part. In approximation, we want the first two moments ($\mu, \Sigma$) to transform correctly. Thereby the extend and orientation of the parts is penalized in addition to its mere position.
 	\begin{equation}
 	\mathcal{L}_{\textrm{equiv}}^i = \mathcal{L}_{\mu}^i+ \mathcal{L}_{\Sigma}^i
 	\label{covariance}
@@ -102,17 +103,16 @@
 
 
 \section{Analysis-by-Synthesis Architecture}\label{sec:architecture}
-	The auto-encoding pipeline consists of analysis and synthesis. The \textbf{analysis} is the {encoding} of both shape and appearance for each part. The \textbf{synthesis} is the meaningful {recombination} of this information into a latent image and the {decoding} of this latent image to reconstruct the image. %The whole process is sketched in Fig. \ref{fig:framework}, the operations in more detail are visualized in Fig. \ref{fig:architecture}.
+	The autoencoding pipeline consists of analysis into factors and subsequent synthesis. The \textbf{analysis} is the {encoding} of both shape and appearance for each part. The \textbf{synthesis} is the meaningful {recombination} of this information into a latent image and the {decoding} of this latent image to reconstruct the image. %The whole process is sketched in Fig. \ref{fig:framework}, the operations in more detail are visualized in Fig. \ref{fig:architecture}.
 	Throughout the procedure we maintain the local correspondence between the representation and the image: We ensure a local appearance extraction in the encoding, a local synthesis in the recombining and a local usage of the latent image in the decoding. These architectural restrictions enable a disentangled part representation with the interpretation of a part as a localized entity. \\
 
 	\subsection{Analysis}
 
-		% \footnote{ For a slim notation, we leave out the explicit reference to the generic input image $\mathbf{x}$ in this section: $\alpha, \sigma, \alpha^i, {\sigma}^i$ refer to ${\alpha}_\mathbf{x}, {\sigma}_{\mathbf{x}}, \alpha^i_{\mathbf{x}}, {\sigma}i_{\mathbf{x}}$.}
-		The encoding of shape and appearance given an image ${(\alpha, \sigma | \mathbf{x})}$ proceeds in two steps: \\
-		\emph{(i)} $(\sigma |\mathbf{x})$: The part shapes are predicted given the image. To extract part shapes we use an hourglass neural network. We utilize the hourglass in both steps, as this model is able to preserve pixel-wise locality, and also integrates information from multiple scales \cite{newell16hourglass}. The network input is an image $\mathbf{x}$, the output a stack of $n$ part shapes $s =  \{ {\sigma}^i| i=1, ...,  n\}$.\\
+		The encoding of shape and appearance given an image ${(\alpha, \sigma | \mathbf{x})}$\footnote{ For a slim notation, we leave out the explicit reference to the generic input image $\mathbf{x}$ in this section: $\alpha, \sigma, \alpha^i, {\sigma}^i$ refer to ${\alpha}_\mathbf{x}, {\sigma}_{\mathbf{x}}, \alpha^i_{\mathbf{x}}, {\sigma}i_{\mathbf{x}}$.} proceeds in two steps: \\
+		\emph{(i)} $(\sigma |\mathbf{x})$: The part shapes are predicted given the image. To extract part shapes we use an hourglass neural network. We utilize the hourglass in both steps, as this model is able to preserve pixel-wise locality, and also integrates information from multiple scales \cite{newell16hourglass}. The network input is an image $\mathbf{x}$, the output a stack of $n$ part shapes $\sigma =  \{ {\sigma}^i| i=1, ...,  n\}$.\\
 		\emph{(ii)} $(\sigma| \alpha , \mathbf{x})$: The part appearances $\alpha =  \{\alpha^i \vert i=1, ...,  n\}$ are predicted given the image and the part shapes. Again we use an hourglass network, albeit shallower. The input is the original image concatenated with the stack of part shapes. The output is a feature stack $F$. A part appearance is obtained by averaging the feature stack with the a part shape:
 		\begin{equation}
-			\alpha^i = \sum_{p \in \Lambda} A(p) \frac{{\sigma}^i(p)}{\sum_{p' \in \Lambda}{\sigma}i(p')}.
+			\alpha^i = \sum_{p \in \Lambda} A(p) \frac{{\sigma}^i(p)}{\sum_{p' \in \Lambda}{\sigma}^i(p')}.
 		\end{equation}
 		Each $\alpha^i$ now describes the appearance of a part spatially localized by the part shape ${\sigma}^i$. \\
 
@@ -123,7 +123,7 @@
 
 		Firstly, we re-merge shape and appearance into images of descriptors at the correct locations. For each part, appearance is multiplied with the corresponding shape, yielding $n$ part feature images:
 		\begin{equation}
-			z^i(\mathbf{x}) = {\sigma}_i(\mathbf{x}) \cdot \alpha_i .
+			z^i(\mathbf{x}) = {\sigma}^i(\mathbf{x}) \cdot \alpha^i .
 		\end{equation}
 
 
@@ -133,10 +133,10 @@
 		\end{equation}
 		The result is an image of part feature descriptors located according to their corresponding part shape, which we call latent image $Z$.
 		\note{What is the rationale behind this approach?}
-		Finally, the latent image needs to be decoded to an image. This is done by a neural network decoder. The decoder architecture is modeled after the up-sampling stream of a standard U-Net \cite{ronneberger15unet}. The latent image is scaled to different scales \todo{alter figure z1 etc} and inserted, after each layer, in addition to the part shapes\todo{ why add shapes?}. As before, the crucial property of the parts that needs to be conserved is their local direct correspondence to the image. On the one hand, one needs to assure, that the receptive field of the neurons does not extend to the full image, in order to thwart a complex non-local interaction of part information. This is why we use only half of a U-Net instead of a complete U-Net or an hourglass architecture.
+		Finally, the latent image needs to be decoded to an image. This is done by a neural network decoder. The decoder architecture is modeled after the up-sampling stream of a standard U-Net \cite{ronneberger15unet}. The latent image is scaled to different resolutions\todo{alter figure z1 etc} and inserted, after each layer, in addition to the part shapes\todo{ why add shapes?}. As before, the crucial property of the parts that needs to be conserved is their local direct correspondence to the image. On the one hand, one needs to assure, that the receptive field of the neurons does not extend to the full image, in order to thwart a complex non-local interaction of part information. This is why we use only half of a U-Net instead of a complete U-Net or an hourglass architecture.
 		On the other hand, it is essential to regularize the information already before passing it to the decoder. Keeping in mind that the part shape should be of rather simple geometry, we introduce a differentiable information bottlenecks, in order to prevent the shape from being scattered over the object. It is an approximation of the part shape as
 		\begin{equation}\label{eq:approx}
-			\hat {\sigma}_i(x) = \frac{1}{1 + (\mathbf{x} -\mu)^T \Sigma^{-1} (\mathbf{x} - \mu)},
+			\hat {\sigma}^i(x) = \frac{1}{1 + (\mathbf{x} -\mu)^T \Sigma^{-1} (\mathbf{x} - \mu)},
 		\end{equation}
 		where $\mu$ and $\Sigma$ are the mean and the covariance matrix of the part shape ${\sigma}^i$. This allows to pass second-order information such as size and orientation of the part to the decoder. Note that all operations are fully differentiable, such that a gradient-based optimization is possible.
 

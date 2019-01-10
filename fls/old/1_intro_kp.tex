@@ -1,13 +1,65 @@
-\begin{figure}[t] \centering \includegraphics{mat/intro} \caption{\textit{"imagine, how ridiculous you would look, if you wore that hot pants"}} \label{fig:x4} \end{figure}
+%&tex
+\chapter{Intro}
 
-\section*{Why Disentangling?} \begin{itemize} \item Computer vision: automatically discern patterns, that reflect structures in physical world \item Why disentangle: detect causal factors to image \item Pragmatic reason: efficient transfer learning, multi-task learning \item Philosophical reason: build machines that understand mechanisms, reason about world \cite{Pearl:2018im} \item Targeted changes $\rightarrow$ thought experiments; not possible for e.g. GAN, VAE\ \textit{"imagine, ..."}\ science of images $\Rightarrow$ science of imagination \cite{Mahadevan:2018tz}. \end{itemize}
+\section{Why Disentangle?}
+	\begin{itemize}
+		\item Computer vision: automatically discern patterns, that reflect structures in physical world
+		\item Why disentangle: detect causal factors to image
+		\item Pragmatic reason: efficient transfer learning, multi-task learning
+		\item Philosophical reason: build machines that understand mechanisms, reason about world \cite{Pearl:2018im}
+		\item Targeted changes $\rightarrow$ thought experiments; not possible for e.g. GAN, VAE\ \textit{"imagine, ..."}\ science of images $\Rightarrow$ science of imagination \cite{Mahadevan:2018tz}.
+	\end{itemize}
 
-% What is the problem? \section*{Problem formulation} \begin{itemize} \item Goal: modelling of articulated objects \item $\Rightarrow$ Articulated objects consist of rigid parts able to move w.r.t. each other \item Articulation if seen by parts simplifies to determination of arrangement of parts \cite{Ross:2006uc, Felzenszwalb:2010ve} \item better shape understanding by explaining away appearance %\item Arrangement (spatial) can be distinguished from parts appearance \item Factorization into shape and appearance BUT part-wise\ example: e.g. moving leg $\rightarrow$ jeans moves with it, changing jeans to hot pants $\rightarrow$ pullover same\ $\Rightarrow$ model object of parts and part as part shape + part appearance \end{itemize}
+\section{How Disentangle?}
+	Statistical residues -> will depends on statistical nature of data (e.g. Gaussian with two dimensions P(s, a)
+	current machine learning: association, probability distribution modeling.
+	% from pure image data without any further assumptions the information about the world will not be learned, because the information does not exist in the data.
 
-% Why unsupervised? \section*{Why Unsupervised?} \begin{itemize} \item There are: shape-supervised disentangling methods \cite{Esser:2018ue, Ma:2017wq, Ma:2017uu, deBem:2018wp, Siarohin:2018wk}. \item By conditioning on shape sucessfully explain away appearance \item BUT: limited to labelled object categories \end{itemize}
+	How do humans disentangle?
+	2. Apart from pure association -> access to video information
+	e.g. video information: how do objects behave across time?
 
-% What is the contribution? \section*{We Propose} \begin{itemize} \item Fully differentiable, end-to-end framework for learning part-wisely disentangled shape and appearance representation \item No prior assumptions on object shape (i.e. no labels) \item Learn factors by reconstruction (analysis-by-sythesis/inverse graphics approach \cite{Yildirim:2015ur}) \end{itemize}
+	3. Learning by interacting: knowing change by changing.
+	second rung on causal ladder (Pearl): intervention. (, acting) What happens if I do?
+	P(s, do(a))
+	Others: counterfactual (imagining), association.
+	In humans e.g. egomotion cues: how does image on retina change if I move.
 
-% What are the results?: \section*{We Contribute} \begin{itemize} \item Formalism to learn representation articulated objects in terms of shape-appearance disentangling parts \item Invariance (+equivariance) behavior under image transformations \item (MAIN NOVELTY) part-based crossing task as a means to disentangle \item Local (novel) architectural implementation of this part-based model. \end{itemize}
 
-% Results \section*{And Evaluate} \begin{itemize} \item State-of-the-art for unsupervised learning of object shape: \item Structuring static objects on CelebA \cite{Liu:2015vj}, Cat Head \cite{Zhang:2008uj} and CUB-200-2011 \cite{Wah:2011vq} (SOA) \item Recovering object articulation on Human3.6M \cite{Ionescu:2014ua} and BBCPose \cite{Charles:2013tb} (SOA by big margin) \item Qualitatively (even) more diffictult also: Penn Action, Dogs Run \item Pose-appearance swaps: on DeepFashion, comparable performance with VU-Net in ReID and Pose on generations. \item Part swaps (DF) (new task, insight into method) \item Video-to-Video translation (BBCPose) (smooth frame-to-frame pose-appearance swap) \end{itemize}
+	How disentangle?
+	change factor -> image change equivariantly, leave others invariant
+	-> equivariance, invariance
+
+	change can be mimicked artificially
+
+
+\section{Contributions I}
+	\textbf{Hypothesis}: learning shape requires abstracting away appearance -> hence disentangling
+	\textbf{Hypothesis \emph{ii)}}: learning disentanglement from pure data is fundamentally constrained. need to take causal literature into account -> disentangling causal factors will need assumptions on causal model and/or interventional/interactional data (instead of raw data).
+	% need to interact with the world, need to change, need to model physical reality -> image transformations, analyis-by-synthesis
+	\begin{itemize}
+		\item validate and evaluate method developed by Lorenz \etal\ 2018 for disentangling
+		\item overview over state-of-the-art disentangling, analysis of future directions
+		\item explain method in context to these
+		\item evaluate unsupervised shape learning:
+			\begin{itemize}
+				\item human faces, bodies (CelebA, Human3.6M)
+				\item animal faces, bodies (cats, dogs, birds)
+				\item composite objects (dancing pair)
+			\end{itemize}
+		\item make own video dataset
+			\begin{itemize}
+				\item for disentangling human pose and appearance (heidelbergpose)
+				\item for articulated animal video (dogs)
+				\item for composite object (pair dancing salsa)
+			\end{itemize}
+		\item ablation study (reconstruction, equivariance loss, transformations)
+		\item qualitative comparison to non-disentangling composite shape learning (Zhang)
+		\item evaluating disentanglement
+			\begin{itemize}
+				\item reID
+				\item pose estimation
+			\end{itemize}
+	\end{itemize}
+	result: soa in shape learning, (first) unsupervised disentangling of articulated shape and appearance
+

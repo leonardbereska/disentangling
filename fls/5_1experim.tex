@@ -25,8 +25,7 @@
 	For this, we follow the protocol of Thewlis \etal \cite{thewlis17}, fixing the network weights after training the model, extracting unsupervised landmarks and training a single linear layer without bias.
 	The performance is quantified on a test set by the mean error and the percentage of correct landmarks (PCK).
 	We extensively evaluate our model on a diverse set of datasets, each with specific challenges.
-	On all datasets we outperform the state-of-the-art by a significant margin.\\
-
+	On all datasets we outperform the state-of-the-art by a significant margin.\todo{smoother transition}
 	In the following, we proceed through our shape learning results: we present the quantitative and qualitative \textit{results} by category (sec. \ref{sec:results}). On the way we introduce the datasets for each category. In the next section we highlight and discuss the \textit{challenges}, which the datasets present (sec. \ref{sec:challenges}) and subsequently argue for the importance of the \textit{transformations} as a means to overcome those challenges (sec. \ref{sec:transformations}).
 
 \section{Diverse Object Categories}\label{sec:results}
@@ -337,7 +336,7 @@
 			% HUMAN3.6M DETAILED RESULTS
 			\begin{table}[!ht]
 				\centering
-				\begin{tabular}{lcccccr}
+				\begin{tabular}{l|cccccr}
 				\hline
 				Dataset & Human3.6M  &  &  & &  &  \\
 				Actions &  {\footnotesize Directions} & {\footnotesize Discussion} &  {\footnotesize Waiting }& {\footnotesize Greeting }& {\footnotesize Posing} & {\footnotesize Walking} \\
@@ -434,18 +433,18 @@
 					Dataset & Cat Head    \\
 					\# Landmarks &  20 \\ \hline
 					full model &  9.30 \\ \hline
-					w/o $\mathcal{L}_{\textrm{eq}}$   & 11.32 \\
+					w/o $\mathcal{L}_{\textrm{equiv}}$   & 11.32 \\
 					w/o $\mathcal{L}_{\textrm{rec}}$   & 35.0 \\
 					w/o appearance transform & 12.46 \\
 					w/o shape transform & 14.72 \\ \hline
 				\end{tabular}
-				\caption{{Ablation studies on Cat Head dataset. We ablate the reconstruction loss $\mathcal{L}_{\textrm{rec}}$, equivariance loss $\mathcal{L}_{\textrm{eq}}$, the color augmentation and the crossing task}}
+				\caption{{Ablation studies on Cat Head dataset. We ablate the reconstruction loss $\mathcal{L}_{\textrm{rec}}$, equivariance loss $\mathcal{L}_{\textrm{equiv}}$, the color augmentation and the crossing task}}
 				\label{tab:ablation}
 			\end{table}
 
 			% what is the color augmentation: explain before
 			\todo{what is the crossing task}
-			We ablate the main components of our proposed framework: reconstruction loss $\mathcal{L}_{\textrm{rec}}$, the equivariance loss $\mathcal{L}_{\textrm{eq}}$, the appearance augmentation and the crossing task for disentangling shape and appearance. For the ablation study we use the Cat Head dataset, following the already introduced train-test setup on the task of landmark ground truth regression. Tab. \ref{tab:ablation} illustrates the ablation results.\\
+			We ablate the main components of our proposed framework: reconstruction loss $\mathcal{L}_{\textrm{rec}}$, the equivariance loss $\mathcal{L}_{\textrm{equiv}}$, the appearance augmentation and the crossing task for disentangling shape and appearance. For the ablation study we use the Cat Head dataset, following the already introduced train-test setup on the task of landmark ground truth regression. Tab. \ref{tab:ablation} illustrates the ablation results.\\
 			Leaving out the reconstruction task naturally leads to the largest drop in performance since only training on equivariance leads to collapsed landmark solutions as discussed in \cite{zhang18}.
 			Training our model without color augmentations or appearance crossing between image pairs (i.e. the crossing task) weakens, respectively neglects the disentanglement of appearance and shape and hence the performance of our model significantly. % here specifically tackling intra-class variance
 			Note that without the crossing task our models performs on par with Zhang \etal \cite{zhang18}, indicating, that this novel task could be explaining overall performance gain \wrt \cite{zhang18}. %This performance drop would be larger on datasets with articulation.
