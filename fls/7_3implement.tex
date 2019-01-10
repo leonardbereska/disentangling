@@ -1,0 +1,69 @@
+% \section{Implementation Details and Settings}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{l|cccc}
+		\hline
+		Dataset & $\#$ landmarks&  res. & lr.  &  advers. \\ \hline
+		Cat Head \cite{zhang08cathead} & 10\ /\ 20 & $128\times128$ &  0.001   &  \ding{55}\\
+		% Cat Head & 20&  1.0 &5.0&0.001    \\
+		CelebA \cite{liu15facewild}  & 10  & $128\times128$  &0.001  &  \ding{55}\\
+		% CelebA & 30 &  1.0 &5.0&0.001   \\
+		Human3.6M \cite{ionescu14human36m}& 16  & $128\times128$  &  0.0002  &  \ding{55}  \\
+		Penn Action \cite{zhang13penn} & 16 &  $128\times128$  & 0.0002  &   \ding{55}\\
+		Dogs Run (own) & 12 &   $128\times128$  & 0.001 &  \ding{55} \\
+		CUB-200-2011 \cite{wah11birds}& 10 &   $128\times128$ & 0.001   &   \ding{55}\\
+		BBC Pose Regression \cite{charles13bbcpose} & 30&  $128\times128$ &0.001   &  \ding{55} \\
+		BBC Pose Synthesis \cite{charles13bbcpose} & 40&  $256\times256$ & 0.001   &  \ding{51}\\
+		Deep Fashion  \cite{liu16deepfashion, liu16deepfashionwild} & 16 &  $256\times256$ & 0.001  &  \ding{51}  \\
+
+	\end{tabular}
+	\caption{Settings for different experiments: number of landmarks, input resolution, learning rate of Adam optimizer, adversarial task }
+	\label{tab:hypers}
+\end{table}
+
+
+\paragraph{Implementation Details.}
+	Table \ref{tab:hypers} gives an overview over the different settings for the datasets we used in our experiments.
+
+	The architecture of the encoder for shape $E_{\sigma}$ and appearance $E_{\alpha}$ is based on the implementation %\cite{Walidtf}
+	of the stacked hourglass architecture \cite{newell16hourglass}.
+	In a first step the image with input resolution $h \times w \times 3$ is processed by a series of convolutions to image features of dimension $64 \times 64 \times 256$.
+	The hourglass modules of $E_{\sigma}$ and $E_{\alpha}$ operate on a maximal resolution of $64 \times 64$, thus part activation maps and the localized image appearance encoding both have a spatial dimension of $64 \times 64$.
+	$E_{\sigma}$ reaches its lowest resolution at $4 \times 4$ pixels whereas $E_{\alpha}$ has its lowest resolution at $32 \times 32$ pixels.
+	All residual blocks of the hourglass modules have $256$ feature channels.
+	The decoder is a variant of a U-Net \cite{ronneberger15unet} operating at a resolution of $h \times w$ pixels.
+	Different from a standard U-Net we do not learn the downsampling stream.
+	Through skip connections the approximate part activations maps are passed to the upsampling stream with the appropriate resolutions.
+	We distribute the local appearance encoding together with the corresponding approximate part activation maps into a multiscale bottleneck of resolution $4 \times 4$ to $16 \times 16$ in the Unet.
+	The convolutional filters in the first up-sampling stage of the U-Net have $512$ feature channels.
+	The number of feature channels is halved every two upsampling stages.
+	\\
+	%\textbf{Local Loss.}
+\paragraph{Local Loss.}
+	The $\ell_1$ reconstruction loss \todo{insert reference}is weighted locally around the part activations $\sigma^i(\mathbf{x})$. For this, we multiply the loss with a soft mask. %, which is nonzero in the neighborhood of each part shape.
+	For an image $\mathbf{x}$ at pixel $u$ the mask takes the form:
+	\begin{equation}
+		\textrm{mask}[u] = \text{min}\big(\sum_i  \frac{1}{1 + \lVert u -  \mu[\sigma^i(\mathbf{x})]/\lambda_\text{scal} \rVert}, 1\big),
+	\end{equation}
+	where $\lambda_\text{scal}$ is a hyperparameter.
+	We do not propagate gradients through the means $\mu([\sigma^i(\mathbf{x})])$ of the mask.\\
+	%\textbf{Decoder Approximation.}
+
+
+	%=(
+	%As denoted in (Sect. 3), the decoder receives approximated part activation maps %shapes %
+	%$\tilde{\sigma}_i(a(x))$ (Eq. 7).
+	%\begin{equation}
+	%\tilde{\sigma}_i(a(x))[u] = \frac{1}{1 + (u -\mu_i)^T \Sigma_i^{-1} (u - \mu_i)},
+	%\end{equation}
+	%where $\mu_i$ and  $\Sigma_i$ denote the mean and covariance of the normalized part activation maps $\sigma_i(a(x))/\sum_{u \in \Lambda} \sigma_i(a(x))[u]$.
+	%We utilize two variants for this approximation: \emph{i)} $\Sigma_i$ is set fixed to the identity matrix
+	%\emph{ii)} $\Sigma_i$ is the covariance of $\sigma_i(a(x)$. In practice \emph{i}) leads to more confined part shapes.
+
+
+
+\paragraph{Adversarial Task.}
+	To improve the quality of image generations, we implement a variant of the adversarial task, as presented in \cite{isola17image2image}: A discriminator is trained to classify $N \times N$ image patches as real or fake.
+	Using the mean locations of part shapes as center points, we extract image patches of size $49 \times 49$ from the real image $\mathbf{x}$ and the generated image $\hat{\mathbf{x}}$. As conditioning, the discriminator is additionally provided with corresponding patches extracted on the stack of approximated part activations $\tilde{\sigma}^i(\mathbf{x})$. The discriminator is implemented as a lightweight CNN architecture consisting of 4 convolution layers with stride 2 followed by a dense layer.
+	The adversarial task is trained simultaneously with the main objective function\todo{insert reference}, no subsequent fine-tuning step is necessary.
