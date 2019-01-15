@@ -1,6 +1,6 @@
 %&tex
 \chapter{Disentanglement of Shape and Appearance}
-\begin{comment}
+% \begin{comment}
 	Disentangled representations of object shape and appearance allow to alter both properties individually to synthesize new images. The ability to flexibly control the generator allows, for instance, to change the pose of a person or their clothing. In contrast to previous work \cite{esser18, denton17disvideo, ma17poseguided, ma17disperson, debem18dgpose, jakab18},
 	we achieve this ability without requiring supervision \textit{and} using a flexible part-based model instead of a holistic representation. This allows to explicitly control the parts of an object that are to be altered. We quantitatively compare against \emph{supervised} state-of-the-art disentangled synthesis of human figures. Also we qualitatively evaluate our model on unsupervised synthesis of still images, video-to-video translation, and local editing for appearance transfer.
 	% \todo{t-SNE of Shape Representation, t-SNE of Appearance Representation}
@@ -12,6 +12,7 @@
 	% In a disentangled representation of object shape and appearance it should be possible to generate from the same shape with different appearances and vice versa.
 	% In our model we can choose the shape or appearance conditioning by providing images as input to the shape or the appearance stream.
 
+% \end{comment}
 \section{Disentangling Pose and Appearance}\label{sec:poseandappearance}
 		% POSE APPEARANCE SWAP
 		\begin{figure}[t]
@@ -33,7 +34,8 @@
 
 	\subsection{Person Re-Identification}
 
-		Person re-identification (ReID) is a research field on its own \eg \cite{almazan18reidtowards, zheng16reidcnn}, the goal being to learn a similarity metric for a persons appearance, invariant to a persons posture and the image viewpoint.
+		Person re-identification (ReID) is a research field on its own (overview in \eg \cite{almazan18reidtowards, bedagkar14reidtrends}), the goal being to learn a similarity metric for a persons appearance, invariant to a persons posture and the image viewpoint.
+		% zheng16reidcnn
 		The key applications are automated person tracking and surveillance \cite{zheng16reidfuture}.
 		For our purposes, we will treat a ReID algorithm as a metric for preservation of appearance / invariance to shape on our generated images.
 		For this, we fine-tune an ImageNet-pretrained \cite{russakovsky15imagenet} Inception-Net \cite{szegedy15inception} with a ReID algorithm \cite{xiao17reidjoint} via a triplet loss \cite{hermans17reidtriplet} to the Deep Fashion training set.
@@ -132,11 +134,21 @@
 
 		To evaluate shape, we extract keypoints using a pose estimator \cite{cao17affinityfield}. Tab. \ref{tab:pose} reports the difference between generated and pose target in percentage of correct keypoints (PCK), Fig. \ref{fig:pckcurve} shows the comparison of PCK curves. As would be expected, VU-Net performs better, since it is trained with exactly the keypoints of \cite{cao17affinityfield}. Still our approach achieves an impressive PCK without supervision underlining value of the embedding of object shape and the disentanglement of appearance and shape. Despite random variation in appearance the shape does not change, this can also be directly observed from the conditioned generations in Fig.~\ref{fig:allswaps}.
 
-\end{comment}
 
 
 \section{Disentangling in a Temporal Sequence}\label{sec:videotovideo}
-	% \textbf{Video-to-Video Translation}
+
+	\begin{figure}[t]
+		\centering
+		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/factor/bbc_arrange}
+		\caption{Generation results for conditioning appearances (top row) on pose (bottom, rightmost) on BBCPose.
+		% The target appearances are from the train set, while the target pose is from the test set.
+		Note that even fine-grained details in shape, such as fingers and facial expression are accurately captured.}
+		\label{fig:bbcthumb}
+	\end{figure}
+
+
+
 	Conditional image generation can also be extended to the task of \textbf{video-to-video translation}. The two conditioning images can be frames from different videos. One frame is acting as the appearance conditioning and the other as shape conditioning. By generating each frame conditioned on the shape and appearance from two videos, one effectively transfers the appearance of one video to the shape of the other on a frame-to-frame level.
 	We evaluate this frame-to-frame video translation on the BBCPose dataset. The datasets videos of sign language present a delicate and complex articulation of arms and hands. We condition on appearance from videos in the training set and on shape from videos in the test set. A sample for generated frames is shown in Fig. \ref{fig:bbcthumb}, for the complete videos please refer to the supplementary.
 	We want to point out two features of the model here: Firstly, despite no use of smoothing or interpolation between frames the generated sequence is smooth in the temporal domain. This is enabled by a temporally consistent part assignment which is stable across articulation.
@@ -149,6 +161,7 @@
 					% $\Rightarrow$ latent space is consistent and smooth across time
 			% \end{itemize}
 	% \end{itemize}
+
 \section{Part-wise Disentanglement}\label{sec:partwise}
 	% PART SWAPS
 	\begin{figure}[ht]
@@ -189,7 +202,8 @@
 
 	\subsection{Part-wise Shape Changes}
 
-	Own Dataset: Move KP, Fig.~\ref{fig:movekp}
+	% Own Dataset: Move KP, Fig.~\ref{fig:movekp}
+
 	\begin{figure}[htp]
 		\centering
 		\begin{subfigure}{1.\linewidth}
@@ -206,24 +220,15 @@
 		\label{fig:movekp}
 	\end{figure}
 
-\begin{comment}
-\section{Follow-Up}\label{sec:followup}
-	\begin{itemize}
-		\item make generative:(KP distribution estimation, variational features).
-		\item make video generation possible (RNN on KP vector).
-		\item better transformations -> appearance locally (around parts changed), appearance changed perceptually -> style transfer
-		\item local appearance change (as TPS)
-	\end{itemize}
-
-
+% \begin{comment}
 	% BBC THUMB
-	\begin{figure}[t]
-		\centering
-		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=.7\linewidth]{fig/factor/bbcthumb5}
-		\caption{Video-to-video translation on BBC Pose. Top-row: target appearances, left: target pose.
-		%The target appearances are from the train set, while the target pose is from the test set.
-		Note that even fine details in shape are accurately captured. See supplementary for videos.}
-		\label{fig:bbcthumb}
-	\end{figure}
+	% \begin{figure}[t]
+		% \centering
+		% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=.7\linewidth]{fig/factor/bbcthumb5}
+		% \caption{Video-to-video translation on BBC Pose. Top-row: target appearances, left: target pose.
+		% %The target appearances are from the train set, while the target pose is from the test set.
+		% Note that even fine details in shape are accurately captured. See supplementary for videos.}
+		% \label{fig:bbcthumb}
+	% \end{figure}
 
-\end{comment}
+% \end{comment}

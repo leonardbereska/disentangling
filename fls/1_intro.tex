@@ -4,14 +4,15 @@
 	Structures and processes in the physical world interact in complex ways to generate an image. The image then acts as a mirror, in which these elements of the world are reflected and leave patterns.
 	To recognize patterns in an image, means in essence, to use this mirror as a window to observe the reality lurking behind it, \ie to measure the causal elements that contributed to the image generation.\note{too poetic?}
 	Typically, objects appear in an intricated interaction of many factors of variation.
-	For example, given the object class of people, persons can vary in their visual appearance by clothing and skin color or in their geometric structure due to their pose or body physique. \note{The image generation itself may further add factors like illumination, viewpoint or contrast.}
-	For articulated object classes the most prominent factors of variation are geometric shape and visual appearance\todo{ (add reference here?)}.
+	For example, in an image dataset of people, the persons can vary in their visual appearance by clothing and skin color or in their geometric structure due to their pose or body physique.
+	% The image generation process itself may further add factors like illumination, viewpoint or contrast.
+	For articulated object classes the most prominent factors of variation are geometric shape and visual appearance\todo{add reference here?}.
 	Disentangling these factors is a difficult problem, due to the intricated interplay of shape and appearance, especially under heavy articulation.
-	The complexity enters, as a variation in shape is a change of the images domain rather than a change of its values~\cite{shu18shapeappear}.
+	The complexity enters, as a variation in shape is a change of the images domain rather than a change of its values~\cite{shu18shapeappear, xing18shapeappear}.
 	Consider a person raising his arm: the color and texture of his pullover sleeve intrinsically does not change, but appears at a different location in the image. An efficient model for shape should cover all possible states of the object and preserve the local linkage to its intrinsic appearance.
 
 \section{Why Disentangle Causal Factors?}
-	Above, we framed disentangling generative factors as a scientific measurement process. An interaction of physical elements in the world is captured in an image, which can be treated as a scientific measurement of reality. Discerning patterns, and disentangling sources of patterns from each other, will then be defined as \textit{understanding} the world. What can be gained from such an \textit{understanding}?
+	Above, we framed disentangling generative factors as similar to a scientific measurement process. An interaction of physical elements in the world is captured in an image, which can be treated as a scientific measurement of reality. Discerning patterns, and disentangling sources of patterns from each other, will then be defined as \textit{understanding} the world. What can be gained from such an \textit{understanding}?
 	On the one hand, there are pragmatic reasons to aim at extracting disentangled factors from images: to successfully transfer a representation between different tasks, typically only a few factors are relevant \cite{bengio13rep}.
 	Efficient transfer and multi-task learning should account for this.
 	On the other hand, learning to capture external mechanisms in appropriate internal representations, can be seen as a step to automate visual reasoning itself.
@@ -41,13 +42,13 @@
 	Can machines tell a story? Carefully observe your own mind, when viewing the images shown in Fig. \ref{fig:notcausal}: observe how the human mind immediately interprets and jumps to conclusions, tries to tell itself a story that explains an image, whereas the machine (in this case, NeuralTalk2 \cite{karpathy15neuraltalk}), is comically descriptive in contrast.
 	The missing \textit{common sense} may be due to a missing causal reasoning, due to a missing disentangled causal representation of the world.
 	But how to learn a disentangled representation from scratch, \ie from raw image data?
-	As we will find out\todo{ref to sec}, disentangling causal factors from raw image data, without any side information is impossible theoretically, and can only work based on statistical assumptions.
-
+	As we will find out (in Sec. ~\ref{sec:causality}), disentangling causal factors from raw image data, without any side information is impossible theoretically.
+	% , and can only work based on interaction assumptions.
 
 	Lets consider an example: Given an image dataset of human persons, that has strong variation in the pose and in the appearance of the persons, how to find these two underlying axes of variation (pose and appearance)? Lets suppose the distribution of variation follows a two-dimensional Gaussian distribution, one dimension for pose, one for appearance.
 	The learning algorithm has access to randomly sampled images from this distribution. An intelligent data compression algorithm will be able to fit a function from the images to the two-dimensional subspace, which explains (by assumption in this example) the variation in the dataset.\todo{plot two-dimensional Gaussians}
-	But are the two dimensions, that the algorithms finds disentangled? No. In fact, any linear combination of pose and appearance and its orthogonal complement are equally valid to span the subspace of underlying variation. Just from observing a two-dimensional Gaussian, no meaning will be attached to the axes. In practice, this problem is often circumvented by first fitting a generative model to the image dataset and \textit{afterwards} interpolating in the latent space to determine (by human judgement) the axes of interest (here the pose or appearance axis). The meaning of pose and appearance as independent factors comes from the fact, that it is easily possible in the real world to change one factor without the other. A person moving without loosing clothes is a trivial example for that.
-	In summary, on the basis of dataset statistics one cannot disentangle causal factors, if the information about how to select the axes, \ie which factors to separate, is not contained in the raw data.
+	But are the two dimensions, that the algorithms finds disentangled? No. In fact, any linear combination of pose and appearance axes and its orthogonal complement are equally valid to span the subspace of underlying variation. Just from observing a two-dimensional Gaussian, no meaning will be attached to the axes. In practice, this problem is often circumvented by first fitting a generative model to the image dataset and \textit{afterwards} interpolating in the latent space to determine (by human judgement) the axes of interest (here the pose or appearance axis). The meaning of pose and appearance as independent factors comes from the fact, that it is easily possible in the real world to change one factor without the other. A person moving without loosing clothes is a trivial example for that.
+	In summary, on the basis of dataset statistics alone one cannot disentangle causal factors, if the information about how to select the axes, \ie which factors to separate, is not contained in the raw data.
 	Fitting a model to the data distribution, does in general not give insight into how the data was generated.
 
 \section{How can Humans Disentangle?}

@@ -3,7 +3,7 @@
 
 \section{Learning from Data}
 	{Learning from data} is commonly understood as the ability of algorithms to improve their performance on a task with experience accumulated from the observation of data \cite{goodfellow16dlb}. The source of data is usually a dataset - set of data points $X = \{x_i | i \in \{1\ldots n\} \}$, which are sampled from a probability distribution $x_i \sim p(x)$.
-	In general, these data points are multi-dimensional. In computer vision in particular, data are images $\mathbf{x}$ with height $h$ and width $w$, so that the dimension is $\mathbf{x} \in \mathbb{R}$.
+	In general, these data points are multi-dimensional. In computer vision in particular, data are images $\mathbf{x}$ with height $h$ and width $w$, so that the dimension is $\mathbf{x} \in \mathbb{R}^{h \times w}$.
 
 	\subsection{Supervised}\label{sec:supervised}
 		The term {supervised learning} denotes the task to learn a mapping from data points $x_i$ to target labels $y_i$.
@@ -14,7 +14,7 @@
 
 	\subsection{Unsupervised}\label{sec:unsupervised}
 		{Unsupervised learning} is the endeavour to learn about structures and patterns in unlabelled data. In this paradigm, the learning algorithm has access to the samples of the data distribution $x \sim p(x)$. The task is usually framed as a form of density estimation, \ie to model the entire distribution in a probabilistic generative model (cf. sec. \ref{sec:genmodel}).
-		Unsupervised learning is considered much harder than supervised learning \cite{bishop06ml}. There are several complications in the design of unsupervised algorithms:
+		Unsupervised learning is considered much harder than supervised learning \cite{bishop06pattern}. There are several complications in the design of unsupervised algorithms:
 		\begin{itemize}
 			\item Naturally, without supervision, \textit{the goal of learning is not specified}, hence surrogate objectives have to be formulated. The lack of specification renders the evaluation often arbitrary and subjective\todo{cite evaluation of generative models}.
 			\item It is a priori not clear, \textit{how much prior knowledge should be embedded}. To introduce no artificial bias, some argue for a purely data-driven approach. Others argue for the importance of certain inductive priors to guide learning \cite{tenenbaum18think}.
@@ -53,7 +53,7 @@
 	    What I cannot create, I do not understand. - R. Feynman
 	\end{quote}
 	Learning and understanding structure in data by being able to generate, is the rationale behind generative modelling.
-	Generative models are mostly applied for unsupervised learning and can be contrasted to discriminative models. While discriminative models are used to model posterior conditionals $p(y|x)$ (\eg for supervised learning (cf. sec. \ref{sec:supervised}), generative models capture the complete data distribution $p(x)$ in an estimate $\hat p(x)$ \cite{bishop06ml}. Thus, after estimation, one can generate samples from this model $\hat p$. Hence the name generative model.
+	Generative models are mostly applied for unsupervised learning and can be contrasted to discriminative models. While discriminative models are used to model posterior conditionals $p(y|x)$ (\eg for supervised learning (cf. sec. \ref{sec:supervised}), generative models capture the complete data distribution $p(x)$ in an estimate $\hat p(x)$ \cite{bishop06pattern}. Thus, after estimation, one can generate samples from this model $\hat p$. Hence the name generative model.
 	\note{Generative modeling can be used for outlier search, where regions with low probability under the model are taken as indicative for an outlier.}
 	The currently predominant generative models are built on either autoencoding or adversarial formulations:
 
@@ -102,7 +102,7 @@
 
 	\subsection{Disentangling by Equivariance and Invariance}
 		What is a factor? As outlined in the introduction (cf. sec. \ref{sec:introduction}), factors in a representation should correspond to causal elements of the world.
-		In general, these factors can interact in complicated ways to finally result in an image. Here, we only consider the case where multiple independent factors each have an influence (cf. Fig. \ref{fig:inferlevel}).
+		In general, these factors can interact in complicated ways to finally result in an image. Here, we only consider the case where multiple independent factors each have an influence (cf. Fig. \ref{fig:infer}).
 		A change in an element, should then lead to: \emph{i)} a corresponding change in the representational factor and \emph{ii)} leave other factors, that represent other elements, unchanged.
 		Formally, this can be seen as inference: a number of latent variables $\mathbf{z_1}\ldots\mathbf{z_N}$ interacted to cause the existence of the observed image $\mathbf{x}$. The task is now to infer estimates for these latent variables $\mathbf{\hat z_i}$. A graphical model of the process is shown in figure \ref{fig:infer}.
 		A disentangled representation should simultaneously fulfill equivariance and invariance: A change in $\mathbf{z_i}$ should: \emph{i)} \textit{equivariantly} change in the abstract representational factor $\mathbf{\hat z_i}$, \emph{ii)} while leaving the other factors $\mathbf{\hat z_j}, j\neq i$, that represent other causes, \textit{invariant}.
@@ -167,11 +167,11 @@
 
 
 	\subsection{Disentangling requires Interventions or Model Assumptions}\label{sec:requirements}
-		The results from the study of causal inference also entail that "purely" unsupervised disentangling, \ie estimating $\mathbf{\hat z_i}$ from samples $x \sim p(x)$, is impossible. A rigerous proof for this can be found in \cite{locatello18challenging}.
+		The results from the study of causal inference also entail that "purely" unsupervised disentangling, \ie estimating $\mathbf{\hat z_i}$ from samples $x \sim p(x)$, is impossible. A proof for this can be found in \cite{locatello18challenging}.
 		% so far fitting curve p(x) to data manifold
 		Current machine learning operates mostly on the level of association, estimating (complex) correlations from raw data.
 		As we have seen, this purely data-driven approach can only go so far.
-		In contrast, humans seem to have the ability to interact with their environment and have innate assumptions on coherence, causality, physics etc., which introduce inductive priors.
+		In contrast, humans seem to have the ability to interact with their environment and have innate assumptions on coherence, causality, physics etc., which introduce inductive priors~\cite{tenenbaum18think}.
 		To bring \emph{i)} interventions and \emph{ii)} model assumptions to our problem of disentangling shape and appearance, we \emph{i)} apply changes to an image, which are assumed to change only one factor and \emph{ii)} model the causal process of the image generation in the theme of analysis-by-synthesis.
 		\todo{math}
 		% measure: p(x)
@@ -192,7 +192,6 @@
 			\centering
 			\input{fls/tikz/trans.tex}
 			\caption{An image $\mathbf{x}$ is assumed to be generated from the factors of shape $\sigma$ and appearance $\alpha$. Implementing an intervention with a transformation of factors, means changeing one factor without changing the other.}
-			\caption{}
 			\label{fig:intervene}
 		\end{figure}
 		% $p(x| do(a), b)$

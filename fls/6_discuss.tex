@@ -2,9 +2,49 @@
 
 
 \chapter{Conclusion}
--> need model-based approach (for counterfactual)
-make model as good as we can implementing as many assumptions as we can and only leave the rest to powerful model
-(humans also have brain structure and reasoning structure genetic)
+	Throughout this work we alluded to two themes: \emph{i)} improving models with realistic constraints and assumptions \emph{ii)} extracting value from richer data, \ie interventional and temporal data.
+	For our task of disentangling shape and appearance of objects these themes translated into \emph{i)} better modelling of the synthesis side in the analysis-by-synthesis framework and \emph{ii)} utilizing image transformations \wrt which to capture invariant and equivariant factors.
 
-need disentangling generative factors for imagination (i.e. synthesis)
-for manipulating factors mentally
+
+\section{Future Work}\label{sec:futurework}
+
+	% \begin{itemize}
+		% \item make generative:(KP distribution estimation, variational features).
+		% \item make video generation possible (RNN on KP vector).
+		% \item better transformations -> appearance locally (around parts changed), appearance changed perceptually -> style transfer
+		% \item local appearance change (as TPS)
+	% \end{itemize}
+
+	With regards to these two themes there is room for improvement still:
+
+
+	\emph{i)} On the modelling side our method models the interplay between shape and appearance of a composite object, but in a prototypical manner. Realistic graphical simulation - as long as it is fully differentiable - such as used in ~\cite{kulkarni15dcign, tieleman14thesis} would impose tighter constraints onto how the factors generate the image.
+	\note{bengio: disentanglement by modelling entanglement, modelling or learning the physical laws on how the factors interact. Change in shape changes appearance (in image) \eg zebra stripes.}
+
+	% temporal data
+	\emph{ii)} On the data side a next step could be to model video data in the exact temporal sequence, not only on a frame-by-frame level (cf. Sec.~\ref{sec:videotovideo}). To do this, the temporal changes of shape would be necessary to be modelled. For this it could prove useful to make our model generative. Generating appearance features could be implemented with standard variational features~\cite{kingma13vae}. Generating shape for temporal sequences could use some type of recurrent architecure.
+	% could make model generative for video sequences, in general generative side is easy to supplement with making features variational, the shape condiditoning could be sampled from, after learning, by estimating the distribution of landmarks and their correlation matrix for the training dataset
+	% interventional data
+	We also repeatedly stressed the importance of the image transformations. For disentangling they are the necessary condition. The better the transformations separate variation in the to-be-disentangled-factors, the better disentangled will these factors be. Video data are the best source of shape transformations, for appearance however, the global contrast, brightness and hue transformations are neither natural nor complete of any type of appearance transform. Usually patterns and texture are considered as appearance, hence, for completeness they should also be transformed. This could be tried with a soft form of style alteration via style transfer~\cite{gatys15neuralstyle}. In addition to extending appearance transformations to a higher level, one can also make them more local, this would further encourage the factorization into local parts.
+
+
+\section{Final Thoughts}\label{sec:finalthoughts}
+
+	\note{specifying factors in advance good
+	-> need model-based approach (for counterfactual)
+	%
+	% make model as good as we can implementing as many assumptions as we can and only leave the rest to powerful model
+	(humans also have brain structure and reasoning structure genetic) in general orient after human good
+	%
+	need disentangling generative factors for imagination (i.e. synthesis)
+	for manipulating factors mentally
+	%
+	causality will be shed light on many endeavours in artificial intelligence not only disentangling}
+
+	% summary
+	We have presented an unsupervised approach to learning the compositional part structure of objects by disentangling pose from appearance. We derive invariance and equivariance constraints that enable a generative framework to discover consistent landmarks in a model-free manner without requiring a prior assumptions on landmark layout. Experiments show that our approach significantly improves upon previous unsupervised methods.
+ 	% context of causality
+	Disentangling shape and appearance has been presented in the broader context of learning the causal structure of the world through images. The insights from the causal literature let us rethink the role of priors, models and data and give a direction for future work.
+	% final metaphor/ joke/ twist
+	% broader context: build intelligent machines. images to imagination.
+	% thanks

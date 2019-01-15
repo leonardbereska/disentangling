@@ -141,7 +141,7 @@
 		where $\mu$ and $\Sigma$ are the mean and the covariance matrix of the part shape ${\sigma}^i$. This allows to pass second-order information such as size and orientation of the part to the decoder. Note that all operations are fully differentiable, such that a gradient-based optimization is possible.
 
 
-	\section{Implementation Details}\label{implementationdetails}
+	\section{Implementation Details}\label{sec:implementationdetails}
 		The image resolution is $128 \times 128$, but the resolution of corresponding part shapes is $ 64 \times 64$.
 		For the reconstruction  loss $\mathcal{L}_\text{rec}$ we use the $L_1$ or $L_2$ distance.
 		To prevent parts from trying to explain the whole image, instead of focusing on the object, we also restrict the reconstruction loss to an area around the part shape: a sum of Gaussian approximations around the means of the part shapes is folded with the loss.\\

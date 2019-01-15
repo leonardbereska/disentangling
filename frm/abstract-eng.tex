@@ -1,23 +1,9 @@
 %% Latex markup and citations may be used here
-(abstract in english, at most 200 words. Example: \cite{loremIpsum})
-
-Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor
-incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat.
-Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat
-nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa
-qui officia deserunt mollit anim id est laborum.
-
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
-consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et
-accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit
-augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet,
-consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut
-laoreet dolore magna aliquam erat volutpat.
-
-Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit
-lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure
-dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore
-eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui
-blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla
-facilisi.
+  Object representations are of paramount importance for various computer vision applications. %Learning such a      model without supervision is still an open challenge. %Frequently used holistic object representations limit a     deep understanding of its spatial structure.
+  This paper presents an unsupervised approach to learn a dedicated compositional part representation of an object, disentangling the factors of shape and appearance for each part. %The invariance of one factor when        the other is transformed in a two-stream auto-encoding framework.
+  To disentangle, each factor is assumed to be invariant under transformations of the other factor. Additionally, shape is assumed to be equivariant with respect to a spatial transformation. These assumptions are implemented in a two-stream auto-encoding framework for detecting parts, while the architecture is designed to maintain the local nature of the parts.\\
+  %We derive explicit invariance and equivariance constraints for such a decomposition and implement these in a      generative framework. % by our shape representation.
+  Trained without any manual supervision or prior information about on the object itself, the method discovers consistent parts, meaningfully covering the object. We evaluate this on a diverse selection of challenging datasets, the object classes ranging from human faces and bodies to dogs, cats and birds.
+  On the task of unsupervised landmark regression, our model outperforms state-of-the-art methods significantly. The margin is especially large on datasets with strong articulation.
+  We show that our model actually learned to disentangle shape from appearance and learns local parts independently.
+ %Unsupervised results for datasets with background clutter and significant articulation have never been            obtained before.
