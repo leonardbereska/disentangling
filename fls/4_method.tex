@@ -1,4 +1,4 @@
-\chapter{Method}
+\chapter{Method}\label{sec:method}
 % describe method
 
 % INTRO FIGURE: PART REPRESENTATION
@@ -39,7 +39,7 @@
 		\label{fig:representation}
 	\end{figure}
 
-\section{Transformation Framework}\label{sec:framework}
+\section{Disentangling by Transforming}\label{sec:framework}
 	% CROSSING TASK FRAMEWORK
 	\begin{figure}[t]
 		\centering
@@ -102,7 +102,7 @@
 	\end{equation}
 
 
-\section{Analysis-by-Synthesis Architecture}\label{sec:architecture}
+\section{Analytic Disentangling by Synthetic Entangling}\label{sec:architecture}
 	The autoencoding pipeline consists of analysis into factors and subsequent synthesis. The \textbf{analysis} is the {encoding} of both shape and appearance for each part. The \textbf{synthesis} is the meaningful {recombination} of this information into a latent image and the {decoding} of this latent image to reconstruct the image. %The whole process is sketched in Fig. \ref{fig:framework}, the operations in more detail are visualized in Fig. \ref{fig:architecture}.
 	Throughout the procedure we maintain the local correspondence between the representation and the image: We ensure a local appearance extraction in the encoding, a local synthesis in the recombining and a local usage of the latent image in the decoding. These architectural restrictions enable a disentangled part representation with the interpretation of a part as a localized entity. \\
 
