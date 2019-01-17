@@ -1,6 +1,8 @@
 %&tex
 \chapter{Prerequisites on Learning Disentanglement}\label{sec:prerequisites}
 
+
+
 \section{Learning from Data}
 	{Learning from data} is commonly understood as the ability of algorithms to improve their performance on a task with experience accumulated from the observation of data \cite{goodfellow16dlb}. The source of data is usually a dataset - set of data points $X = \{x_i | i \in \{1\ldots n\} \}$, which are sampled from a probability distribution $x_i \sim p(x)$.
 	In general, these data points are multi-dimensional. In computer vision in particular, data are images $\mathbf{x}$ with height $h$ and width $w$, so that the dimension is $\mathbf{x} \in \mathbb{R}^{h \times w}$.
@@ -9,20 +11,20 @@
 		The term {supervised learning} denotes the task to learn a mapping from data points $x_i$ to target labels $y_i$.
 		A supervised algorithm has access to data-label pairs  $(y_i, x_i) \sim p(y, x)$, in order to estimate the connection between data points and labels, either in form of a conditional probability $p(y|x)$, or in form of a deterministic function $y = f(x)$.
 		The label $y$ can be either discrete (\eg information about an object class) or continuous (\eg the location of an object part in an image).
-		Recent advances, in particular the effectiveness of neural network models (cf. sec. \ref{sec:neuralnetworks}) on big datasets, have led to huge progress on problems that can be formulated as regression or classification. That is why on many traditional computer vision problems, such as \eg object recognition, image classification or human pose estimation, machines are now performing on a superhuman level; hence, these problems are now considered to be essentially solved.\\
+		Recent advances, in particular the effectiveness of neural network models (cf. Sec. \ref{sec:neuralnetworks}) on big datasets, have led to huge progress on problems that can be formulated as regression or classification. That is why on many traditional computer vision problems, such as object recognition, image classification or human pose estimation, machines are now performing on a superhuman level; hence, these problems are now considered to be essentially solved.\\
 		The Achilles' heel of supervised learning lies in the need for a viable supervision signal. To get labels, it is usually required to manually annotate the data. The human effort in this is costly, error-prone and not scalable to the ever-growing vast amounts of raw data.
 
 	\subsection{Unsupervised}\label{sec:unsupervised}
-		{Unsupervised learning} is the endeavour to learn about structures and patterns in unlabelled data. In this paradigm, the learning algorithm has access to the samples of the data distribution $x \sim p(x)$. The task is usually framed as a form of density estimation, \ie to model the entire distribution in a probabilistic generative model (cf. sec. \ref{sec:genmodel}).
+		{Unsupervised learning} is the endeavour to learn about structures and patterns in unlabelled data. In this paradigm, the learning algorithm has access to the samples of the data distribution $x \sim p(x)$. The task is usually framed as a form of density estimation, \ie to model the entire distribution in a probabilistic generative model (cf. Sec. \ref{sec:genmodel}).
 		Unsupervised learning is considered much harder than supervised learning \cite{bishop06pattern}. There are several complications in the design of unsupervised algorithms:
 		\begin{itemize}
 			\item Naturally, without supervision, \textit{the goal of learning is not specified}, hence surrogate objectives have to be formulated. The lack of specification renders the evaluation often arbitrary and subjective~\cite{theis15evalgen}.
-			\item It is a priori not clear, \textit{how much prior knowledge should be embedded}. To introduce no artificial bias, some argue for a purely data-driven approach. Others argue for the importance of certain inductive priors to guide learning \cite{tenenbaum18think}.
-			A related modeling choice is, if the algorithm should be model-free or model-based\todo{ cite huszar article}.
+			\item It is a priori not clear, \textit{how much prior knowledge} should be embedded. To introduce no artificial bias, some argue for a purely data-driven approach. Others argue for the importance of certain inductive priors to guide learning \cite{tenenbaum18think}.
+			A related modeling choice is, whether the algorithm should be model-free or model-based\todo{ cite huszar article}.
 			\note{model-free vs model-based approaches:}
 			\note{model-based $\rightarrow$ more flexible, transferable, allows for modular combination (like parts)}
 			{In this work we argue for using more prior knowledge and modeling assumptions to obtain strong constraints.}
-				\todo{it is not clearly defined: what is unsupervised?}
+			\todo{it is not clearly defined: what is unsupervised?}
 
 		\end{itemize}
 		\todo{connection between unsupervised and supervised learning, \cite{goodfellow16dlb}.}
@@ -53,7 +55,7 @@
 	    What I cannot create, I do not understand. - R. Feynman
 	\end{quote}
 	Learning and understanding structure in data by being able to generate, is the rationale behind generative modelling.
-	Generative models are mostly applied for unsupervised learning and can be contrasted to discriminative models. While discriminative models are used to model posterior conditionals $p(y|x)$ (\eg for supervised learning (cf. sec. \ref{sec:supervised}), generative models capture the complete data distribution $p(x)$ in an estimate $\hat p(x)$ \cite{bishop06pattern}. Thus, after estimation, one can generate samples from this model $\hat p$. Hence the name generative model.
+	Generative models are mostly applied for unsupervised learning and can be contrasted to discriminative models. While discriminative models are used to model posterior conditionals $p(y|x)$ (\eg for supervised learning (cf. Sec. \ref{sec:supervised}), generative models capture the complete data distribution $p(x)$ in an estimate $\hat p(x)$ \cite{bishop06pattern}. Thus, after estimation, one can generate samples from this model $\hat p$. Hence the name generative model.
 	\note{Generative modeling can be used for outlier search, where regions with low probability under the model are taken as indicative for an outlier.}
 	The currently predominant generative models are built on either autoencoding or adversarial formulations:
 
@@ -65,11 +67,12 @@
 			% \mathcal{L} = \underbrace{\mathds{E}_{z\sim q(z|x)}  \log p(x|z)}_{\textrm{reconstruction loss}}  - \underbrace{\textrm{KL}(q(z|x)||p(z))}_{\textrm{regularization}}
 		% \end{equation}
 		\begin{equation}\label{eq:vae}
-			\mathcal{L} = \mathds{E}_{z\sim q(z|x)}  \log p(x|z) - \textrm{KL}(q(z|x)||p(z))
+			% \mathcal{L} = \mathds{E}_{z\sim q(z|x)}  \log p(x|z) - \textrm{KL}(q(z|x)||p(z))
+			\mathcal{L} = \mathds{E}_{z\sim q(z|x)}  \log p(x|z) - \mathds{E}_{z\sim q(z|x)} \log \frac{q(z|x)}{p(z)}
 		\end{equation}
 
-		Where $z$ introduces latent variables, with a prior distribution $p(z)$. The approximation to the posterior $q(z|x)$ of the latent variables and the posterior of the data given the latent variables $p(x|z)$. If one wants to model the distributions with neural networks, one typically uses Gaussian distributions and lets the networks predict the parameters (mean $\mu$ and variance $\Sigma$) based on the image.
-		In the current machine learning contexts, all functions ($e, d$) and or moments ($\mu, \Sigma$) are modelled with neural networks.
+		Where $z$ introduces latent variables, with a prior distribution $p(z)$, with an approximation to the posterior $q(z|x)$ of the latent variables, and the posterior of the data given the latent variables $p(x|z)$. If one wants to model the distributions with neural networks, one typically uses Gaussian distributions and lets the networks predict the parameters (mean $\mu$ and variance $\Sigma$) based on the image.
+		In the current machine learning contexts, all functions ($e, d$) and moments ($\mu, \Sigma$) are modelled with neural networks.
 
 	\subsection{Adversarial Formulations}\label{sec:adversarial}
 		\textit{Generative adversarial networks} (GAN) \cite{goodfellow14gan} consist of two neural networks competing in a zero-sum game. A generator network $G$ is generating images based on a latent code $z$ sampled from a distribution $p(z)$. The discriminator network $D$ is a binary classifier with the task to classify an image as originating from the data distribution $p_{\mathrm{data}}$ or from the distribution produced by $G$. The loss function of $G$ is the negative of the loss of $D$, such that one can formulate the optimization in a minmax form:
@@ -80,7 +83,7 @@
 		\end{equation}
 		The generator is then optimized to make the output indiscriminable from the data distribution.
 		The discriminator can be interpreted as a learned similarity metric, to measure the closeness of an image to the data distribution \cite{larsen15vaegan}.
-		There are many variants and extensions to this basic principle of learning with an adversarial task. For example, one can learn a discriminator on for a set of image patches \cite{isola17image2image}. \todo{find more examples, of the gan zoo}
+		There are many variants and extensions to this basic principle of learning with an adversarial task. For example, one can learn a discriminator for a set of image patches \cite{isola17image2image}. \todo{find more examples, of the gan zoo}
 
 \section{Disentangling Representations}\label{sec:disentangled}
 	In supervised learning, a performance measure is naturally induced by the metric, that is being optimized. In the unsupervised setting, judging the performance of a model is less straightforward.
@@ -94,37 +97,44 @@
 		{Disentangle as many factors as possible, discarding as little information about the data as is practical.} - Bengio \etal \cite{bengio13rep} % Y. Bengio, A. Courville and P. Vincent \cite{Bengio2013rep}
 	\end{quote}
 
-	According to Bengio \etal \cite{bengio13rep},  a representation is useful, if it can be applied to many - in advance unknown - different tasks, while being trained on only one particular task.
+	According to Bengio \etal \cite{bengio13rep}, a representation is useful, if it can be applied to many - in advance unknown - different tasks, while being trained on only one particular task.
 	As the downstream tasks can be multifarious, the essential \textit{information} should be contained in the representation.
-	For some tasks only a subset of aspects of the data will be necessary, that is why \textit{disentangled factors} make a representation particularly practical.\\
+	For some tasks only a subset of aspects of the data will be necessary, that is why \textit{disentangled factors} make a representation particularly practical.
+
 	The latent representation $z$ learned by generative models captures the essential \textit{information} of the data distribution. That is made sure by requiring the ability to generate samples from the original data distribution from it.
 	How then to reach the second goal, the \textit{disentanglement} of generative factors?
 
 	\subsection{Disentangling by Equivariance and Invariance}
-		What is a factor? As outlined in the introduction (cf. sec. \ref{sec:introduction}), factors in a representation should correspond to causal elements of the world.
-		In general, these factors can interact in complicated ways to finally result in an image. Here, we only consider the case where multiple independent factors each have an influence (cf. Fig. \ref{fig:infer}).
-		A change in an element, should then lead to: \emph{i)} a corresponding change in the representational factor and \emph{ii)} leave other factors, that represent other elements, unchanged.
-		Formally, this can be seen as inference: a number of latent variables $\mathbf{z_1}\ldots\mathbf{z_N}$ interacted to cause the existence of the observed image $\mathbf{x}$. The task is now to infer estimates for these latent variables $\mathbf{\hat z_i}$. A graphical model of the process is shown in figure \ref{fig:infer}.
-		A disentangled representation should simultaneously fulfill equivariance and invariance: A change in $\mathbf{z_i}$ should: \emph{i)} \textit{equivariantly} change in the abstract representational factor $\mathbf{\hat z_i}$, \emph{ii)} while leaving the other factors $\mathbf{\hat z_j}, j\neq i$, that represent other causes, \textit{invariant}.
-		\begin{figure}[ht]
+		\begin{figure}[htp]
 			\centering
 			\input{fls/tikz/inferlevel.tex}
 			\caption{Disentangling causal factors means to infer an estimate - \ie a representation - from an image}
 			\label{fig:infer}
 		\end{figure}
+
+		What is a factor? As outlined in the introduction (cf. Sec. \ref{sec:introduction}), factors in a representation should correspond to causal elements of the world.
+		In general, these factors can interact in complicated ways to finally result in an image. Here, we only consider the case where multiple independent factors each have an influence (cf. Fig. \ref{fig:infer}):
+		\begin{equation}\label{eq:independent}
+			p(z_1 \ldots z_N) = \prod_i p(z_i)
+		\end{equation}
+		A change in an element, should then lead to: \emph{i)} a corresponding change in the representational factor and \emph{ii)} leave other factors, that represent other elements, unchanged.
+		Formally, this can be seen as inference: a number of latent variables ${z_1}\ldots{z_N}$ interacted to cause the existence of the observed image $\mathbf{x}$. The task is now to infer estimates for these latent variables $r(\mathbf{x})_i:=r_i$. A graphical model of the process is shown in Fig.~\ref{fig:infer}.
+		A disentangled representation should simultaneously fulfill equivariance and invariance: A change in ${z_i}$ should: \emph{i)} \textit{equivariantly} change in the abstract representational factor $r_i$, \emph{ii)} while leaving the other factors $r_j, j\neq i$, that represent other causes, \textit{invariant}.
 		\todo{mathematically,.. $f \circ g (x) = ... $}
 		\todo{draw other: arbitrary causal}
 		\todo{incorporate definition~\cite{higgins18defdisrep}}
 
 
 \section{Theoretical Impediments from Causality}\label{sec:causality}
+
+
 	Generative factors represent causal elements.
 	Learning a disentangled representation of generative factors is then understood as causal inference.
-	In accordance with the causal literature, we can make statements about the type of knowledge, that can be gained by the type of data provided. It turns out that from "raw" image data, it is actually impossible learn a disentangled representation $z$ - raw data referring to images $x$ sampled from $p(x)$, without further assumptions.
-	To elucidate this fact, we start with a primer for causal learning (sec. \ref{sec:causallearning}), outline which inductive biases are needed for disentanglement (sec. \ref{sec:requirements}) and assess how one can instantiate such biases for disentangling the factors of shape and appearance in images (sec. \ref{sec:transform}, sec. \ref{sec:anabysyn})).
+	In accordance with the causal literature~\cite{pearl18impediments}, we can make statements about the type of knowledge, that can be gained by the type of data provided. It turns out that from "raw" image data, it is actually impossible to learn a disentangled representation $z$ - raw data referring to images $x$ sampled from $p(x)$, without further assumptions.
+	To elucidate this fact, we start with a primer for causal learning (Sec. \ref{sec:causallearning}), outline which inductive biases are needed for disentanglement (Sec. \ref{sec:requirements}) and assess how one can instantiate such biases for disentangling the factors of shape and appearance in images (Sec. \ref{sec:transform}, Sec. \ref{sec:anabysyn})).
 
 	\subsection{Causal Learning}\label{sec:causallearning}
-		\begin{figure}[t]
+		\begin{figure}[htp]
 			\begin{subfigure}{0.3\linewidth}
 				\centering
 				\input{fls/tikz/causes.tex}
@@ -148,23 +158,32 @@
 		It is a well-known theme in statistics is that correlation does not imply causation. Less well-known\todo{formulate differently} is Reichenbachs principle \cite{peters17elements, reichenbach56time}, that states: if two random variables are statistically dependent, then there exists a third variable that influences both or a direct causal link between them (Fig. \ref{fig:reichenbach}).
 		In addition to estimating the probability distribution, also the causal structure has to be inferred \cite{peters17elements}.
 
-		We start with an intuitive example problem (adapted from \cite{pearl18why}):
+		To show the limitations of raw data, we sketch an intuitive example problem (adapted from \cite{pearl18why}):
 		How to learn the causal connection between a barometer and the weather? If the barometer is working well, there exists a clear correlation between the weather condition and the needle position. Given a dataset showing both barometer and corresponding weather condition, a capable machine learning algorithm will be able to capture this correlation. However, it will fail to understand the causal direction, since this is not possible from the data.
 		Imagine how a human would go about solving this problem:
 		Having a mechanistic model of the world he could reason about the precise causal mechanism relating weather to humidity to needle position. A simple model could be: weather influences air pressure, pressure influences barometer needle position.
-		What if one has no prior knowledge? A solution of childlevel simplicity is, to force the needle to move with a finger. Without the power of voodoo magic, the weather will not change. Hence causality has to go other way or via a third latent variable influencing both \ie air pressure.
+		What if one has no prior knowledge? A solution of childlevel simplicity is, to force the needle to move with a finger. Without the power of magic, the weather will not change. Hence causality has to go other way or via a third latent variable influencing both \ie air pressure.
 		% There cannot be an abstract intelligence, which finds out about the world purely by observation. The intelligence has to interact with the world, it has to be in the world.
 		% e.g.  RCT
-		To conclude, the strength of association (correlation) can be estimated with observational data alone, this can answer the question: how likely will it rain, if the barometer needle sinks? But not: how would the weather change if I force the barometer needle to sink?
+		To conclude, the strength of association (correlation) can be estimated with observational data alone, this can answer the question: how likely will it rain, if the barometer needle sinks? But not: how would the weather change if I force the barometer needle to sink?\todo{linking to next section}
 
 		Pearl \cite{pearl18why} distinguishes between three types of questions, that can be answered by different types of knowledge:
-		\begin{enumerate}
-			\item Association. What if I see \ldots?
-			\item Intervention. What if I do \ldots?
-			\item Counterfactual. What if I had done \ldots?
-			%Particularly problematic to learn from data: data consist of facts, not counterfacts.
-		\end{enumerate}
-		The levels of this \textit{ladder of causation} \cite{pearl18why} are separate not only conceptually, but in the type of data or assumptions that have to be made in order to access them. In particular, by unsupervised learning from observational data only the first level is accessible. The second level requires interactional data or model assumptions, while the third is inaccessible without an explicit model. The answers to these hypothetical questions (counterfactuals) lie by definition not in the data (facts).
+		\begin{table}[htp]
+			\centering
+			\caption{Ladder of causation~\cite{pearl18impediments}. Questions at level $i$ of the ladder are only accessible with information from level $i$ or higher.}
+			\label{tab:overview}
+			\begin{tabular}{l|ccr}
+				\hline
+				Level & Symbol & Typical Activity & Typical Questions \\ \hline
+				1. Association & $P(y|x)$ & Seeing & What if I see?  \\
+				2. Intervention& $P(y|\mathrm{do}(x), z)$ & Doing& What if I do?  \\
+				3. Counterfactual& $P(y_x|x', y')$ & Imagining & What if had done?  \\ \hline
+			\end{tabular}
+		\end{table}
+
+		The levels of this \textit{ladder of causation} \cite{pearl18why, pearl18impediments} are separate not only conceptually, but in the type of data or assumptions that have to be made in order to access them. In particular, by unsupervised learning from observational data only the first level is accessible. The second level requires interactional data or model assumptions, while the third is inaccessible without an explicit model. The answers to these hypothetical questions (counterfactuals) lie by definition not in the data (facts).
+
+
 
 
 	\subsection{Disentangling requires Interventions or Model Assumptions}\label{sec:requirements}
@@ -201,7 +220,7 @@
 	\subsection{Analysis-by-Synthesis to Model Assumptions}\label{sec:anabysyn}
 		Additional assumptions can be made about the image generation process in the regime of analysis-by-synthesis:
 		The key idea is, that the process of how an image is generated from underlying factors (graphics), is much better known that estimating the factors from the image (inverse graphics)\todo{ look up definition for inverse graphics}.
-		One can combine a model for analysis and a model for synthesis to reconstruct an image (autoencoding, cf. sec \ref{sec:autoencoding}).
+		One can combine a model for analysis and a model for synthesis to reconstruct an image (autoencoding, cf. Sec \ref{sec:autoencoding}).
 		Herein the synthesis can be tightly constrained to fit the assumptions about reality \cite{tieleman14thesis}.
 		Assumptions about how shape and appearance interact enable disentanglement. The idea to generatively entangle in order to disentangle has been explored before in other contexts~\cite{desjardins12genentangle}.
 
