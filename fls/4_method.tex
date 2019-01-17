@@ -83,17 +83,16 @@
 	%The first stream encodes $s(\mathbf{x})$ to obtain $(a, s')$  and the second stream encodes $a(\mathbf{x})$ to obtain $(a', s)$.
 	%Then appearance and shape representations are crossed.
 	%After recombining $(a, s)$ to a feature volume $V$ (explained in detail in sec. \ref{sec:architecture}), the decoder reconstructs $\mathbf{x}$.
-	\begin{equation}
-	\mathcal{L}_{\textrm{rec}}= \lVert  \mathbf{x}  - \mathrm{D}[{\alpha}_{s(\mathbf{x})}, {\sigma}_{a(\mathbf{x})}]\rVert
+	\begin{equation}\label{eq:loss_rec}
+		\mathcal{L}_{\textrm{rec}}= \lVert  \mathbf{x}  - \mathrm{D}[{\alpha}_{s(\mathbf{x})}, {\sigma}_{a(\mathbf{x})}]\rVert
 	\end{equation}
-	\label{eq:loss_rec}
 	%From an information perspective, we apply an appearance transformation to the image, to selectively destroy appearance information in the shape representation and vice versa destroy shape information in the appearance representation with a shape transformation.
 	Let us examine what this formulation means on the level of a single part: the part appearance $\alpha^i_{\mathbf{x}}$ is extracted at locations in the spatially transformed image ${\sigma}^i_{s(\mathbf{x})}$, but then used for reconstruction at the location in the original image ${\sigma}^i_{\mathbf{x}}$. For example in Fig.  \ref{fig:architecture} the appearance of the arm will be extracted in a raised position, but then these features are used for reconstructing an arm in a lowered position. For this to succeed, firstly, the appearance features need to be sufficiently abstract. Secondly, part locations of the two images have to refer to the same part and track the location of it consistently. This part assignment consistency is an implicit way to improve equivariance under the shape transformations.\\
 	%The shape also need to be invariant under appearance transformations, so part assignment needs to be consistent .
 	%For video data the crossing task can be run on images pairs that show the same object in a different articulation (i.e. different frames of the video), enforcing equivariance of $s$ with respect to natural shape transformations. \\
 	For a known shape transformation the equivariance of shape can also be encouraged explicitly with a loss. This has been used before in the context of unsupervised landmark learning by \cite{thewlis17, zhang18} as a point-wise loss on a part probability map, encouraging the exact location of a part to transform accordingly. In our case, the part shapes shall not encode probability, but instead the spatial extend of a part. In approximation, we want the first two moments ($\mu, \Sigma$) to transform correctly. Thereby the extend and orientation of the parts is penalized in addition to its mere position.
 	\begin{equation}
-	\mathcal{L}_{\textrm{equiv}}^i = \mathcal{L}_{\mu}^i+ \mathcal{L}_{\Sigma}^i
+		\mathcal{l}_{\textrm{equiv}}^i = \mathcal{l}_{\mu}^i+ \mathcal{l}_{\sigma}^i
 	\label{covariance}
 	\end{equation}
 	The overall loss objective is the sum of the reconstruction loss and the equivariance loss for all $n$ parts:

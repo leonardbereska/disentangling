@@ -1,0 +1,65 @@
+\documentclass[xcolor=dvipsnames]{beamer}
+%\usetheme{CambridgeUS}
+\usetheme{Warsaw}
+%\usecolortheme{dove}
+\usecolortheme[named=Gray]{structure}
+%MidnightBlue
+\definecolor{RedViolet}{HTML}{800e56}
+\definecolor{PineGreen}{HTML}{01796F}
+\definecolor{StateBlue}{HTML}{004D7F}
+
+\usepackage{pgfpages}
+\setbeamertemplate{note page}[plain]
+%\usepackage[dvipsnames]{xcolor} % for colors
+%\setbeameroption{show notes on second screen=right}
+
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{url}
+\usepackage{fancyref}
+\usepackage{caption}
+%\usepackage[onehalfspacing]{setspace}
+%\usepackage{color}
+%\usepackage{lipsum}
+\usepackage[colorinlistoftodos,prependcaption,textsize=small,disable]{todonotes} %type disable to disable: small,disable]
+\usepackage[nonumberlist,nowarn]{glossaries}
+\usepackage{glossary-mcols}
+\usepackage{framed}
+\usepackage{multirow} %multiple rows within tables
+%\usepackage{biblatex} %bibliography with no sorting
+%\usepackage{cite} %another cite package
+%\usepackage[authoryear]{natbib} % for citing author
+%\usepackage{graphicx}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{subcaption} % for subfigures
+\usepackage{comment}
+
+
+\setcounter{tocdepth}{2} %hide subsections
+% Generate the glossary
+\makeglossaries
+
+\glsdisablehyper
+
+
+\title{{Unsupervised Learning of Object Pose}}
+\author{Dominik Lorenz, Leonard Bereska  \\
+Supervisors: T. Milbich, Prof. B. Ommer \\
+Heidelberg Collaboratory for Image Processing (HCI)}
+%\institute{Supervisor: Prof. Dr. D. Durstewitz, Dr. G. Koppe, Zentrales Institut f\"ur Seelische Gesundheit (\gls{zi})}
+\date{\today}
+
+
+\begin{document}
+
+
+\input{fls/ppt}
+
+\begin{frame}
+	\frametitle{Bibliography}
+\bibliography{lib_new}{}
+\bibliographystyle{unsrt}
+\end{frame}
+
+\end{document}
