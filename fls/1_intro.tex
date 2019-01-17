@@ -2,11 +2,14 @@
 \chapter{Introduction}\label{sec:introduction}
 	Computer vision is the scientific endeavour to algorithmically understand patterns in images.
 	Structures and processes in the physical world interact in complex ways to generate an image. The image then acts as a mirror, in which these elements of the world are reflected and leave patterns.
-	To recognize patterns in an image, means in essence, to use this mirror as a window to observe the reality lurking behind it, \ie to measure the causal elements that contributed to the image generation.\note{too poetic?}
+	To recognize patterns in an image, means in essence to observe the reality lurking behind this mirror, \ie to measure the causal elements that contributed to the image generation.
+
+
+	In this thesis, we focus on our efforts on image datasets which feature a single object class.
 	Typically, objects appear in an intricated interaction of many factors of variation.
 	For example, in an image dataset of people, the persons can vary in their visual appearance by clothing and skin color or in their geometric structure due to their pose or body physique.
 	% The image generation process itself may further add factors like illumination, viewpoint or contrast.
-	For articulated object classes the most prominent factors of variation are geometric shape and visual appearance\todo{add reference here?}.
+	The two prominent factors of variation for articulated objects are geometric shape and visual appearance.
 	Disentangling these factors is a difficult problem, due to the intricated interplay of shape and appearance, especially under heavy articulation.
 	The complexity enters, as a variation in shape is a change of the images domain rather than a change of its values~\cite{shu18shapeappear, xing18shapeappear}.
 	Consider a person raising his arm: the color and texture of his pullover sleeve intrinsically does not change, but appears at a different location in the image. An efficient model for shape should cover all possible states of the object and preserve the local linkage to its intrinsic appearance.
