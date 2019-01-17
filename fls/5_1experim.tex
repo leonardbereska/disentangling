@@ -114,16 +114,20 @@
 		\end{figure}
 
 		Human bodies introduce the challenge of object articulation. We test on three datasets. The BBC Pose dataset is used to compare against Jakab \etal~\cite{jakab18}, the Human3.6M dataset to beat the benchmark of Zhang \etal~\cite{zhang18}. Additionally, we present the first unsupervised results on Penn Action, which is, as we argue, significantly more difficult.
+		% In contrast to the considerable pose variation, the appearance variation among the 7 subjects is limited due to the lighting conditions and similar clothing.
+		% Penn Action: In contrast to both BBC Pose and Human3.6M both pose and appearance variation is huge, real-world conditions.
 
 			\begin{tcolorbox}
-				\textbf{BBC Pose} \cite{charles13bbcpose} contains videos of sign-language signers with varied appearance in front of a changing background. Like \cite{jakab18} we loosely crop around the signers.
+				\textbf{BBC Pose} \cite{charles13bbcpose} contains videos of sign-language signers with varied appearance in front of a changing background.
 				The test set includes 1000 frames and the test set signers did not appear in the train set.
+				Like \cite{jakab18} we loosely crop around the signers: we used image patches measuring $300 \times 300$ pixels, which we resized to a resolution of $128 \times 128$.
 				For evaluation, as \cite{jakab18}, we utilized the provided evaluation script, which measures the PCK around $d=6$ pixels in the original image resolution.
 			\end{tcolorbox}
 			\begin{tcolorbox}
-				\textbf{Human3.6M} \cite{ionescu14human36m} features human activity videos.
-				We adopt the training and evaluation procedure of \cite{zhang18}.
-				For proper comparison to \cite{zhang18} we also removed the background using the off-the-shelf unsupervised background subtraction method provided in the dataset.
+				\textbf{Human3.6M} \cite{ionescu14human36m} features human activity videos in stable environments. We consider a subset of ca. 800k images from 6 activities (direction, discussion, posing, waiting, greeting, walking).
+				We adopt the training and evaluation procedure of \cite{zhang18}: We trained on 6 subjects IDs (S1, S5, S6, S7, S8, S9) and used S11 for testing.
+				For proper comparison to \cite{zhang18} we also removed the background using the off-the-shelf unsupervised background subtraction method provided in the dataset and cropped roughly around the provided bounding boxes, then resized to $128 \times 128$.
+				For evaluation, as~\cite{zhang18}, we report the minimum of the errors to the original landmark annotations and their left-right-flipped counterparts. This is correcting for the fact, that the model does not distinguish back and frontal views (for a discussion of this problem, cf. Sec.~\ref{sec:parity}).
 			\end{tcolorbox}
 			\begin{tcolorbox}
 				\textbf{Penn Action} \cite{zhang13penn} contains 2326 video sequences of 15 different sports categories.
@@ -219,8 +223,8 @@
 		\begin{tcolorbox}
 			\textbf{CUB-200-2011} \cite{wah11birds} comprises ca. 12k images of birds in the wild from 200 bird species.
 			% flying birds impossible because transition information missing
-			We excluded bird species of seabirds, roughly cropped using the provided landmarks as bounding box information and resized to $128\times128$.
-			We aligned the parity with the information about the visibility of the eye landmark.
+			We excluded bird species of seabirds, because these bird species were depicted flying, (discussion in Sec.~\ref{sec:articulation}), roughly cropped using the provided landmarks as bounding box information and resized to $128\times128$.
+			We aligned the parity with the information about the visibility of the eye landmark (discussion in Sec.~\ref{sec:parity}).
 			For comparing with \cite{zhang18} we used their published code.
 		\end{tcolorbox}
 		\begin{tcolorbox}
@@ -228,14 +232,17 @@
 		\end{tcolorbox}
 
 		\subsubsection{Qualitative results}
-			The Dogs Run dataset displays that even completely different dog breeds can be related via semantic parts.
-			Here, the universality of the approach (capturing non-human poses) is underlined once more.
-			This is to be expected, as no prior assumptions about the object-class are introduced in the model.
-			Furthermore, the limited amount of data in Dogs Run is no problem for finding meaningful correspondences, due to the unsupervised nature of the model and the transformations acting as a form of data augmentation.
+			On CUB-200-2011 the model discovers consistent landmarks that closely cover the birds body, despite significant variation in color, texture, size and background. The direct comparison to Zhang \etal~\cite{zhang18} is further discussed in Sec.~\ref{sec:compare}, including a qualitative comparison in Fig.~\ref{fig:compare}.
+			The performance on the Dogs Run dataset shows that highly differing dog breeds (size, thickness of fur) can be related via semantic parts.
+			Furthermore, the limited amount of data in Dogs Run is no problem for finding meaningful correspondences, firstly due to the unsupervised nature of the model and the transformations acting as a form of data augmentation.
+			On both datasets, the universality of the approach (capturing non-human poses) is underlined once more.
+			This is to be expected, as no specific assumptions about the object-class are introduced in the model formulation.
+
 
 		\subsubsection{Quantitative results}
 
-			For a direct comparison to Zhang \etal \cite{zhang18} we apply their published code on the CUB-200-2011 dataset. The results are shown in Tab.~\ref{tab:birds}.
+			For a direct comparison to Zhang \etal \cite{zhang18} we apply their published code on the CUB-200-2011 dataset. The results are shown in Tab.~\ref{tab:birds}. Our method surpasses~\cite{zhang18}; to appreciate why this is so, refer to the direct comparison in Sec.~\ref{sec:zhang}.
+
 
 			% RESULTS BIRDS
 			\begin{table}[t]
@@ -274,11 +281,9 @@
 		\end{tabular}
 	\end{table}
 	An overview over the challenges implied by each of the presented datasets is given in Tab.~\ref{tab:challenges}. We address the main difficulties in the following: background clutter~\ref{sec:background}, intra-class variance~\ref{sec:intraclass}, articulation and viewpoint variation~\ref{sec:articulation}.
-	We discuss how the method overcomes these challenges.
+	We make suggestions on how the method overcomes these challenges.
 
 	\subsection{Background Clutter}\label{sec:background}
-
-
 		The question how to separate background from object goes deeper than one might think. Fundamentally the question is equivalent to: \textit{What is an object?}
 		If an unsupervised algorithm is posed the task of finding the object in an image dataset - under the assumption that the object is present in all images - the object is a structure common to these images.
 		By this definition background is everything that is not strongly correlated with the object itself.
@@ -288,11 +293,16 @@
 
 
 	\subsection{Object Articulation and Viewpoint Variation}\label{sec:articulation}
-		Object articulation and viewpoint variation makes consistent landmark discovery challenging. In contrast to rigid bodies that can vary in orientation and scale, articulated objects have many degrees of freedom more. Part assignment consistency means equivariance \wrt changes in shape due to articulation. Equivariance is enforced twice in the method (cf. Sec. \ref{sec:framework}).
+		Object articulation and viewpoint variation makes consistent shape learning challenging. In contrast to rigid bodies that can vary in orientation and scale, articulated objects viewn from different viewpoints have many degrees of freedom more.
+		Complex articulation can be conceptually simplified by regarding an object as a collection of rigid parts, that again each have only few degrees of freedom. This description of an arrangement of parts is exponentially cheaper than trying to capture it as a whole~\cite{ross06parts}. To enforce the factorization into independent parts it is crucial to restrain the part features and region to be local (how exactly is shown in Sec.~\ref{sec:method}). Landmarks are a simple and efficient implementation of this part factorization idea. In this sense, using landmarks as shape representation is the natural approach for tackling articulation. However, related work does not strictly enforce locality of the learned features (compare~\ref{sec:jakab}) or a local reconstruction from these features.
+
+
+		Part assignment consistency means equivariance \wrt changes in shape due to articulation. Equivariance is enforced twice in the method (cf. Sec.~\ref{sec:framework}).
 		We showed previously that the method can deal with strongly articulated human and animal bodies (cf. Sec.~\ref{sec:kp_humanbodies} and Sec.~\ref{sec:kp_animalbodies}).
 		\todo{Viewpoint variation, cnns bad at viewpoint}
 		% no grid -> Zhang
 		% % ill-posed fundamentally if reconstruction, cf.\ bbcpose to see that from trainset possible.
+		\todo{discuss about shape transformation, for which no transformation present, like birds flying, deep fashion leg crossing.}
 
 	\subsection{Intra-Class Variation}\label{sec:intraclass}
 		Intra-class variation can be both in shape and in appearance. Due to different breeds and species the animal datasets - Dogs Run, CUB-200-2011, Cat Head - present the highest degree of variability within the object class. The method in part coincidentally generalizes and in part inherently enforces in due to the data augmentation with shape and appearance transformations (see also Sec. \ref{sec:transformations}).
@@ -322,9 +332,8 @@
 		\end{figure}
 
 		In this section we discuss the effect of the transformations on learning a consistent and comprehensive representation.
-		Since strong image transformations can make the learning curve for the algorithm too steep, we exponetially schedule the increase in magnitude, finally resulting in image changes as shown in Fig. \ref{fig:coloraugm}.
-		In effect, the transformations teach the algorithm what changes in shape and appearance are. Assuming that samples from the data distribution are - showing the same object class - related via a change in shape and appearance, the transformations blur the distribution. This data augmentation is sketched in Fig. \ref{fig:trans}.
-
+		Since strong image transformations can make the learning curve for the algorithm too steep, we exponentially schedule the increase in magnitude, finally resulting in image changes as shown in Fig. \ref{fig:coloraugm}.
+		In effect, the transformations teach the algorithm what changes in shape and appearance are. Assuming that samples from the data distribution are - showing the same object class - related via a change in shape and appearance, the transformations blur the distribution. This data augmentation effect is sketched in Fig. \ref{fig:trans}.
 
 		\subsection{Spatial Transformations}\label{sec:warps}
 			We perform thin-plate spline (TPS) warps to mimick spatial transformations. These changes incorporate rotation, scaling and translation as a special case. While irreplacable for calculating the direct equivariance loss\todo{ reference to equation}, they can result in artificial shape changes. After all, most objects - such as human beings or animals, do not warp, but articulate their parts/limbs.
@@ -361,7 +370,9 @@
 % \end{comment}
 
 \section{Comparative Advantages}\label{sec:compare}
-		\subsection{Non-Disentangling Approach}
+		In this section we directly compare against the closest competitors on unsupervised learning of shape Zhang \etal~\cite{zhang18} and Jakab \etal~\cite{jakab18}. On a low-level, there are many differences to both approaches, some of which we discuss in the respective related work (\ref{sec:shapelearning}). On a high level, different is that Zhang \etal lack a principled way to disentangle shape and appearance (\eg via transformations) (Sec.~\ref{sec:zhang}) and Jakab \etal model the appearance in a holistic encoding (Sec.~\ref{sec:jakab}).
+
+		\subsection{Non-Disentangling Approach}\label{sec:zhang}
 			% HUMAN3.6M DETAILED RESULTS
 			\begin{table}[!ht]
 				\centering
@@ -402,8 +413,7 @@
 			This is due to their separation constraint, which forces landmarks to be mutually distant.
 			We do not need such a problematic bias in our approach, since the localized, part-based representation and reconstruction guides the shape learning and captures the object and its articulations more closely.
 
-		\subsection{Holistic Approach}
-
+		\subsection{Holistic Approach}\label{sec:jakab}
 			The method of Jakab \etal \cite{jakab18} aims disentangling shape and appearance with video information. Shape is then - similar to ours - defined by the change between consecutive frames. However, they do not model the link between local parts of shape and appearance, but use a holistic appearance embedding. Constrained by reality.
 			% \begin{itemize}
 				% \item not factorizing into parts, holistic appearance
@@ -439,13 +449,12 @@
 			\begin{figure}[htp]
 				\centering
 				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/shape/bbc8}
-				\caption{Comparison of regression results of our method (bottom rows) to \cite{jakab18} (top rows) on BBC POSE. For visualization by Jakab \etal (from their paper) ground truth is in circles and the corresponding regression in the same color. For our visualization the red dots mark the ground truth, the colored circles the regressed locations. The color coding is in terms of the error \wrt the image edge length.}
+				\caption{Comparison of regression results of our method (bottom rows) to \cite{jakab18} (top rows) on BBC Pose. For visualization by Jakab \etal (from their paper) ground truth is in circles and the corresponding regression in the same color. For our visualization the red dots mark the ground truth, the colored circles the regressed locations. The color coding is in terms of the error \wrt the image edge length.}
 				\label{fig:bbc8}
 			\end{figure}
+			\todo{color coding problem, reference to our regression figure}
 
 
-
-% \begin{comment}
 	% \subsection{Failure Modes}\label{sec:failuremodes}
 		\todo{search for failure modes}
 		% on cat head, human mislabelling is the most common failure mode
@@ -475,9 +484,10 @@
 			\todo{what is the crossing task}
 			We ablate the main components of our proposed framework: reconstruction loss $\mathcal{L}_{\textrm{rec}}$, the equivariance loss $\mathcal{L}_{\textrm{equiv}}$, the appearance augmentation and the crossing task for disentangling shape and appearance. For the ablation study we use the Cat Head dataset, following the already introduced train-test setup on the task of landmark ground truth regression. Tab. \ref{tab:ablation} illustrates the ablation results.\\
 			Leaving out the reconstruction task naturally leads to the largest drop in performance since only training on equivariance leads to collapsed landmark solutions as discussed in \cite{zhang18}.
-			Training our model without color augmentations or appearance crossing between image pairs (i.e. the crossing task) weakens, respectively neglects the disentanglement of appearance and shape and hence the performance of our model significantly. % here specifically tackling intra-class variance
-			Note that without the crossing task our models performs on par with Zhang \etal \cite{zhang18}, indicating, that this novel task could be explaining overall performance gain \wrt \cite{zhang18}. %This performance drop would be larger on datasets with articulation.
-			Leaving out the explicit equivariance leads to the smallest drop in performance. This is not surprising, as equivariance is implicitly also enforced in the crossing framework.
+			Note that without both shape and appearance transformations our models performs significantly worse, now comparable to Zhang \etal \cite{zhang18}.
+			Without transformations the reconstruction objective is identical to the one of~\cite{zhang18}, only the model architecture deviates.
+			This suggests, that the improved disentanglement (by transformations) could be explaining the overall performance gain \wrt \cite{zhang18}.  %This performance drop would be larger on datasets with articulation.
+			Leaving out the explicit equivariance leads to the smallest drop in performance. This is not surprising, as equivariance is implicitly also enforced in the feature crossing framework.
 			% without local features (not done yet, should we?, could ablate local decoder, or part appearance)
 
 	\subsection{Crucial role of Transformations}
@@ -486,5 +496,4 @@
 		We compare to other approaches and reach state-of-the-art performance on the task of regressing human-annotated landmarks from the part representation.
 		The key difference to the most competitive approach \cite{zhang18} is the emphasis on disentanglement via a crossed reconstruction with shape and appearance transformations.
 		Enforcing disentanglement via targeted transformations enhances the shape representation in two ways: \emph{(i)} it asserts that no appearance information is encoded in the shape representation and vice versa and \emph{(ii)} it requires visual features to be equivariant under a spatial transformation.
-		With regards to the considerations earlier, the crucial role of the transformations are to be expected, as they enable to reach a \textit{disentanglement}.
-% \end{comment}
+		With regards to the considerations earlier, the crucial role of the transformations is to be expected, as they enable to reach a \textit{disentanglement}. In the next section we explore and compare the disentanglement quantitatively.
