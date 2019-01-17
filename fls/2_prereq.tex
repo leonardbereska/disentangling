@@ -16,7 +16,7 @@
 		{Unsupervised learning} is the endeavour to learn about structures and patterns in unlabelled data. In this paradigm, the learning algorithm has access to the samples of the data distribution $x \sim p(x)$. The task is usually framed as a form of density estimation, \ie to model the entire distribution in a probabilistic generative model (cf. sec. \ref{sec:genmodel}).
 		Unsupervised learning is considered much harder than supervised learning \cite{bishop06pattern}. There are several complications in the design of unsupervised algorithms:
 		\begin{itemize}
-			\item Naturally, without supervision, \textit{the goal of learning is not specified}, hence surrogate objectives have to be formulated. The lack of specification renders the evaluation often arbitrary and subjective\todo{cite evaluation of generative models}.
+			\item Naturally, without supervision, \textit{the goal of learning is not specified}, hence surrogate objectives have to be formulated. The lack of specification renders the evaluation often arbitrary and subjective~\cite{theis15evalgen}.
 			\item It is a priori not clear, \textit{how much prior knowledge should be embedded}. To introduce no artificial bias, some argue for a purely data-driven approach. Others argue for the importance of certain inductive priors to guide learning \cite{tenenbaum18think}.
 			A related modeling choice is, if the algorithm should be model-free or model-based\todo{ cite huszar article}.
 			\note{model-free vs model-based approaches:}
