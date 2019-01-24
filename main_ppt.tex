@@ -1,7 +1,8 @@
 \documentclass[xcolor=dvipsnames]{beamer}
-%\usetheme{CambridgeUS}
+% \usetheme{CambridgeUS}
 \usetheme{Warsaw}
-%\usecolortheme{dove}
+% \setbeamertemplate{footline}[frame number]
+\setbeamertemplate{headline}{}
 \usecolortheme[named=Gray]{structure}
 %MidnightBlue
 \definecolor{RedViolet}{HTML}{800e56}
@@ -11,7 +12,7 @@
 \usepackage{pgfpages}
 \setbeamertemplate{note page}[plain]
 %\usepackage[dvipsnames]{xcolor} % for colors
-%\setbeameroption{show notes on second screen=right}
+% \setbeameroption{show notes on second screen=right}
 
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -34,6 +35,36 @@
 \usepackage{amsmath}
 \usepackage{subcaption} % for subfigures
 \usepackage{comment}
+% \usepackage[pagebackref=true,breaklinks=true,colorlinks,bookmarks=false]{hyperref}
+\usepackage{csquotes}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{dsfont}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{caption}
+\usepackage{pifont}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{xspace}
+\usepackage{tikz}
+\usetikzlibrary{bayesnet}
+\usepackage{comment}
+\usepackage{tcolorbox}
+\usepackage{xcolor}
+
+\makeatletter
+	\DeclareRobustCommand\onedot{\futurelet\@let@token\@onedot}
+	\def\@onedot{\ifx\@let@token.\else.\null\fi\xspace}
+	\def\eg{\emph{e.g}\onedot} \def\Eg{\emph{E.g}\onedot}
+	\def\ie{\emph{i.e}\onedot} \def\Ie{\emph{I.e}\onedot}
+	\def\cf{\emph{c.f}\onedot} \def\Cf{\emph{C.f}\onedot}
+	\def\etc{\emph{etc}\onedot} \def\vs{\emph{vs}\onedot}
+	\def\wrt{w.r.t\onedot} \def\dof{d.o.f\onedot}
+	\def\etal{\emph{et al}\onedot}
+\makeatother
 
 
 \setcounter{tocdepth}{2} %hide subsections
@@ -44,8 +75,8 @@
 
 
 \title{{Unsupervised Learning of Object Pose}}
-\author{Dominik Lorenz, Leonard Bereska  \\
-Supervisors: T. Milbich, Prof. B. Ommer \\
+\author{Leonard Bereska}
+\institute{Supervisors: T. Milbich, Prof. B. Ommer \\
 Heidelberg Collaboratory for Image Processing (HCI)}
 %\institute{Supervisor: Prof. Dr. D. Durstewitz, Dr. G. Koppe, Zentrales Institut f\"ur Seelische Gesundheit (\gls{zi})}
 \date{\today}
@@ -56,7 +87,7 @@ Heidelberg Collaboratory for Image Processing (HCI)}
 
 \input{fls/ppt}
 
-\begin{frame}
+\begin{frame}[plain, shrink]
 	\frametitle{Bibliography}
 \bibliography{lib_new}{}
 \bibliographystyle{unsrt}
