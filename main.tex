@@ -74,8 +74,8 @@
 
 	\begin{document}
 	% \include{frm/titlepages-ger} % select either german
-	% \input{frm/titlepages-eng} % or english title page
-	% \include{frm/abstracts}
+	\input{frm/titlepages-eng} % or english title page
+	\include{frm/abstracts}
 
 	\tableofcontents
 	\newpage
@@ -89,24 +89,24 @@
 	\input{fls/6_discuss.tex}
 
 	% \input{fls/0_contrib.tex}
-	% \part{Appendix}
-	% \begin{appendix}
-	% \chapter{Landmark Results}
-	% \input{fls/7_1landmarks.tex}
-	% \chapter{Disentangled Representation}
-	% \input{fls/7_2swaps.tex}
-	% \chapter{Implementation Details}
-	% \input{fls/7_3implement.tex}
-	% \chapter{Dataset Preprocessing}
-	% \input{fls/7_4datasets.tex}
-	% \chapter{Lists}
-	% \listoffigures
-	% \listoftables
+	\part{Appendix}
+	\begin{appendix}
+	\chapter{Landmark Results}
+	\input{fls/7_1landmarks.tex}
+	\chapter{Disentangled Representation}
+	\input{fls/7_2swaps.tex}
+	\chapter{Implementation Details}
+	\input{fls/7_3implement.tex}
+	\chapter{Dataset Preprocessing}
+	\input{fls/7_4datasets.tex}
+	\chapter{Lists}
+	\listoffigures
+	\listoftables
 	\bibliography{lib_new}{}
 	% % \citestyle{egu}
 	% % \bibliographystyle{ieee}
 	\bibliographystyle{unsrt}
 	% % \bibliographystyle{plainnat}
-	% \include{frm/deposition}
-	% \end{appendix}
+	\include{frm/deposition}
+	\end{appendix}
 	\end{document}

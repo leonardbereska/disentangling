@@ -1,9 +1,30 @@
 %% Latex markup and citations may be used here
   Object representations are of paramount importance for various computer vision applications. %Learning such a      model without supervision is still an open challenge. %Frequently used holistic object representations limit a     deep understanding of its spatial structure.
-  This paper presents an unsupervised approach to learn a dedicated compositional part representation of an object, disentangling the factors of shape and appearance for each part. %The invariance of one factor when        the other is transformed in a two-stream auto-encoding framework.
+  The thesis at hand presents an unsupervised approach to learn a dedicated compositional part representation of an object, disentangling the factors of shape and appearance for each part. %The invariance of one factor when        the other is transformed in a two-stream auto-encoding framework.
   To disentangle, each factor is assumed to be invariant under transformations of the other factor. Additionally, shape is assumed to be equivariant with respect to a spatial transformation. These assumptions are implemented in a two-stream auto-encoding framework for detecting parts, while the architecture is designed to maintain the local nature of the parts.\\
   %We derive explicit invariance and equivariance constraints for such a decomposition and implement these in a      generative framework. % by our shape representation.
   Trained without any manual supervision or prior information about on the object itself, the method discovers consistent parts, meaningfully covering the object. We evaluate this on a diverse selection of challenging datasets, the object classes ranging from human faces and bodies to dogs, cats and birds.
-  On the task of unsupervised landmark regression, our model outperforms state-of-the-art methods significantly. The margin is especially large on datasets with strong articulation.
-  We show that our model actually learned to disentangle shape from appearance and learns local parts independently.
+  On the task of unsupervised landmark regression, the model outperforms state-of-the-art methods significantly.
+  % The margin is especially large on datasets with strong articulation.
+  Additionally we show that our model actually learned to disentangle shape from appearance and learns local parts independently.
  %Unsupervised results for datasets with background clutter and significant articulation have never been            obtained before.
+
+% To show that the disentanglement is indeed achieved, we evaluate the disentanglement performance against a shape-supervised state-of-the-art disentanglement method and perform favorably (Chapter~\ref{sec:disentangling}).
+% \item \textit{Hypothesis \emph{ii)}: Learning unsupervised disentanglement without any assumptions is fundamentally impossible. In accordance with the literature on causal learning \cite{pearl18impediments}, disentangling causal factors requires model assumptions and/or interactional data - instead of observational (raw) data.}
+
+
+	% To address these hypotheses, we \textit{explain}, \textit{validate} and \textit{evaluate} a method for unsupervised shape learning: \textit{Unsupervised Part-wise Disentanglement of Shape and Appearance} developed by Lorenz \etal\ 2018\todo{cite properly}.
+%
+%
+	% To \textit{explain}, after theoretical prerequisites (Chapter~\ref{sec:prerequisites}) we give an overview over state-of-the-art unsupervised disentangling literature and situate the proposed method in relation to the literature (Chapter~\ref{sec:literature}). In particular, we carve out the necessary aspects of an approach for disentangling causal factors and analyze the current state of research in order to indicate future directions.\todo{do that for real!}
+	% We subsequently disclose our method (Chapter~\ref{sec:method}).
+%
+%
+	% To \textit{validate}, we show that the proposed method outperforms the state-of-the-art for unsupervised learning of object shape on miscellaneous datasets, featuring human and animal faces and bodies (Chapter~\ref{sec:shapelearning}).
+	% We also contribute several self-made video datasets for disentangling human pose from appearance, for articulated animal motion and for articulated composite objects. We highlight the specific challenges of these datasets and elucidate how the proposed method tackles them.
+%
+%
+	% To \textit{evaluate}, we perform ablation studies on critical components of the method. In addition, we compare to a part-wise shape learning method which does make the goal of disentangling explicit.
+%
+%
+	% % In short, our results are a big improvement upon the state-of-the-art in unsupervised object shape learning. This confirms the first hypothesis. To complement the learned shape in a generative process, object appearance is disentangled from shape. The achieved disentanglement with our causal assumptions, and the not-achieved disentanglement when dropping these assumptions, confirms the second hypothesis.
