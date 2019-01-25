@@ -36,7 +36,7 @@
 		\note{notion of truly unsupervised learning is actually harmful to progress.}
 
 	\subsection{Artificial Neural Networks}\label{sec:neuralnetworks}
-		Artificial neural networks are a powerful and flexible tool for function approximation. In their principles they are inspired by biological neurophysiology. An artificial network is a model for a function $y = f(x)$ with vector input $x = \{ x_i | i = 1 \ldots n \}$ and vector output $y = \{ y_j | j = 1 \ldots m \}$:
+		Artificial neural networks are a powerful and flexible tool for function approximation. In their principles they are inspired by biological neurons. An artificial network is a model for a function $y = f(x)$ with vector input $x = \{ x_i | i = 1 \ldots n \}$ and vector output $y = \{ y_j | j = 1 \ldots m \}$:
 		\begin{equation} \label{eq1}
 			\begin{split}
 				h_j & =  a (\sum_i w_{ji} x_i + b_i)  \\
@@ -165,7 +165,7 @@
 		How to learn the causal connection between a barometer and the weather? If the barometer is working well, there exists a clear correlation between the weather condition and the needle position. Given a dataset showing both barometer and corresponding weather condition, a capable machine learning algorithm will be able to capture this correlation. However, it will fail to understand the causal direction, since this is not possible from the data.
 		Imagine how a human would go about solving this problem:
 		Having a mechanistic model of the world he could reason about the precise causal mechanism relating weather to air pressure to needle position. A simple model could be: weather influences air pressure, pressure influences barometer needle position.
-		What if one has no prior knowledge? A solution of childlevel simplicity is, to force the needle to move with a finger. Without the power of magic, the weather will not change. Hence causality has to go other way or via a third latent variable influencing both \ie air pressure.
+		What if one has no prior knowledge? A solution of child-level simplicity is, to force the needle to move with a finger. Without the power of magic, the weather will not change. Hence causality has to go other way or via a third latent variable influencing both \ie air pressure.
 		% There cannot be an abstract intelligence, which finds out about the world purely by observation. The intelligence has to interact with the world, it has to be in the world.
 		% e.g.  RCT
 		To conclude, the strength of association (correlation) can be estimated with observational data alone, this can answer the question: how likely will it rain, if the barometer needle sinks? But not: how would the weather change if I force the barometer needle to sink?\todo{linking to next section}

@@ -144,7 +144,7 @@
 		The image resolution is $128 \times 128$, but the resolution of corresponding part shapes is $ 64 \times 64$.
 		For the reconstruction  loss $\mathcal{L}_\text{rec}$ we use the $L_1$ or $L_2$ distance.
 		To prevent parts from trying to explain the whole image, instead of focusing on the object, we also restrict the reconstruction loss to an area around the part shape: a sum of Gaussian approximations around the means of the part shapes is folded with the loss.\\
-		In the decoder, the latent image Z is not only rescaled, but also filled with parts incrementally.
+		In the decoder, the latent image Z is not only re-scaled, but also filled with parts incrementally.
 		At the lowest scale only some parts are inserted, with each scale parts are added until at the highest scale all parts are used. This makes the part decoding a hierarchical process. The underlying assumption is, that parts exist at multiple scales.
 		For landmark learning, we approximate the part shapes in the decoder in the bottleneck also with eq. \ref{eq:approx}, but fix the covariance $\Sigma$ to be the identity matrix.
 		Hence, effectively only information about the mean of each part shape can reach the decoder. This mean information is used as a landmark, so encouraging an accurate estimation of the mean through reconstruction is wanted.\todo{this needs further explanation or is dangerous}\\

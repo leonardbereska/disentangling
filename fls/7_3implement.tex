@@ -34,10 +34,10 @@
 	All residual blocks of the hourglass modules have $256$ feature channels.
 	The decoder is a variant of a U-Net \cite{ronneberger15unet} operating at a resolution of $h \times w$ pixels.
 	Different from a standard U-Net we do not learn the downsampling stream.
-	Through skip connections the approximate part activations maps are passed to the upsampling stream with the appropriate resolutions.
-	We distribute the local appearance encoding together with the corresponding approximate part activation maps into a multiscale bottleneck of resolution $4 \times 4$ to $16 \times 16$ in the Unet.
+	Through skip connections the approximate part activations maps are passed to the up-sampling stream with the appropriate resolutions.
+	We distribute the local appearance encoding together with the corresponding approximate part activation maps into a multi-scale bottleneck of resolution $4 \times 4$ to $16 \times 16$ in the U-Net.
 	The convolutional filters in the first up-sampling stage of the U-Net have $512$ feature channels.
-	The number of feature channels is halved every two upsampling stages.
+	The number of feature channels is halved every two up-sampling stages.
 	\\
 	%\textbf{Local Loss.}
 \paragraph{Local Loss.}

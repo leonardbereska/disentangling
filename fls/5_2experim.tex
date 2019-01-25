@@ -23,11 +23,11 @@
 		\end{figure}
 
 		% On Deep Fashion , a benchmark dataset for supervised disentangling methods, the task is to separate person ID (appearance) from body pose (shape) and then synthesize new images for previously unseen persons from the test set in eight different poses. We randomly sample the target pose and appearance conditioning from the test set.
-		We compare the disentangling performance quantitatively against a supervised method, namely the variational U-Net \cite{esser18}. We evaluate on the DeepFashion \cite{liu16deepfashion, liu16deepfashionwild} dataset, a standard benchmark dataset for supervised disentangling methods. In this dataset appearance is defined by a persons ID and shape by the pose of the person. For each ID in the test set, we condition the image generation on 8 different poses which are chosen randomly from the test set. Both VU-Net and our model are conditioned on the exactly the same pose-ID image pairs. Fig. \ref{fig:allswaps} shows qualitative results.
+		We compare the disentangling performance quantitatively against a supervised method, namely the variational U-Net \cite{esser18}. We evaluate on the Deep Fashion \cite{liu16deepfashion, liu16deepfashionwild} dataset, a standard benchmark dataset for supervised disentangling methods. In this dataset appearance is defined by a persons ID and shape by the pose of the person. For each ID in the test set, we condition the image generation on 8 different poses which are chosen randomly from the test set. Both VU-Net and our model are conditioned on the exactly the same pose-ID image pairs. Fig. \ref{fig:allswaps} shows qualitative results.
 		We quantitatively compare against supervised state-of-the-art disentangling \cite{esser18} by evaluating \emph{i)} invariance of shape against variation in appearance by the distance in pose between generated and pose target image and \emph{ii)} invariance of appearance against variation in shape by the re-identification error.
 
 		\begin{tcolorbox}
-			\textbf{Deep Fashion} \cite{liu16deepfashion, liu16deepfashionwild} consists of ca. 53k in-shop clothes images in high-resolution of $256 \times 256$. We selected the images which are showing a full body (all keypoints visible, measured with the pose estimator by \cite{cao17affinityfield}) as full visibilty of the object is an assumption to the model and used the provided train-test split. For comparison with Esser \etal \cite{esser18} we used their published code.
+			\textbf{Deep Fashion} \cite{liu16deepfashion, liu16deepfashionwild} consists of ca. 53k in-shop clothes images in high-resolution of $256 \times 256$. We selected the images which are showing a full body (all keypoints visible, measured with the pose estimator by \cite{cao17affinityfield}) as full visibility of the object is an assumption to the model and used the provided train-test split. For comparison with Esser \etal \cite{esser18} we used their published code.
 		\end{tcolorbox}
 
 	\subsection{Pose Estimation}
@@ -74,7 +74,7 @@
 		% many-image ReID
 		% ReID means ranking. rank-1 is the ratio of correct finding by the first entry. rank-n ratio of correct samples that are within first n entries in ranking. mean average precision is the average over
 		The first question we ask, is, if the appearance encoding is stable to variations in pose, hence invariant to pose (shape). Each ID from the test set is generated in 8 different poses. The task for the ReID algorithm is now to rank the similarity of these pose-changed yet same-appearance generations.
-		Although our approach is unsupervised, it is competitive compared to the supervised VU-Net \cite{esser18} as shown in Tab. \ref{tab:reid}. The high chance of reidentifying a persons appearance in a different shape (rank-1 accuracy) shows that the appearance is invariant against variation in shape (pose) for both methods.
+		Although our approach is unsupervised, it is competitive compared to the supervised VU-Net \cite{esser18} as shown in Tab. \ref{tab:reid}. The high chance of re-identifying a persons appearance in a different shape (rank-1 accuracy) shows that the appearance is invariant against variation in shape (pose) for both methods.
  		To visualize the closeness of the same-ID generations in the ReID-embedding the show a t-SNE plot in Fig.~\ref{fig:tsne}.
 
 		\begin{table}[htp]
@@ -115,19 +115,19 @@
 			\label{fig:tsne}
 		\end{figure}
 
-		The second question one could ask is, if appearance is preserved, \ie if the ReID algorithm is able to reidentify the groundtruth appearance image from the generation. Results for this are shown in Tab.~\ref{tab:reiddirect}. The result depends strongly on whether the algorithm had been fine-tuned to the DeepFashion image distribution or the DeepFashion and the synthesized image distribution. The stark difference can be explained by the difference in the feature distribution: high-frequency details (such as patterns and texture of clothing), are not synthesized correctly, as the model is trained by a reconstruction objective which will blurr these high frequencies. On the other hand, the adversarial objective will encourage \textit{some} high frequencies, but not necessarily the ones from the initial appearance conditioning. The ReID algorithm, if not additionally adjusted to this, will pay attention to those details and subsequently fail.
+		The second question one could ask is, if appearance is preserved, \ie if the ReID algorithm is able to re-identify the groundtruth appearance image from the generation. Results for this are shown in Tab.~\ref{tab:reiddirect}. The result depends strongly on whether the algorithm had been fine-tuned to the Deep Fashion image distribution or the Deep Fashion and the synthesized image distribution. The stark difference can be explained by the difference in the feature distribution: high-frequency details (such as patterns and texture of clothing), are not synthesized correctly, as the model is trained by a reconstruction objective which will blur these high frequencies. On the other hand, the adversarial objective will encourage \textit{some} high frequencies, but not necessarily the ones from the initial appearance conditioning. The ReID algorithm, if not additionally adjusted to this, will pay attention to those details and subsequently fail.
 		unambiguous function between generations and groundtruth can be found.
 
 		\begin{table}[htp]
 			\centering
-			\caption{Mean average precision (mAP) and rank-n accuracy for person re-identification from synthesized to ground truth appearance images after performing shape/appearance swap. When only fine-tuning the ReID algorithm on DeepFashion, results are much worse that when also adjusting to the synthesized images.}
+			\caption{Mean average precision (mAP) and rank-n accuracy for person re-identification from synthesized to ground truth appearance images after performing shape/appearance swap. When only fine-tuning the ReID algorithm on Deep Fashion, results are much worse that when also adjusting to the synthesized images.}
 			\label{tab:reiddirect}
 			\begin{tabular}{l|cccr}
 				\hline
 				Fine-tune to: & mAP & rank-1 & rank-5 & rank-10 \\ \hline
 				% VU-Net \cite{esser18} & 88.7\% & 87.5\% & {98.7}\% & {99.5}\% \\
-				DeepFashion & {17.2}\% & {25.4}\% &{48.8}\% & {60.4}\% \\
-				DeepFashion and Synthesized Images& {75.0}\% & {73.8}\% &{89.5}\% & {92.5}\% \\ \hline
+				Deep Fashion & {17.2}\% & {25.4}\% &{48.8}\% & {60.4}\% \\
+				Deep Fashion and Synthesized Images& {75.0}\% & {73.8}\% &{89.5}\% & {92.5}\% \\ \hline
 			\end{tabular}
 		\end{table}
 
@@ -153,7 +153,7 @@
 	We want to point out two features of the model here: Firstly, despite no use of smoothing or interpolation between frames the generated sequence is smooth in the temporal domain. This is enabled by a temporally consistent part assignment which is stable across articulation.
 	Secondly, the training on the natural spatial transforms in video data enables the model to encapsulate realistic transitions such as out-of-plane rotation and complex 3D articulation of \eg hands and even fingers (note the correct translation of the thumbs position in Fig. \ref{fig:bbcthumb}). \\
 	% \begin{itemize}
-		% \item video-translation on BBCPose (frame-to-frame shape-appearance swap)
+		% \item video-translation on BBC Pose (frame-to-frame shape-appearance swap)
 			% \begin{itemize}
 				% \item $\Rightarrow$ shows realistic 3D transitions can be encapsulated in model by explicitly training on them (video data)
 				% \item NO additional smoothing for frame-to-frame translation

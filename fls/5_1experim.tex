@@ -294,7 +294,7 @@
 
 	\subsection{Object Articulation and Viewpoint Variation}\label{sec:articulation}
 
-		Object articulation and viewpoint variation makes consistent shape learning challenging. In contrast to rigid bodies that can vary in orientation and scale, articulated objects viewn from different viewpoints have many degrees of freedom more.
+		Object articulation and viewpoint variation makes consistent shape learning challenging. In contrast to rigid bodies that can vary in orientation and scale, articulated objects viewed from different viewpoints have many degrees of freedom more.
 		Complex articulation can be conceptually simplified by regarding an object as a collection of rigid parts, that again each have only few degrees of freedom. This description of an arrangement of parts is exponentially cheaper than trying to capture it as a whole~\cite{ross06parts}. To enforce the factorization into independent parts it is crucial to restrain the part features and region to be local (how exactly is shown in Sec.~\ref{sec:method}). Landmarks are a simple and efficient implementation of this part factorization idea. In this sense, using landmarks as shape representation is the natural approach for tackling articulation. However, related work does not strictly enforce locality of the learned features (compare~\ref{sec:jakab}) or a local reconstruction from these features.
 
 
@@ -344,7 +344,7 @@
 			\end{figure}
 
 			The method of Zhang \etal \cite{zhang18} is similar to our method, but does not disentangle shape from appearance.
-			\note{Zhang similar, but not disentangling, why does that fail, why do we suceed?}
+			\note{Zhang similar, but not disentangling, why does that fail, why do we succeed?}
 			In Tab.~\ref{tab:humanactions} we list the detailed results of a comparison to Zhang \etal~\cite{zhang18}.
 			Fig. \ref{fig:compare} provides a direct visual comparison to \cite{zhang18} on CUB-200-2011.\todo{reference table}
 			It becomes evident that our predicted landmarks track the object much more closely.
@@ -461,7 +461,7 @@
 		In effect, the transformations teach the algorithm what changes in shape and appearance are. Assuming that samples from the data distribution are - showing the same object class - related via a change in shape and appearance, the transformations blur the distribution. This data augmentation effect is sketched in Fig. \ref{fig:trans}.
 
 		\subsection{Spatial Transformations}\label{sec:warps}
-			We perform thin-plate spline (TPS) warps to mimick spatial transformations. These changes incorporate rotation, scaling and translation as a special case. While irreplacable for calculating the direct equivariance loss\todo{ reference to equation}, they can result in artificial shape changes. After all, most objects - such as human beings or animals, do not warp, but articulate their parts/limbs.
+			We perform thin-plate spline (TPS) warps to mimic spatial transformations. These changes incorporate rotation, scaling and translation as a special case. While irreplaceable for calculating the direct equivariance loss\todo{ reference to equation}, they can result in artificial shape changes. After all, most objects - such as human beings or animals, do not warp, but articulate their parts/limbs.
 			Natural shape changes are needed to learn a model of the objects articulation. These changes are presented in video data. Hence, for videos we enforce the reconstruction to function across different frames. This results in a much stabler performance and greater part consistency especially for highly articulated parts such as arms.
 
 		\subsection{Appearance Transformations}
@@ -473,7 +473,7 @@
 				\label{fig:coloraugm}
 			\end{figure}
 
-			We mimick appearance changes with image transformations in color, contrast, hue and brightness. Exemplars for the combined effect of spatial and appearance transformations are shown in Fig. \ref{fig:coloraugm}.
+			We mimic appearance changes with image transformations in color, contrast, hue and brightness. Exemplars for the combined effect of spatial and appearance transformations are shown in Fig. \ref{fig:coloraugm}.
 			Especially for datasets with high intra-class appearance variance, connecting the data points via appearance changes is crucial. On Cat Head for example, without them, the method assigned different landmarks to black cats than to other-color cats. The model will incur no loss, as long as it always has to reconstruct black cats from images of black cats. If it has to relate black and white cats (\eg via color inversion) this intra-class inconsistency has to vanish.\\
 			Ideally one would want more "natural" appearance changes as well. This could be a line of future work (cf. Sec.~\ref{sec:futurework}).
 
