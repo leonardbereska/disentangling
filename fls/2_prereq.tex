@@ -5,7 +5,7 @@
 
 \section{Learning from Data}
 	{Learning from data} is commonly understood as the ability of algorithms to improve their performance on a task with experience accumulated from the observation of data \cite{goodfellow16dlb}. The source of data is usually a dataset - set of data points $X = \{x_i | i \in \{1\ldots n\} \}$, which are sampled from a probability distribution $x_i \sim p(x)$.
-	In general, these data points are multi-dimensional. In computer vision in particular, data are images $\mathbf{x}$ with height $h$ and width $w$, so that the dimension is $\mathbf{x} \in \mathbb{R}^{h \times w}$.
+	In general, these data points are multi-dimensional. In computer vision in particular, data are images $\mathbf{x}$ with height $h$ and width $w$, so that the data points are $\mathbf{x} \in \mathbb{R}^{h \times w}$.
 
 	\subsection{Supervised}\label{sec:supervised}
 		The term {supervised learning} denotes the task to learn a mapping from data points $x_i$ to target labels $y_i$.
@@ -18,13 +18,15 @@
 		{Unsupervised learning} is the endeavour to learn about structures and patterns in unlabelled data. In this paradigm, the learning algorithm has access to the samples of the data distribution $x \sim p(x)$. The task is usually framed as a form of density estimation, \ie to model the entire distribution in a probabilistic generative model (cf. Sec. \ref{sec:genmodel}).
 		Unsupervised learning is considered much harder than supervised learning \cite{bishop06pattern}. There are several complications in the design of unsupervised algorithms:
 		\begin{itemize}
-			\item Naturally, without supervision, \textit{the goal of learning is not specified}, hence surrogate objectives have to be formulated. The lack of specification renders the evaluation often arbitrary and subjective~\cite{theis15evalgen}.
+			\item Naturally, without supervision, \textit{the goal of learning is not specified}, hence surrogate objectives have to be formulated. The lack of specification renders the evaluation oftentimes arbitrary and subjective~\cite{theis15evalgen}.
 			\item It is a priori not clear, \textit{how much prior knowledge} should be embedded. To introduce no artificial bias, some argue for a purely data-driven approach. Others argue for the importance of certain inductive priors to guide learning \cite{tenenbaum18think}.
 			A related modeling choice is, whether the algorithm should be model-free or model-based\todo{ cite huszar article}.
-			\note{model-free vs model-based approaches:}
-			\note{model-based $\rightarrow$ more flexible, transferable, allows for modular combination (like parts)}
-			{In this work we argue for using more prior knowledge and modeling assumptions to obtain strong constraints.}
-			\todo{it is not clearly defined: what is unsupervised?}
+			% \note{model-free vs model-based approaches:}
+			% \note{model-based $\rightarrow$ more flexible, transferable, allows for modular combination (like parts)}
+			In this work we argue for using more prior knowledge and modelling assumptions to obtain strong constraints.
+			\item Lastly, the \textit{definition of the term unsupervised} itself is subject to discussion. What entitles an algorithm to be called unsupervised? While the definition itself has no practical importance, unclear and imprecise terminology unnecessarily confuses.
+
+
 
 		\end{itemize}
 		\todo{connection between unsupervised and supervised learning, \cite{goodfellow16dlb}.}
@@ -50,6 +52,7 @@
 		To optimize these weights via gradient descent has proven successful (for deep networks this is called backpropagation).
 		\note{Need to be differentiable, (differentiable programming).}
 
+\newpage
 \section{Generative Models}\label{sec:genmodel}
 	\begin{quote}
 	    What I cannot create, I do not understand. - R. Feynman
@@ -62,7 +65,7 @@
 	\subsection{Autoencoding Formulations}\label{sec:autoencoding}
 		An autoencoding model is learning by reconstructing samples of data, $\hat x = f(x)$. To enforce data compression (otherwise the identity function is a trivial solution of autoencoding) the function has an information bottleneck, namely an inferred latent code $z$ of reduced dimension. The autoencoder is then the chain of an encoding function $z = e(x)$ and a decoding function $\hat x = d(z) = d(e(x))$.
 
-		Whereas the conventional autoencoder consists of deterministic mappings $e, d$, the \textit{variational autoencoder} \cite{kingma13vae} models the probability distribution $p(x)$. More specifically, it maximizes a lower bound to the logarithmic likelihood $\log p(x)$ of data $x$. This so-called variational lower bound $\mathcal{L}$ is given by:
+		Whereas the conventional autoencoder consists of deterministic mappings $e, d$, the {variational autoencoder} \cite{kingma13vae} models the probability distribution $p(x)$. More specifically, it maximizes a lower bound to the logarithmic likelihood $\log p(x)$ of data $x$. This so-called variational lower bound $\mathcal{L}$ is given by:
 		% \begin{equation}\label{eq:vae}
 			% \mathcal{L} = \underbrace{\mathds{E}_{z\sim q(z|x)}  \log p(x|z)}_{\textrm{reconstruction loss}}  - \underbrace{\textrm{KL}(q(z|x)||p(z))}_{\textrm{regularization}}
 		% \end{equation}
@@ -75,7 +78,7 @@
 		In the current machine learning contexts, all functions ($e, d$) and moments ($\mu, \Sigma$) are modelled with neural networks.
 
 	\subsection{Adversarial Formulations}\label{sec:adversarial}
-		\textit{Generative adversarial networks} (GAN) \cite{goodfellow14gan} consist of two neural networks competing in a zero-sum game. A generator network $G$ is generating images based on a latent code $z$ sampled from a distribution $p(z)$. The discriminator network $D$ is a binary classifier with the task to classify an image as originating from the data distribution $p_{\mathrm{data}}$ or from the distribution produced by $G$. The loss function of $G$ is the negative of the loss of $D$, such that one can formulate the optimization in a minmax form:
+		{Generative adversarial networks} (GAN) \cite{goodfellow14gan} consist of two neural networks competing in a zero-sum game. A generator network $G$ is generating images based on a latent code $z$ sampled from a distribution $p(z)$. The discriminator network $D$ is a binary classifier with the task to classify an image as originating from the data distribution $p_{\mathrm{data}}$ or from the distribution produced by $G$. The loss function of $G$ is the negative of the loss of $D$, such that one can formulate the optimization in a minmax form:
 		\begin{equation}
 			% \begin{split}
 			\min_D \max_G - \frac{1}{2} \mathds{E}_{x \sim p_{\mathrm{data}}} [\log D(x)] - \frac{1}{2} \mathds{E}_{z\sim p(z)}[\log (1-D(G(z)))]
@@ -161,7 +164,7 @@
 		To show the limitations of raw data, we sketch an intuitive example problem (adapted from \cite{pearl18why}):
 		How to learn the causal connection between a barometer and the weather? If the barometer is working well, there exists a clear correlation between the weather condition and the needle position. Given a dataset showing both barometer and corresponding weather condition, a capable machine learning algorithm will be able to capture this correlation. However, it will fail to understand the causal direction, since this is not possible from the data.
 		Imagine how a human would go about solving this problem:
-		Having a mechanistic model of the world he could reason about the precise causal mechanism relating weather to humidity to needle position. A simple model could be: weather influences air pressure, pressure influences barometer needle position.
+		Having a mechanistic model of the world he could reason about the precise causal mechanism relating weather to air pressure to needle position. A simple model could be: weather influences air pressure, pressure influences barometer needle position.
 		What if one has no prior knowledge? A solution of childlevel simplicity is, to force the needle to move with a finger. Without the power of magic, the weather will not change. Hence causality has to go other way or via a third latent variable influencing both \ie air pressure.
 		% There cannot be an abstract intelligence, which finds out about the world purely by observation. The intelligence has to interact with the world, it has to be in the world.
 		% e.g.  RCT

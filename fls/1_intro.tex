@@ -11,7 +11,8 @@
 	The two prominent factors of variation for articulated objects are geometric shape and visual appearance.
 	Disentangling these factors is a difficult problem, due to the intricate interplay of shape and appearance, especially under heavy articulation.
 	Consider a person raising an arm: the color and texture of the pullover sleeve intrinsically does not change, but appears at a different location in the image.
-	The complexity for modelling this enters, as a variation in shape is a change of the appearance domain rather than a change of its values~\cite{shu18shapeappear}. Even simple shape models~\cite{cootes98activeappear} offer difficult optimization problems.
+	The complexity for modelling this enters, as a variation in shape is a change of the domain of appearance rather than a change of its values~\cite{shu18shapeappear}.
+	Even simple shape models~\cite{cootes98activeappear} offer difficult optimization problems.
 	An efficient model for shape should cover all possible states of the object and preserve the local linkage to its intrinsic appearance.
 
 \section{Why Disentangle Causal Factors?}
@@ -79,10 +80,9 @@
 		Not only quantity, but also quality of data. Machine learning on images is commonly posed as the task to learn from randomly sampled images from a data set. But humans do not perceive the world in arbitrary samples.
 		To humans, the world appears in a temporal sequence, which reveals how generative factors change and persevere across time. Instead of focusing on datasets with static images, sampled at random so that the images may have nothing to do with each other, algorithms should use video datasets and harness the rich temporal information.\\
 		Another key difference is, that humans interact with their environment.
-		That means, humans know change, not only by observing change (as in a temporal sequence), but also by changing.
+		That means, humans know how factors change, not only by observing them changing, but also by changing them.
 		Anyone, who has watched a human infant play, can affirm that the learning mind is obsessed with interaction and change. The inevitable destruction around a young human is no accident, but a result of curious learning.
-		\note{Whether consciously by performing controlled experiments or by subconscious cues \cite{wall08egomotion}:}
-		\textit{Interaction is crucial for a learning mind.}
+		Whether by performing consciously controlled experiments or by subconscious cues \cite{wall08egomotion}: Interaction is crucial for a learning mind.
 
 		% causal inference
 		% 3. Learning by interacting: knowing change by changing.
@@ -95,7 +95,7 @@
 	% humans what model: imagination: e.g.
 		Humans are able to imagine. That presupposes an internal model of the world, to which specific changes of representational factors can be applied.
 		% So-called dreaming neural networks can distract from the fact that human imagination is make changes to the world that it did not observe.
-		In machine learning, fitting neural network models as functions to approximate datasets has seen tremendous progress recently, to the point, that it is considered a solved problem \todo{cite something, maybe bigGAN etc)}. This progress is mainly due to the effectiveness of neural networks to fit high-dimensional functions. But a probabilistic fit to a dataset, however complex and rich, is not a causal model. Even if one were to obtain a probabilistic model over all images the world (one could start with \eg ImageNet \cite{russakovsky15imagenet}), this would tell very little about the real-world (causal) relationships between objects.
+		In machine learning, fitting neural network models as functions to approximate datasets has seen tremendous progress recently, to the point, that it is considered a solved problem\todo{cite something, maybe bigGAN etc)}. This progress is mainly due to the effectiveness of neural networks to fit high-dimensional functions. But a probabilistic fit to a dataset, however complex and rich, is not a causal model. Even if one were to obtain a probabilistic model over all images the world (one could start with \eg ImageNet \cite{russakovsky15imagenet}), this would tell very little about the real-world (causal) relationships between objects.
 		\note{One could hope for relationships to emerge by data compression alone, but }
 		\note{A step towards intelligence would be to automate the finding of "meaning" in the learned latent spaces. But meaning has to come from somewhere, and will not emerge from the data itself.}
 
@@ -110,7 +110,7 @@
 	% A theoretical objection to driving-only-with-data comes from the causal literature: For an understanding of the world, an algorithm needs to model causal processes, that cause an image to be generated.
 
 \newpage
-\section{Contributions}
+\section{Contributions}\label{sec:contributions}
 	This thesis provides evidence for two hypotheses:
 	\begin{itemize}
 		\item  \textit{Hypothesis \emph{i)}: Unsupervised learning of object shape benefits from abstracting away the complement of shape, namely the object appearance. Explaining away the appearance factor can be achieved by a disentangled generative modelling of both factors.}

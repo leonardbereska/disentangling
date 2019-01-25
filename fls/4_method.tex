@@ -92,7 +92,7 @@
 	%For video data the crossing task can be run on images pairs that show the same object in a different articulation (i.e. different frames of the video), enforcing equivariance of $s$ with respect to natural shape transformations. \\
 	For a known shape transformation the equivariance of shape can also be encouraged explicitly with a loss. This has been used before in the context of unsupervised landmark learning by \cite{thewlis17, zhang18} as a point-wise loss on a part probability map, encouraging the exact location of a part to transform accordingly. In our case, the part shapes shall not encode probability, but instead the spatial extend of a part. In approximation, we want the first two moments ($\mu, \Sigma$) to transform correctly. Thereby the extend and orientation of the parts is penalized in addition to its mere position.
 	\begin{equation}
-		\mathcal{l}_{\textrm{equiv}}^i = \mathcal{l}_{\mu}^i+ \mathcal{l}_{\sigma}^i
+		\mathcal{L}_{\textrm{equiv}}^i = \mathcal{L}_{\mu}^i+ \mathcal{L}_{\sigma}^i
 	\label{covariance}
 	\end{equation}
 	The overall loss objective is the sum of the reconstruction loss and the equivariance loss for all $n$ parts:

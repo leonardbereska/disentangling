@@ -23,7 +23,7 @@
 		\end{figure}
 
 		% On Deep Fashion , a benchmark dataset for supervised disentangling methods, the task is to separate person ID (appearance) from body pose (shape) and then synthesize new images for previously unseen persons from the test set in eight different poses. We randomly sample the target pose and appearance conditioning from the test set.
-		We compare the disentangling performance quantitatively against a supervised method, namely the variational U-Net \cite{Esser:2018ue}. We evaluate on the DeepFashion \cite{liu16deepfashion, liu16deepfashionwild} dataset, a standard benchmark dataset for supervised disentangling methods. In this dataset appearance is defined by a persons ID and shape by the pose of the person. For each ID in the test set, we condition the image generation on 8 different poses which are chosen randomly from the test set. Both VU-Net and our model are conditioned on the exactly the same pose-ID image pairs. Fig. \ref{fig:allswaps} shows qualitative results.
+		We compare the disentangling performance quantitatively against a supervised method, namely the variational U-Net \cite{esser18}. We evaluate on the DeepFashion \cite{liu16deepfashion, liu16deepfashionwild} dataset, a standard benchmark dataset for supervised disentangling methods. In this dataset appearance is defined by a persons ID and shape by the pose of the person. For each ID in the test set, we condition the image generation on 8 different poses which are chosen randomly from the test set. Both VU-Net and our model are conditioned on the exactly the same pose-ID image pairs. Fig. \ref{fig:allswaps} shows qualitative results.
 		We quantitatively compare against supervised state-of-the-art disentangling \cite{esser18} by evaluating \emph{i)} invariance of shape against variation in appearance by the distance in pose between generated and pose target image and \emph{ii)} invariance of appearance against variation in shape by the re-identification error.
 
 		\begin{tcolorbox}
@@ -140,7 +140,7 @@
 	\begin{figure}[htp]
 		\centering
 		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/factor/bbc_arrange}
-		\caption{Generation results for conditioning appearances (top row) on pose (bottom, rightmost) on BBCPose.
+		\caption{Generation results for conditioning appearances (top row) on pose (bottom, rightmost) on BBC Pose.
 		% The target appearances are from the train set, while the target pose is from the test set.
 		Note that even fine-grained details in shape, such as fingers and facial expression are accurately captured.}
 		\label{fig:bbcthumb}
@@ -149,7 +149,7 @@
 
 
 	Conditional image generation can also be extended to the task of {video-to-video translation}. The two conditioning images can be frames from different videos. One frame is acting as the appearance conditioning and the other as shape conditioning. By generating each frame conditioned on the shape and appearance from two videos, one effectively transfers the appearance of one video to the shape of the other on a frame-to-frame level.
-	We evaluate this frame-to-frame video translation on the BBCPose dataset. The datasets videos of sign language present a delicate and complex articulation of arms and hands. We condition on appearance from videos in the training set and on shape from videos in the test set. A sample for generated frames is shown in Fig. \ref{fig:bbcthumb}, for the complete videos please refer to the supplementary.
+	We evaluate this frame-to-frame video translation on the BBC Pose dataset. The datasets videos of sign language present a delicate and complex articulation of arms and hands. We condition on appearance from videos in the training set and on shape from videos in the test set. A sample for generated frames is shown in Fig. \ref{fig:bbcthumb}, for the complete videos please refer to the supplementary.
 	We want to point out two features of the model here: Firstly, despite no use of smoothing or interpolation between frames the generated sequence is smooth in the temporal domain. This is enabled by a temporally consistent part assignment which is stable across articulation.
 	Secondly, the training on the natural spatial transforms in video data enables the model to encapsulate realistic transitions such as out-of-plane rotation and complex 3D articulation of \eg hands and even fingers (note the correct translation of the thumbs position in Fig. \ref{fig:bbcthumb}). \\
 	% \begin{itemize}

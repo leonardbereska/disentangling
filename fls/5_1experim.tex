@@ -33,7 +33,7 @@
 	In the following, we proceed through our shape learning results: we present the quantitative and qualitative {results} by object category (Sec.~\ref{sec:results}).
 	On the way we introduce the datasets for each category.
 	In the next section we highlight and discuss the challenges, which the datasets present (Sec.~\ref{sec:challenges}) and subsequently argue for the importance of the transformations and modelling assumptions  as a means to reach disentanglement and to overcome those challenges (Sec.~\ref{sec:transformations}).
-	This confirms that disentangled modelling aids the learning of shape (hypothesis I, Sec.~\ref{sec:contributions}).
+	This confirms that disentangled modelling aids the learning of shape (Hypothesis I, Sec.~\ref{sec:contributions}).
 
 \section{Diverse Object Categories}\label{sec:results}
 	% On the object classes of human faces, cat faces, and birds and human and animal bodies our model predicts landmarks consistently across different instances.
@@ -53,7 +53,7 @@
 		\end{figure}
 
 		% \subsubsection{Dataset preprocessing}
-		For human and cat faces we use the popular datasets CelebA and CatHead, since our predecessors for unsupervised shape learning established baselines here. Both object categories are rather rigid and non-articulated - meaning that the relations between object parts are not changing from instance to instance.
+		For human and cat faces we use the popular datasets CelebA and Cat Head, since our predecessors for unsupervised shape learning established baselines here. Both object categories are rather rigid and non-articulated - meaning that the relations between object parts are not changing from instance to instance.
 		Due to different breeds, the Cat Head dataset exhibits large variations between instances. Cat faces feature more complicated texture and locally variant silhouettes \cite{zhang08cathead}, hence, require a better learning of both shape and appearance.
 
 			\begin{tcolorbox}
@@ -86,11 +86,11 @@
 				Dataset & Cat Head &  & MAFL \\
 				  \# Landmarks &10 & 20  & 10  \\
 				  \hline
-				 Thewlis \cite{thewlis17}
+				 Thewlis \etal \cite{thewlis17}
 				 & 26.76 & 26.94 & 6.32    \\
-				 Jakab \cite{jakab18}
+				 Jakab \etal \cite{jakab18}
 				 & - & - & 4.69  \\
-				 Zhang \cite{zhang18}
+				 Zhang \etal \cite{zhang18}
 				 & 15.35 & 14.84 & 3.46  \\
 				  Ours & \textbf{9.88}  & \textbf{9.30} & \textbf{3.24}  \\ \hline  % image length is 600: 32.15 , 23.51
 				\end{tabular}
@@ -164,11 +164,11 @@
 				\hline
 				BBC Pose &   &    { Accuracy}  \\
 				 \hline
-				supervised & Charles \cite{charles13bbcpose} &
+				supervised & Charles \etal \cite{charles13bbcpose} &
 				   79.9\%  \\ % 79.90
-				 & Pfister \cite{pfister15flowingconv}  &
+				 & Pfister \etal \cite{pfister15flowingconv}  &
 				  88.0\%  \\ \hline % 88.01
-				unsupervised &Jakab \cite{jakab18} &
+				unsupervised &Jakab \etal \cite{jakab18} &
 				 68.4\%  \\  % 68.44
 				  &Ours &  \textbf{74.5}\% \\
 				% test pck = 0.7484605918670523
@@ -188,13 +188,13 @@
 				\hline
 				 Human3.6M   & &  { Error w.r.t. image size}  \\
 				 \hline
-				 supervised & Newell \cite{newell16hourglass}
+				 supervised & Newell \etal \cite{newell16hourglass}
 				  &2.16  \\  \hline
-				 semi-supervised & Zhang \cite{zhang18}
+				 semi-supervised & Zhang \etal \cite{zhang18}
 				  & 4.14  \\ \hline
-				 unsupervised & Thewlis \cite{thewlis17}
+				 unsupervised & Thewlis \etal \cite{thewlis17}
 				 & 7.51  \\
-				  & Zhang \cite{zhang18}
+				  & Zhang \etal \cite{zhang18}
 					& 4.91 \\
 				  & Ours& \textbf{2.79} \\
 				\hline
@@ -255,21 +255,21 @@
 					CUB-200-2011 dataset&  & Error \wrt image edge\\
 					% \# Landmarks & 10  \\
 					\hline
-					Zhang \cite{zhang18} & 5.36 \\
+					Zhang \etal \cite{zhang18} & 5.36 \\
 					Ours  & \textbf{3.91}  \\ \hline
 				\end{tabular}
 			\end{table}
 
 
-\section{Challenges}\label{sec:challenges}
+\section{Overcoming Challenges}\label{sec:challenges}
 	%DATASET CHALLENGES
-	\begin{table}
+	\begin{table}[htp]
 		\centering
 		\caption{Difficulties of datasets: articulation, intra-class variance, background clutter and viewpoint variation}
 		\label{tab:challenges}
 		\begin{tabular}{l|rrrr}
 			\hline
-			Dataset &  Articul.& Var. &  Backgr.& Viewp.  \\ \hline
+			Dataset &  Articulation & Intra-Class &  Background & Viewpoint \\ \hline
 			CelebA &   &  &  &    \\
 			Cat Head & &  \checkmark&  &   \\
 			CUB-200-2011 & & \checkmark& \checkmark&   \\
@@ -289,10 +289,11 @@
 		By this definition background is everything that is not strongly correlated with the object itself.
 		This dataset-specific object category can be unintuitive: for example for a bird sitting on a twig, the twig can considered as part of the object, if the dataset shows only birds on twigs (\eg two landmarks are on feet/twig on CUB-200-2011 dataset,  cf. Fig.~\ref{fig:kp_animals}).
 		This dataset-biased pre-categorical thinking of unsupervised algorithms can be seen as a failure, or as a feature: on a dataset of Salsa-dancing humans our method identified the pair of dancers as an object (cf. Fig.~\ref{fig:parity}). \todo{better figure here, make salsa dataset}
-		Technically, we allow the algorithm to focus on the reconstruction of only the object, and not background by a local weighting around the part activation (refer to Sec.~\ref{sec:implementationdetails}). The fundamental issue of strong object-background correlations cannot be solved technically, but requires different data. \todo{look up (and reference to) dataset bias} Interestingly, on with the constrained but repetetive background of the Human3.6M dataset, where traditional background subtraction methods are easily applied, our method struggles: several parts are assigned to background objects. On the other hand, complexly cluttered backgrounds - as long as no correlations to the object exist - such as the background TV screen in the BBCPose dataset (cf. Fig.~\ref{fig:bbcthumb}) are actually favorable for the method. This is due to the crossed reconstruction objective: if reconstructing the background of the target image is possible with the information of the source appearance image, the algorithm will try to do so by assigning parts to the background, if not, not.
+		Technically, we allow the algorithm to focus on the reconstruction of only the object, and not background by a local weighting around the part activation (refer to Sec.~\ref{sec:implementationdetails}). The fundamental issue of strong object-background correlations cannot be solved technically, but requires different data. \todo{look up (and reference to) dataset bias} Interestingly, on with the constrained but repetitive background of the Human3.6M dataset, where traditional background subtraction methods are easily applied, our method struggles: several parts are assigned to background objects. On the other hand, complexly cluttered backgrounds - as long as no correlations to the object exist - such as the background TV screen in the BBC Pose dataset (cf. Fig.~\ref{fig:bbcthumb}) are actually favorable for the method. This is due to the crossed reconstruction objective: if reconstructing the background of the target image is possible with the information of the source appearance image, the algorithm will try to do so by assigning parts to the background, if not, not.
 
 
 	\subsection{Object Articulation and Viewpoint Variation}\label{sec:articulation}
+
 		Object articulation and viewpoint variation makes consistent shape learning challenging. In contrast to rigid bodies that can vary in orientation and scale, articulated objects viewn from different viewpoints have many degrees of freedom more.
 		Complex articulation can be conceptually simplified by regarding an object as a collection of rigid parts, that again each have only few degrees of freedom. This description of an arrangement of parts is exponentially cheaper than trying to capture it as a whole~\cite{ross06parts}. To enforce the factorization into independent parts it is crucial to restrain the part features and region to be local (how exactly is shown in Sec.~\ref{sec:method}). Landmarks are a simple and efficient implementation of this part factorization idea. In this sense, using landmarks as shape representation is the natural approach for tackling articulation. However, related work does not strictly enforce locality of the learned features (compare~\ref{sec:jakab}) or a local reconstruction from these features.
 
@@ -365,21 +366,21 @@
 				\centering
 				\begin{tabular}{l|ccccccr}
 				\hline
-				Dataset & BBCPose &  &  &  & &  &  \\
+				Dataset & BBC Pose &  &  &  & &  &  \\
 				Landmarks & {\footnotesize Head} & {\footnotesize Wrists} &  {\footnotesize Elbows }& {\footnotesize Shoulders } & {\footnotesize Avg.}  \\
 				\hline
-				Charles et al. \cite{charles13bbcpose}  (supervised)&
+				Charles \etal \cite{charles13bbcpose}  (supervised)&
 				95.40 & 72.95 & 68.70 & 90.30 & 79.90  \\
-				Pfister et al.  \cite{pfister15flowingconv} (supervised) &
+				Pfister \etal  \cite{pfister15flowingconv} (supervised) &
 				98.00 & 88.45 & 77.10 & 93.50 & 88.01  \\ \hline
-				Jakab \cite{jakab18}  (unsupervised) &
+				Jakab \etal \cite{jakab18}  (unsupervised) &
 				76.10& 56.50& 70.70& 74.30 &68.44  \\
 				Ours (unsupervised)  & \textbf{96.34} & \textbf{71.39} & \textbf{62.12} & \textbf{80.28}& \textbf{74.85} \\
 				% test pck = 0.7484605918670523
 				% test pck_per_kp = [0.9633621  0.6627155  0.76508623 0.54956895 0.6928879  0.76616377   0.83943963]
 				\hline
 				\end{tabular}
-				\caption{{Comparison with supervised and unsupervised methods for annotated landmark prediction on the BBCPose testing sets.
+				\caption{{Comparison with supervised and unsupervised methods for annotated landmark prediction on the BBC Pose testing sets.
 				\%-age of points within 6 pixels of ground-truth is reported.}}
 				\label{tab:gtregressionhuman}
 			\end{table}
@@ -421,13 +422,13 @@
 
 			% what is the color augmentation: explain before
 			\todo{what is the crossing task}
-			Another insightful comparison one can make is to compare a method to lesser versions of itself:
-			We ablate the main components of our proposed framework: reconstruction loss $\mathcal{L}_{\textrm{rec}}$, the equivariance loss $\mathcal{L}_{\textrm{equiv}}$, the appearance augmentation and the crossing task for disentangling shape and appearance. For the ablation study we use the Cat Head dataset, following the already introduced train-test setup on the task of landmark ground truth regression. Tab. \ref{tab:ablation} illustrates the ablation results.\\
+			Perhaps the most insightful comparison for a method is, to compare to lesser versions of itself:
+			We ablate the main components of our proposed framework: reconstruction loss $\mathcal{L}_{\textrm{rec}}$, the equivariance loss $\mathcal{L}_{\textrm{equiv}}$, the appearance augmentation and the transformations for disentangling shape and appearance. For the ablation study we use the Cat Head dataset, following the already introduced train-test setup on the task of landmark ground truth regression. Tab. \ref{tab:ablation} illustrates the ablation results.\\
 			Leaving out the reconstruction task naturally leads to the largest drop in performance since only training on equivariance leads to collapsed landmark solutions as discussed in \cite{zhang18}.
 			Note that without both shape and appearance transformations our models performs significantly worse, now comparable to Zhang \etal \cite{zhang18}.
 			Without transformations the reconstruction objective is identical to the one of~\cite{zhang18}, only the model architecture deviates.
 			This suggests, that the improved disentanglement (by transformations) could be explaining the overall performance gain \wrt \cite{zhang18}.  %This performance drop would be larger on datasets with articulation.
-			Leaving out the explicit equivariance leads to the smallest drop in performance. This is not surprising, as equivariance is implicitly also enforced in the feature crossing framework.
+			Leaving out the explicit equivariance leads to the smallest drop in performance. This is not surprising, as equivariance is implicitly also enforced in the feature crossing in the framework.
 			% without local features (not done yet, should we?, could ablate local decoder, or part appearance)
 
 
@@ -477,7 +478,7 @@
 			Ideally one would want more "natural" appearance changes as well. This could be a line of future work (cf. Sec.~\ref{sec:futurework}).
 
 
-		\subsection{Parity Transformations}
+		\subsection{Parity Transformations}\label{sec:parity}
 			\begin{figure}[htp]
 				\centering
 				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/shape/parity}
@@ -496,5 +497,5 @@
 			We compare to other approaches and reach state-of-the-art performance on the task of regressing human-annotated landmarks from the part representation.
 			The key difference to the most competitive approach \cite{zhang18} is the emphasis on disentanglement via a crossed reconstruction with shape and appearance transformations.
 			Enforcing disentanglement via targeted transformations enhances the shape representation in two ways: \emph{(i)} it asserts that no appearance information is encoded in the shape representation and vice versa and \emph{(ii)} it requires visual features to be equivariant under a spatial transformation.
-			With regards to the considerations earlier, the crucial role of the transformations is to be expected, as they enable to reach a \textit{disentanglement}. In the next section we explore and compare the disentanglement quantitatively.
+			With regards to the considerations earlier, the crucial role of the transformations is to be expected, as they enable to reach a \textit{disentanglement}. In the next section we explore and compare the performance on disentanglement.
 
