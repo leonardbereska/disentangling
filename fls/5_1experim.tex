@@ -307,68 +307,6 @@
 	\subsection{Intra-Class Variation}\label{sec:intraclass}
 		Intra-class variation can be both in shape and in appearance. Due to different breeds and species the animal datasets - Dogs Run, CUB-200-2011, Cat Head - present the highest degree of variability within the object class. The method in part coincidentally generalizes and in part inherently enforces in due to the data augmentation with shape and appearance transformations (see also Sec. \ref{sec:transformations}).
 
-
-\section{Transformational Effects}\label{sec:transformations}
-		% \note{in this section: effect of transformations on learning, disentangling}
-		% \note{effectively connecting samples from the dataset, spreading the}
-		\note{schedule transformations with exponential, formula}
-		\note{as data augmentation}
-		% \note{as blurring of data points}
-
-
-		\begin{figure}[htp]
-			\begin{subfigure}{0.40\linewidth}
-				\centering
-				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/other/trans}
-				\caption{}
-			\end{subfigure}
-			\begin{subfigure}{0.40\linewidth}
-				\centering
-				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/other/trans2}
-				\caption{}
-			\end{subfigure}
-			\caption{Effect of transformations on data distribution: (a) Data points (red) can be connected via a shape $s$ and an appearance $a$ transformation. (b) Applying transformations effectively blurs the data distribution.}
-			\label{fig:trans}
-		\end{figure}
-
-		In this section we discuss the effect of the transformations on learning a consistent and comprehensive representation.
-		Since strong image transformations can make the learning curve for the algorithm too steep, we exponentially schedule the increase in magnitude, finally resulting in image changes as shown in Fig. \ref{fig:coloraugm}.
-		In effect, the transformations teach the algorithm what changes in shape and appearance are. Assuming that samples from the data distribution are - showing the same object class - related via a change in shape and appearance, the transformations blur the distribution. This data augmentation effect is sketched in Fig. \ref{fig:trans}.
-
-		\subsection{Spatial Transformations}\label{sec:warps}
-			We perform thin-plate spline (TPS) warps to mimick spatial transformations. These changes incorporate rotation, scaling and translation as a special case. While irreplacable for calculating the direct equivariance loss\todo{ reference to equation}, they can result in artificial shape changes. After all, most objects - such as human beings or animals, do not warp, but articulate their parts/limbs.
-			Natural shape changes are needed to learn a model of the objects articulation. These changes are presented in video data. Hence, for videos we enforce the reconstruction to function across different frames. This results in a much stabler performance and greater part consistency especially for highly articulated parts such as arms.
-
-		\subsection{Appearance Transformations}
-			% COLOR
-			\begin{figure}[htp]
-				\centering
-				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=.8\linewidth]{fig/shape/coloraugm}
-				\caption{Examples for shape and appearance transformation on CUB-200-2011. Images from the upper row relate to images directly below.}
-				\label{fig:coloraugm}
-			\end{figure}
-
-			We mimick appearance changes with image transformations in color, contrast, hue and brightness. Exemplars for the combined effect of spatial and appearance transformations are shown in Fig. \ref{fig:coloraugm}.
-			Especially for datasets with high intra-class appearance variance, connecting the data points via appearance changes is crucial. On Cat Head for example, without them, the method assigned different landmarks to black cats than to other-color cats. The model will incur no loss, as long as it always has to reconstruct black cats from images of black cats. If it has to relate black and white cats (\eg via color inversion) this intra-class inconsistency has to vanish.\\
-			Ideally one would want more "natural" appearance changes as well. This could be a line of future work (cf. Sec.~\ref{sec:futurework}).
-
-
-		\subsection{Parity}
-			\begin{figure}[htp]
-				\centering
-				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/shape/parity}
-				\caption{Parity changes: the images of the upper and lower row relate via the usual transformations and an additional parity flip. For the bird (1-5th column) images induced artificially, for the dancing humans (6-7th column) via sampling different frames from a video.}
-				\label{fig:parity}
-			\end{figure}
-			\todo{make parity failure image}
-			The model has problems with consistent part assignment under parity changes, if these changes do not change the object enough. For example human body appearance in frontal and back view are not dissimilar enough from each other. So the model can assign the same landmark to \eg the right arm in the frontal view and the left arm in the back view.
-			Similarly, there is no distinction, for dog or bird side views facing to the left or right. However, if features on the left and on the right are very different \eg for the dancing humans the model automatically learns the distinction (see Fig.~\ref{fig:parity}).
-
-			A tentative solution to the problem can be to incorporate parity flips in the equivariance loss. This is impossible for parity-symmetrical objects (such as frontal view humans), but works \eg for side view dogs or birds. One has to be careful in scheduling these random parity flips, as landmarks tend to align along the mirror axis as a trivial solution. A successfully learned parity model for CUB-200-2011 is shown in Fig.~\ref{fig:parity}.
-
-
-% \end{comment}
-
 \section{Comparative Advantages}\label{sec:compare}
 		In this section we directly compare against the closest competitors on unsupervised learning of shape Zhang \etal~\cite{zhang18} and Jakab \etal~\cite{jakab18}. On a low-level, there are many differences to both approaches, some of which we discuss in the respective related work (\ref{sec:shapelearning}). On a high level, different is that Zhang \etal lack a principled way to disentangle shape and appearance (\eg via transformations) (Sec.~\ref{sec:zhang}) and Jakab \etal model the appearance in a holistic encoding (Sec.~\ref{sec:jakab}).
 
@@ -483,6 +421,7 @@
 
 			% what is the color augmentation: explain before
 			\todo{what is the crossing task}
+			Another insightful comparison one can make is to compare a method to lesser versions of itself:
 			We ablate the main components of our proposed framework: reconstruction loss $\mathcal{L}_{\textrm{rec}}$, the equivariance loss $\mathcal{L}_{\textrm{equiv}}$, the appearance augmentation and the crossing task for disentangling shape and appearance. For the ablation study we use the Cat Head dataset, following the already introduced train-test setup on the task of landmark ground truth regression. Tab. \ref{tab:ablation} illustrates the ablation results.\\
 			Leaving out the reconstruction task naturally leads to the largest drop in performance since only training on equivariance leads to collapsed landmark solutions as discussed in \cite{zhang18}.
 			Note that without both shape and appearance transformations our models performs significantly worse, now comparable to Zhang \etal \cite{zhang18}.
@@ -491,10 +430,71 @@
 			Leaving out the explicit equivariance leads to the smallest drop in performance. This is not surprising, as equivariance is implicitly also enforced in the feature crossing framework.
 			% without local features (not done yet, should we?, could ablate local decoder, or part appearance)
 
-	\subsection{Crucial role of Transformations}
-		The proposed method enables to abstract away object appearance from shape.
-		Despite the multifarious challenges in the diverse range of datasets, the method is able to learn a dedicated part representation for shape.
-		We compare to other approaches and reach state-of-the-art performance on the task of regressing human-annotated landmarks from the part representation.
-		The key difference to the most competitive approach \cite{zhang18} is the emphasis on disentanglement via a crossed reconstruction with shape and appearance transformations.
-		Enforcing disentanglement via targeted transformations enhances the shape representation in two ways: \emph{(i)} it asserts that no appearance information is encoded in the shape representation and vice versa and \emph{(ii)} it requires visual features to be equivariant under a spatial transformation.
-		With regards to the considerations earlier, the crucial role of the transformations is to be expected, as they enable to reach a \textit{disentanglement}. In the next section we explore and compare the disentanglement quantitatively.
+
+
+\section{Transformational Effects}\label{sec:transformations}
+		% \note{in this section: effect of transformations on learning, disentangling}
+		% \note{effectively connecting samples from the dataset, spreading the}
+		\note{schedule transformations with exponential, formula}
+		\note{as data augmentation}
+		% \note{as blurring of data points}
+
+
+		\begin{figure}[htp]
+			\begin{subfigure}{0.40\linewidth}
+				\centering
+				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/other/trans}
+				\caption{}
+			\end{subfigure}
+			\begin{subfigure}{0.40\linewidth}
+				\centering
+				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/other/trans2}
+				\caption{}
+			\end{subfigure}
+			\caption{Effect of transformations on data distribution: (a) Data points (red) can be connected via a shape $s$ and an appearance $a$ transformation. (b) Applying transformations effectively blurs the data distribution.}
+			\label{fig:trans}
+		\end{figure}
+
+		In this section we discuss the effect of the transformations on learning a consistent and comprehensive representation.
+		Since strong image transformations can make the learning curve for the algorithm too steep, we exponentially schedule the increase in magnitude, finally resulting in image changes as shown in Fig. \ref{fig:coloraugm}.
+		In effect, the transformations teach the algorithm what changes in shape and appearance are. Assuming that samples from the data distribution are - showing the same object class - related via a change in shape and appearance, the transformations blur the distribution. This data augmentation effect is sketched in Fig. \ref{fig:trans}.
+
+		\subsection{Spatial Transformations}\label{sec:warps}
+			We perform thin-plate spline (TPS) warps to mimick spatial transformations. These changes incorporate rotation, scaling and translation as a special case. While irreplacable for calculating the direct equivariance loss\todo{ reference to equation}, they can result in artificial shape changes. After all, most objects - such as human beings or animals, do not warp, but articulate their parts/limbs.
+			Natural shape changes are needed to learn a model of the objects articulation. These changes are presented in video data. Hence, for videos we enforce the reconstruction to function across different frames. This results in a much stabler performance and greater part consistency especially for highly articulated parts such as arms.
+
+		\subsection{Appearance Transformations}
+			% COLOR
+			\begin{figure}[htp]
+				\centering
+				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=.8\linewidth]{fig/shape/coloraugm}
+				\caption{Examples for shape and appearance transformation on CUB-200-2011. Images from the upper row relate to images directly below.}
+				\label{fig:coloraugm}
+			\end{figure}
+
+			We mimick appearance changes with image transformations in color, contrast, hue and brightness. Exemplars for the combined effect of spatial and appearance transformations are shown in Fig. \ref{fig:coloraugm}.
+			Especially for datasets with high intra-class appearance variance, connecting the data points via appearance changes is crucial. On Cat Head for example, without them, the method assigned different landmarks to black cats than to other-color cats. The model will incur no loss, as long as it always has to reconstruct black cats from images of black cats. If it has to relate black and white cats (\eg via color inversion) this intra-class inconsistency has to vanish.\\
+			Ideally one would want more "natural" appearance changes as well. This could be a line of future work (cf. Sec.~\ref{sec:futurework}).
+
+
+		\subsection{Parity Transformations}
+			\begin{figure}[htp]
+				\centering
+				\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/shape/parity}
+				\caption{Parity changes: the images of the upper and lower row relate via the usual transformations and an additional parity flip. For the bird (1-5th column) images induced artificially, for the dancing humans (6-7th column) via sampling different frames from a video.}
+				\label{fig:parity}
+			\end{figure}
+			\todo{make parity failure image}
+			The model has problems with consistent part assignment under parity changes, if these changes do not change the object enough. For example human body appearance in frontal and back view are not dissimilar enough from each other. So the model can assign the same landmark to \eg the right arm in the frontal view and the left arm in the back view.
+			Similarly, there is no distinction, for dog or bird side views facing to the left or right. However, if features on the left and on the right are very different \eg for the dancing humans the model automatically learns the distinction (see Fig.~\ref{fig:parity}).
+
+			A tentative solution to the problem can be to incorporate parity flips in the equivariance loss. This is impossible for parity-symmetrical objects (such as frontal view humans), but works \eg for side view dogs or birds. One has to be careful in scheduling these random parity flips, as landmarks tend to align along the mirror axis as a trivial solution. A successfully learned parity model for CUB-200-2011 is shown in Fig.~\ref{fig:parity}.
+
+		\subsection{Importance of Transformations}
+			The proposed method enables to abstract away object appearance from shape.
+			Despite the multifarious challenges in the diverse range of datasets, the method is able to learn a dedicated part representation for shape.
+			We compare to other approaches and reach state-of-the-art performance on the task of regressing human-annotated landmarks from the part representation.
+			The key difference to the most competitive approach \cite{zhang18} is the emphasis on disentanglement via a crossed reconstruction with shape and appearance transformations.
+			Enforcing disentanglement via targeted transformations enhances the shape representation in two ways: \emph{(i)} it asserts that no appearance information is encoded in the shape representation and vice versa and \emph{(ii)} it requires visual features to be equivariant under a spatial transformation.
+			With regards to the considerations earlier, the crucial role of the transformations is to be expected, as they enable to reach a \textit{disentanglement}. In the next section we explore and compare the disentanglement quantitatively.
+

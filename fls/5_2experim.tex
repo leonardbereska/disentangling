@@ -22,17 +22,46 @@
 			\label{fig:allswaps}
 		\end{figure}
 
-		On Deep Fashion \cite{liu16deepfashion, liu16deepfashionwild}, a benchmark dataset for supervised disentangling methods, the task is to separate person ID (appearance) from body pose (shape) and then synthesize new images for previously unseen persons from the test set in eight different poses. We randomly sample the target pose and appearance conditioning from the test set. Fig. \ref{fig:allswaps} shows qualitative results.
-		\todo{incorporate note}
-		\note{We compare the disentangling performance quantitatively against a supervised method, namely the variational U-Net \cite{Esser:2018ue}. We evaluate on the DeepFashion dataset, a standard benchmark dataset for supervised disentangling methods. In this dataset appearance is defined by a persons ID and shape by the pose of the person. For each ID in the test set, we condition the image generation on 8 different poses which are chosen randomly from the test set. Both VU-Net and our model are conditioned on the exactly the same pose-ID image pairs.
-		We quantitatively compare against supervised state-of-the-art disentangling \cite{esser18} by evaluating \emph{i)} invariance of appearance against variation in shape by the re-identification error and \emph{ii)} invariance of shape against variation in appearance by the distance in pose between generated and pose target image.}
+		% On Deep Fashion , a benchmark dataset for supervised disentangling methods, the task is to separate person ID (appearance) from body pose (shape) and then synthesize new images for previously unseen persons from the test set in eight different poses. We randomly sample the target pose and appearance conditioning from the test set.
+		We compare the disentangling performance quantitatively against a supervised method, namely the variational U-Net \cite{Esser:2018ue}. We evaluate on the DeepFashion \cite{liu16deepfashion, liu16deepfashionwild} dataset, a standard benchmark dataset for supervised disentangling methods. In this dataset appearance is defined by a persons ID and shape by the pose of the person. For each ID in the test set, we condition the image generation on 8 different poses which are chosen randomly from the test set. Both VU-Net and our model are conditioned on the exactly the same pose-ID image pairs. Fig. \ref{fig:allswaps} shows qualitative results.
+		We quantitatively compare against supervised state-of-the-art disentangling \cite{esser18} by evaluating \emph{i)} invariance of shape against variation in appearance by the distance in pose between generated and pose target image and \emph{ii)} invariance of appearance against variation in shape by the re-identification error.
 
 		\begin{tcolorbox}
 			\textbf{Deep Fashion} \cite{liu16deepfashion, liu16deepfashionwild} consists of ca. 53k in-shop clothes images in high-resolution of $256 \times 256$. We selected the images which are showing a full body (all keypoints visible, measured with the pose estimator by \cite{cao17affinityfield}) as full visibilty of the object is an assumption to the model and used the provided train-test split. For comparison with Esser \etal \cite{esser18} we used their published code.
 		\end{tcolorbox}
 
-	\subsection{Person Re-Identification}
+	\subsection{Pose Estimation}
+		% \begin{figure}[htp]
+			% \centering
+			% \begin{subfigure}{0.49\linewidth}
+			% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/pck18}
+			% \end{subfigure}
+			% \begin{subfigure}{0.49\linewidth}
+			% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.7\linewidth]{fig/factor/pck25}
+			% \end{subfigure}
+			% \caption{PCK Curve for VU-Net \cite{esser18} and Ours for re-estimating pose with a 25 keypoint human pose detector.}
+			% \label{fig:pckcurve}
+		% \end{figure}
 
+		\begin{table}[htp]
+			\centering
+			\caption{Percentage of Correct Keypoints (PCK) for pose estimation on shape/appearance swapped generations.\;$\alpha$ is pixel distance divided by image diagonal. Note that \cite{esser18} serves as upper bound, as it uses the groundtruth shape estimates.}
+			%shape supervision.}
+			\label{tab:pose}
+			\begin{tabular}{l|cccr}
+				\hline
+				$\alpha$ & $2.5\%$ &  $5\%$ & $7.5\%$ & $10\%$ \\ \hline
+				VU-Net \cite{esser18} & {95.2}\% & {98.4}\% & {98.9}\% & {99.1}\% \\
+				Ours & 85.6\% & 94.2\% &96.5\% & 97.4\% \\ \hline
+			\end{tabular}
+		\end{table}
+
+
+		To evaluate shape, we extract keypoints using a pose estimator \cite{cao17affinityfield}. Tab. \ref{tab:pose} reports the difference between generated and pose target in percentage of correct keypoints (PCK).
+		% , Fig. \ref{fig:pckcurve} shows the comparison of PCK curves.
+		As would be expected, VU-Net performs better, since it is trained with exactly the keypoints of \cite{cao17affinityfield}. Nevertheless, our approach achieves an impressive PCK without supervision underlining value of the embedding of object shape and the disentanglement of appearance and shape. Despite random variation in appearance the shape does not change, this can also be directly observed from the conditioned generations in Fig.~\ref{fig:allswaps}.
+
+	\subsection{Person Re-Identification}
 		Person re-identification (ReID) is a research field on its own (overview in \eg \cite{almazan18reidtowards, bedagkar14reidtrends}), the goal being to learn a similarity metric for a persons appearance, invariant to a persons posture and the image viewpoint.
 		% zheng16reidcnn
 		The key applications are automated person tracking and surveillance \cite{zheng16reidfuture}.
@@ -104,41 +133,10 @@
 
 
 
-		\subsection{Pose Estimation}
-		% \begin{figure}[htp]
-			% \centering
-			% \begin{subfigure}{0.49\linewidth}
-			% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\linewidth]{fig/pck18}
-			% \end{subfigure}
-			% \begin{subfigure}{0.49\linewidth}
-			% \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.7\linewidth]{fig/factor/pck25}
-			% \end{subfigure}
-			% \caption{PCK Curve for VU-Net \cite{esser18} and Ours for re-estimating pose with a 25 keypoint human pose detector.}
-			% \label{fig:pckcurve}
-		% \end{figure}
-
-		\begin{table}[htp]
-			\centering
-			\caption{Percentage of Correct Keypoints (PCK) for pose estimation on shape/appearance swapped generations.\;$\alpha$ is pixel distance divided by image diagonal. Note that \cite{esser18} serves as upper bound, as it uses the groundtruth shape estimates.}
-			%shape supervision.}
-			\label{tab:pose}
-			\begin{tabular}{l|cccr}
-				\hline
-				$\alpha$ & $2.5\%$ &  $5\%$ & $7.5\%$ & $10\%$ \\ \hline
-				VU-Net \cite{esser18} & {95.2}\% & {98.4}\% & {98.9}\% & {99.1}\% \\
-				Ours & 85.6\% & 94.2\% &96.5\% & 97.4\% \\ \hline
-			\end{tabular}
-		\end{table}
-
-
-		To evaluate shape, we extract keypoints using a pose estimator \cite{cao17affinityfield}. Tab. \ref{tab:pose} reports the difference between generated and pose target in percentage of correct keypoints (PCK).
-		% , Fig. \ref{fig:pckcurve} shows the comparison of PCK curves.
-		As would be expected, VU-Net performs better, since it is trained with exactly the keypoints of \cite{cao17affinityfield}. Nevertheless, our approach achieves an impressive PCK without supervision underlining value of the embedding of object shape and the disentanglement of appearance and shape. Despite random variation in appearance the shape does not change, this can also be directly observed from the conditioned generations in Fig.~\ref{fig:allswaps}.
 
 
 
-\section{Disentangling in a Temporal Sequence}\label{sec:videotovideo}
-
+\section{Disentangling across Time}\label{sec:videotovideo}
 	\begin{figure}[htp]
 		\centering
 		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/factor/bbc_arrange}
@@ -163,11 +161,11 @@
 			% \end{itemize}
 	% \end{itemize}
 
-\section{Part-wise Disentanglement}\label{sec:partwise}
+\section{Disentangling in Parts}\label{sec:partwise}
 	The second type of disentanglement we approach is to factorize the object into local parts. Obviously, object parts are in general not disentangled factors in a sense that they have an independent probability distribution\todo{ref to equation independence in beginning}. Since the parts are geometrically connected, in their spatial layout they are conditioned on each other. For example, you cannot move your head arbitrarily far away from your shoulders. Still, there is a local freedom and modularity - especially in appearance features - that renders a local factorization efficient. As an illustration, the color of the shoes you wear need only be mildly correlated with your hair color.
 	We show that the model disentangles these local modes of variation for a persons appearance (Sec.~\ref{sec:partappearance}) and shape (Sec.~\ref{sec:partshape}).
 
-	\subsection{Part-wise Appearance Transfer}\label{sec:partappearance}
+	\subsection{Part Appearance Transfer}\label{sec:partappearance}
 	% PART SWAPS
 	\begin{figure}[htp]
 		\begin{subfigure}{0.49\linewidth}
@@ -203,7 +201,7 @@
 	% \end{itemize}
 	% $\Rightarrow$ Factorization achieved, utility for downstream tasks
 
-	\subsection{Part-wise Shape Changes}\label{sec:partshape}
+	\subsection{Part Shape Changes}\label{sec:partshape}
 	One can also change the position of individual parts in the shape conditioning, which leads to generations as shown in Fig.~\ref{fig:movekp}. One can observe that the other non-moved parts shapes also lead to stationary parts in the generation, indicating that these parts are spatially disentangled. In the unnatural (never seen in data) regime \eg if the head is to far from the shoulders, the model still hallucinates a head next to the body - similar to supervised results~\cite{debem18dgpose}.
 
 	\begin{figure}[htp]
