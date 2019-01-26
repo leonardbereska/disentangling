@@ -3,7 +3,7 @@
   The thesis at hand presents an unsupervised approach to learn a dedicated compositional part representation of an object, disentangling the factors of shape and appearance for each part. %The invariance of one factor when        the other is transformed in a two-stream auto-encoding framework.
   To disentangle, each factor is assumed to be invariant under transformations of the other factor. Additionally, shape is assumed to be equivariant with respect to a spatial transformation. These assumptions are implemented in a two-stream auto-encoding framework for detecting parts, while the architecture is designed to maintain the local nature of the parts.\\
   %We derive explicit invariance and equivariance constraints for such a decomposition and implement these in a      generative framework. % by our shape representation.
-  Trained without any manual supervision or prior information about on the object itself, the method discovers consistent parts, meaningfully covering the object. We evaluate this on a diverse selection of challenging datasets, the object classes ranging from human faces and bodies to dogs, cats and birds.
+  Trained without any manual supervision or prior information on the object class, the method discovers consistent parts, meaningfully covering the object. We evaluate this on a diverse selection of challenging datasets, the object classes ranging from human faces and bodies to dogs, cats and birds.
   On the task of unsupervised landmark regression, the model outperforms state-of-the-art methods significantly.
   % The margin is especially large on datasets with strong articulation.
   Additionally we show that our model actually learned to disentangle shape from appearance and learns local parts independently.

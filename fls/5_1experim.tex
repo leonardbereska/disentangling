@@ -19,7 +19,7 @@
 		\label{fig:shape}
 	\end{figure}
 
-	In this section we will establish that the proposed method (Sec.~\ref{sec:method}) outperforms the state-of-the-art in unsupervised object shape learning by a large margin.
+	In this section we will establish that the proposed method (Chapter~\ref{sec:method}) outperforms the state-of-the-art in unsupervised object shape learning by a large margin.
 	The learned shape representation is visualized in Fig.~\ref{fig:shape}. \todo{ours region-based, landmarks only for evaluation}
 	To quantitatively evaluate the shape estimation, we measure how well groundtruth landmarks (only during testing) are predicted from it.
 	We obtain landmarks from our part-region based shape representation by designating the mean of a part shape $\mu[\sigma^i(\mathbf{x})]$ as the landmark position. To quantify the quality of these landmark estimates, we linearly regress them to human-annotated groundtruth landmarks and measure the test error.
@@ -353,7 +353,7 @@
 			We do not need such a problematic bias in our approach, since the localized, part-based representation and reconstruction guides the shape learning and captures the object and its articulations more closely.
 
 		\subsection{Holistic Approach}\label{sec:jakab}
-			The method of Jakab \etal \cite{jakab18} aims disentangling shape and appearance with video information. Shape is then - similar to ours - defined by the change between consecutive frames. However, they do not model the link between local parts of shape and appearance, but use a holistic appearance embedding.
+			The method of Jakab \etal \cite{jakab18} aims at disentangling shape and appearance with video information. Shape is then - similar to ours - defined by the change between consecutive frames. However, they do not model the link between local parts of shape and appearance, but use a holistic appearance embedding.
 			% Constrained by reality.
 			% \begin{itemize}
 				% \item not factorizing into parts, holistic appearance
