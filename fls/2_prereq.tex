@@ -1,8 +1,6 @@
 %&tex
 \chapter{Prerequisites on Learning Disentanglement}\label{sec:prerequisites}
 
-
-
 \section{Learning from Data}
 	{Learning from data} is commonly understood as the ability of algorithms to improve their performance on a task with experience accumulated from the observation of data \cite{goodfellow16dlb}. The source of data is usually a dataset - set of data points $X = \{x_i | i \in \{1\ldots n\} \}$, which are sampled from a probability distribution $x_i \sim p(x)$.
 	In general, these data points are multi-dimensional. In computer vision in particular, data are images $\mathbf{x}$ with height $h$ and width $w$, so that the data points are $\mathbf{x} \in \mathbb{R}^{h \times w}$.
@@ -24,7 +22,7 @@
 			% \note{model-free vs model-based approaches:}
 			% \note{model-based $\rightarrow$ more flexible, transferable, allows for modular combination (like parts)}
 			In this work we argue for using more prior knowledge and modelling assumptions to obtain strong constraints.
-			\item Lastly, the \textit{definition of the term unsupervised} itself is subject to discussion. What entitles an algorithm to be called unsupervised? While the definition itself has no practical importance, unclear and imprecise terminology unnecessarily confuses.
+			\item Lastly, the \textit{definition of the term unsupervised} itself is subject to discussion. What entitles an algorithm to be called unsupervised? While the definition itself has no practical importance, unclear and imprecise terminology unnecessarily confuses. Here, unsupervised learning shall mean to use no label information for the dataset samples, but assuming a model or inductive priors shall be fine. This is indeed necessary to enable unsupervised learning of disentanglement at all, as we will see in Sec.~\ref{sec:causality}.
 
 
 
@@ -40,18 +38,21 @@
 		\begin{figure}[htp]
 			\centering
 			\input{fls/tikz/neuralnet.tex}
-			\caption{Sketch of artificial neural network model}
-			\label{fig:overview}
+			\caption{Sketch of a one-hidden-layer artificial neural network model: input $x = \{ x_i | i = 1 \ldots n \}$ and output $y = \{ y_j | j = 1 \ldots m \}$ are connected through a hidden layer $h = \{h_k | j = 1 \ldots p \}$ }
+			\label{fig:neuralnet}
 		\end{figure}
 		Artificial neural networks are a powerful and flexible tool for function approximation. Inspired by biological neurons, there have been numerous questionable claims \wrt their biological plausibility. % cite bishop
-		Here, we will treat an artificial network solely as a parametric non-linear function approximator. They can approximate a function $y = f(x)$ with vector input $x = \{ x_i | i = 1 \ldots n \}$ and vector output $y = \{ y_j | j = 1 \ldots m \}$:
+		Here, we will treat an artificial network solely as a parametric non-linear function approximator. They can approximate a function $y = f(x)$ with vector input $x = \{ x_i | i = 1 \ldots n \}$ and vector output $y = \{ y_j | j = 1 \ldots m \}$, also see Fig.~\ref{fig:neuralnet}. At minimum they connect the input and the output through one hidden layer $h = \{h_k | j = 1 \ldots p \}$ by:
 		\begin{equation} \label{eq1}
 			\begin{split}
 				h_j & =  a (\sum_i w_{ji} x_i + w_{0i})  \\
-				y_j & =  a' (\sum_i w'_{ji} h_i + w'_{0i})
+				y_j & =  a' (\sum_i w'_{ji} h_i + w'_{0i}),
 			\end{split}
-		\end{equation},
+		\end{equation}
 		with weight matrices $w, w'$, non-linear so-called activation functions $a, a'$  and bias vectors $w_{0}$, $w_{0}'$.
+		Neural networks can also comprise multiple hidden layers connect by $h_j  =  a (\sum_i w_{ji} h_i + w_{0i})$.
+		It can be shown, that in the limit of infinite hidden units $h_j$ a one-hidden-layer network is enough to approximate any (continuous) function arbitrarily close \cite{cybenko89approx, hornik91approx}.
+		In practice, however, networks with more that one layer, referred to as deep neural networks, seem to work better. This may be due to the possibility of building a hierarchical feature representation \cite{zeiler14vis}, that reflects the hierarchical nature of the physical reality.
 		Typical activation functions are for example the sigmoid function ($a_{sigm}$ or the rectified linear unit ($a_{relu}$):
 		\begin{equation}
 			a_{\textrm{sigm}}(x)= \frac{1}{1+e^{-x}}
@@ -75,22 +76,19 @@
 		% \end{equation}
 		The activation function needs to be non-linear, otherwise the neural network is just a linear classifier (matrix multiplies are again matrices).
 		% multiple layers
-		The components $h_j$ are called hidden units or neurons. Neural networks can also comprise multiple hidden layers via $h_j  =  a (\sum_i w_{ji} h_i + w_{0i})$.
-		It can be shown, that in the limit of infinite hidden units $h_j$ they can approximate any (continuous) function arbitrarily close \cite{cybenko89approx, hornik91approx}.
-		In practice, however, networks with more that one layer, referred to as deep neural networks, seem to work better. This may be due to the possibility of building a hierarchical feature representation \cite{zeiler14vis}, that reflects the hierarchical nature of the physical reality. % cite tegmark
+		 % cite tegmark
 		% convolutional
 		For processing image data, the weight matrices can be constrained to be only locally connected and to share weights across locations to enforce translation invariance, resulting in \textit{convolutional} neural networks.
 
 		% optimization
-		Deep neural networks have highly non-convex likelihood functions, hence for optimization iterative numerical methods are used: The weights $w$ are initialized to some initial value $w^0$% cite glorot
-		and then updated ($w^{t+1}\rightarrow w^t$).
-		A simple yet successful update rule is gradient descent,
+		Deep neural networks have highly non-convex likelihood functions, hence for optimization iterative numerical methods are used: The weights $w$ are initialized to some initial value $w^0$ \todo{cite glorot}
+		and then updated at time step $t$ with an update rule $w^{t+1}\rightarrow w^t$.
+		A simple yet successful rule is given by gradient descent,
 		\begin{equation}
-			w^{t+1} = w^{t} - \lambda \nabla_{w^t}	 \mathcal{L} (w^t).
+			w^{t+1} = w^{t} + \lambda \nabla_{w^t}	 \mathcal{L} (w^t),
 		\end{equation}
-		In practice, calculating derivatives of the likelihood \wrt the weights can be done efficiently via error backpropagation.
-		For big datasets %(cite lecun)
-		one usually approximates the gradient on a random subset of the data, which renders the optimization stochastic.
+		where $\lambda$ is the learning rate, parametrizing the step size. In practice, calculating derivatives of the likelihood \wrt the weights can be done efficiently via error backpropagation.
+		For big datasets it becomes cumbersome to calculate the gradient w.r.t the whole dataset. Taking only a random subset of the data for an approximation of the gradient, renders the optimization stochastic; the procedure is then called stochastic gradient descent.
 
 
 \newpage
@@ -148,7 +146,7 @@
 	The latent representation $z$ learned by generative models captures the essential \textit{information} of the data distribution. That is made sure by requiring the ability to generate samples from the original data distribution from it.
 	How then to reach the second goal, the \textit{disentanglement} of generative factors?
 
-	\subsection{Disentangling by Equivariance and Invariance}
+	\subsection{Disentangling defined by Equivariance and Invariance}
 		\begin{figure}[htp]
 			\centering
 			\input{fls/tikz/inferlevel.tex}
@@ -251,22 +249,4 @@
 %
 % $p(x| do(s), do(a))$
 
-	\subsection{Image Transformation as Intervention}\label{sec:transform}
-		\begin{figure}[htp]
-			\centering
-			\input{fls/tikz/trans.tex}
-			\caption{An image $\mathbf{x}$ is assumed to be generated from the factors of shape $\sigma$ and appearance $\alpha$. Implementing an intervention with a transformation of factors, means changeing one factor without changing the other.}
-			\label{fig:intervene}
-		\end{figure}
-		% $p(x| do(a), b)$
-		To disentangle shape $\sigma$ and appearance $\alpha$, we can emulate interventions by image transformations. Under the assumption that certain transformations only lead to a change in shape, while leaving appearance invariant or vice versa, we obtain access to interventional data. %of the type x | s, a , x | do(s), a
 
-	\subsection{Analysis-by-Synthesis to Model Assumptions}\label{sec:anabysyn}
-		Additional assumptions can be made about the image generation process in the regime of analysis-by-synthesis:
-		The key idea is, that the process of how an image is generated from underlying factors (graphics), is much better known that estimating the factors from the image (inverse graphics)\todo{ look up definition for inverse graphics}.
-		One can combine a model for analysis and a model for synthesis to reconstruct an image (autoencoding, cf. Sec \ref{sec:autoencoding}).
-		Herein the synthesis can be tightly constrained to fit the assumptions about reality \cite{tieleman14thesis}.
-		Assumptions about how shape and appearance interact enable disentanglement. The idea to generatively entangle in order to disentangle has been explored before in other contexts~\cite{desjardins12genentangle}.
-
-\todo{add shape and appearance}
-\todo{objects}
