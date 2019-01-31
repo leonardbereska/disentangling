@@ -1,21 +1,11 @@
 %&tex
 \chapter{Introduction}\label{sec:introduction}
 	Computer vision is the scientific endeavour to algorithmically understand patterns in images.
-	Structures and processes in the physical world interact in complex ways to generate an image. The image then acts as a mirror, in which these elements of the world are reflected and leave patterns.
+	Structures and objects in the physical world interact in complex ways to generate an image. The image then acts as a mirror, in which these elements of the world are reflected and leave patterns.
 	To recognize patterns in an image, means in essence to observe the reality lurking behind this mirror, \ie to measure the causal elements that contributed to the image generation.
 
-	In this thesis, we focus on our efforts on image datasets which feature a single object class.
-	Typically, objects appear in an intricate interaction of many factors of variation.
-	For example, in an image dataset of people, the persons can vary in their visual appearance by clothing and skin color or in their geometric structure due to their pose or body physique.
-	% The image generation process itself may further add factors like illumination, viewpoint or contrast.
-	The two prominent factors of variation for articulated objects are geometric shape and visual appearance.
-	Disentangling these factors is a difficult problem, due to the intricate interplay of shape and appearance, especially under heavy articulation.
-	Consider a person raising an arm: the color and texture of the pullover sleeve intrinsically does not change, but appears at a different location in the image.
-	The complexity for modelling this enters, as a variation in shape is a change of the domain of appearance rather than a change of its values~\cite{shu18shapeappear}.
-	Even simple shape models~\cite{cootes98activeappear} offer difficult optimization problems.
-	An efficient model for shape should cover all possible states of the object and preserve the local linkage to its intrinsic appearance.
 
-\section{Why Disentangle Causal Factors?}
+\section{Why Disentangle Generative Factors?}
 	\begin{figure}[htp]
 		\centering
 		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.5\linewidth]{fig/other/hotpants}
@@ -23,10 +13,9 @@
 		\label{fig:hotpants}
 	\end{figure}
 
-	So far, we framed disentangling generative factors as similar to a scientific measurement process. An interaction of physical elements in the world is captured in an image, which can be treated as a scientific measurement of reality. Discerning patterns, and disentangling sources of patterns from each other, will then be defined as \textit{understanding} the world. What can be gained from such an \textit{understanding}?
-
+	% So far, we framed disentangling generative factors as similar to a scientific measurement process. An interaction of physical elements in the world is captured in an image, which can be treated as a scientific measurement of reality. Discerning patterns, and disentangling sources of patterns from each other, will then be defined as \textit{understanding} the world. What can be gained from such an {understanding}?
 	On the one hand, there are pragmatic reasons to aim at extracting disentangled factors from images: to successfully transfer a representation between different tasks, typically only a few factors are relevant \cite{bengio13rep}.
-	Efficient transfer and multi-task learning should account for this.
+	Efficient transfer and multi-task learning should account for this. % what is transfer and multi-task learning
 	On the other hand, learning to capture external mechanisms in appropriate internal representations, can be seen as a step to automate visual reasoning itself.
 	Once disentangled, a factor can be manipulated individually to make a targeted change in an image. Thereby, not only humans may change images at will, but also machines may reason about the world \cite{pearl18impediments}, by simulating changes to factors internally in their model of the world.
 	Thought experiments like \textit{"imagine, how ridiculous you would look, if you wore that hot pants"} (cf. Fig.~\ref{fig:hotpants}) are manageable tasks for the human imagination, but are out of the league for currently used generative image models \cite{goodfellow14gan, kingma13vae}, that typically rely on non-interpretable vector spaces with entangled dimensions.
@@ -55,21 +44,19 @@
 	Can machines tell a story? Carefully observe your own mind, when viewing the images shown in Fig. \ref{fig:notcausal}: observe how the human mind immediately interprets and jumps to conclusions, tries to tell itself a story that explains an image, whereas the machine (in this case, NeuralTalk2 \cite{karpathy15neuraltalk}), is comically descriptive in contrast.
 	The missing \textit{common sense} may be due to a missing causal reasoning, due to a missing disentangled causal representation of the world.
 	But how to learn a disentangled representation from scratch, \ie from raw image data? -
-	As we will find out (in Sec. ~\ref{sec:causality}), disentangling causal factors from raw image data, without any side information is impossible theoretically, but can only work with model assumptions or interventional data.
+	As we will find out (in Sec. ~\ref{sec:causality}), disentangling causal factors from raw image data without any side information is impossible theoretically, but can only work with model assumptions or interventional data.
 
-	Let us consider an example to visualize the fundamental problem: Given an image dataset of human persons, that has strong variation in the pose and in the appearance of the persons, how to find these two underlying axes of variation (pose and appearance)? Let us suppose the distribution of variation follows a two-dimensional Gaussian distribution, one dimension for pose, one for appearance.
+	Let us consider an example to visualize the fundamental problem: Given an image dataset of human persons, that has strong variation in the pose and in the appearance of the persons, how to find these two underlying axes of variation (pose and appearance)? Let us suppose the distribution of variation follows a two-dimensional Gaussian distribution, one dimension for pose, one for appearance. By this we assume that images are only generated from the causal factor of pose and the factor of appearance.
 	The learning algorithm has access to randomly sampled images from this distribution. An optimal data compression algorithm will be able to fit a function from the images to the two-dimensional subspace, which explains (by assumption in this example) the variation in the dataset.\todo{plot two-dimensional Gaussians}
-	But are the two dimensions, that the algorithms finds disentangled? No. In fact, any linear combination of pose and appearance axes and its orthogonal complement are equally valid to span the subspace of underlying variation. Just from observing a two-dimensional Gaussian, no meaning will be attached to the axes. In practice, this problem is often circumvented by first fitting a generative model to the image dataset and \textit{afterwards} interpolating in the latent space to determine (by human judgment) the axes of interest (here the pose or appearance axis). The meaning of pose and appearance as independent factors comes from the fact, that it is easily possible in the real world to change one factor without the other. A person that walks (hence changes shape) without loosing clothes on the way (not changing appearance) is a trivial example for that.
+	But are the two dimensions, that the algorithms finds, disentangled? No. In fact, any linear combination of pose and appearance axes and its orthogonal complement are equally valid to span the subspace of underlying variation. Just from observing a two-dimensional Gaussian, no meaning will be attached to the axes. In practice, this problem is often circumvented by first fitting a generative model to the image dataset and \textit{afterwards} interpolating in the latent space to determine (by human judgment) the axes of interest (here the pose or appearance axis). The meaning of pose and appearance as independent factors comes from the fact, that it is easily possible in the real world to change one factor without the other. A person that walks (hence changes shape) without loosing clothes on the way (not changing appearance) is a trivial example for that.\todo{explain better, what are the causal factors here}
 
-	In summary, on the basis of dataset statistics alone one cannot disentangle causal factors, if the information about how to select the axes, \ie which factors to separate, is not contained in the raw data.
+	In summary, on the basis of dataset statistics alone one cannot disentangle causal factors if the information about how to select the axes, \ie which factors to separate, is not contained in the raw data.
 	Fitting a model to the data distribution, does in general not give insight into how the data was generated.
 
 % \newpage
 \section{How can Humans Disentangle?}
 
-	The dichotomy between humans and machines is constructed, of course, because on a fundamental level humans are machines.
-	\note{explain and state performance gap in lacking reasoning, causal discovery, }
-	But in this context, the distinction between humans and machines shall refer to the current gap between human and machine learning performance, in terms of inferring generative factors and reasoning (again, cf. Fig. \ref{fig:notcausal}).
+	The dichotomy between humans and machines is constructed, of course, because on a fundamental level humans are machines. But in this context, the distinction between humans and machines shall refer to the current gap between human and machine learning performance, in terms of inferring generative factors and reasoning (again, cf. Fig.~\ref{fig:notcausal}).
 	So, what advantageous characteristics does the human mind have, that are lacking in data-driven machine learning algorithms?
 
 	\emph{Priors.}
@@ -78,12 +65,11 @@
 
 	\emph{Data.}
 		Not only quantity, but also quality of data. Machine learning on images is commonly posed as the task to learn from randomly sampled images from a data set. But humans do not perceive the world in arbitrary samples.
-		To humans, the world appears in a temporal sequence, which reveals how generative factors change and persevere across time. Instead of focusing on datasets with static images, sampled at random so that the images may have nothing to do with each other, algorithms should use video datasets and harness the rich temporal information.\\
+		To humans, the world appears in a temporal sequence, which reveals how generative factors change and persevere across time. Instead of focusing on datasets with static images, sampled at random so that the images may have nothing to do with each other, algorithms should use video datasets and harness the rich temporal information.
 		Another key difference is, that humans interact with their environment.
 		That means, humans know how factors change, not only by observing them changing, but also by changing them.
 		Anyone, who has watched a human infant play, can affirm that the learning mind is obsessed with interaction and change. The inevitable destruction around a young human is no accident, but a result of curious learning.
 		Whether by performing consciously controlled experiments or by subconscious cues \cite{wall08egomotion}: Interaction is crucial for a learning mind.
-
 		% causal inference
 		% 3. Learning by interacting: knowing change by changing.
 		% second rung on causal ladder (Pearl): intervention. (, acting) What happens if I do?
@@ -95,11 +81,11 @@
 	% humans what model: imagination: e.g.
 		Humans are able to imagine. That presupposes an internal model of the world, to which specific changes of representational factors can be applied.
 		% So-called dreaming neural networks can distract from the fact that human imagination is make changes to the world that it did not observe.
-		In machine learning, fitting neural network models as functions to approximate datasets has seen tremendous progress recently, to the point, that it is considered a solved problem\todo{cite something, maybe bigGAN etc)}. This progress is mainly due to the effectiveness of neural networks to fit high-dimensional functions. But a probabilistic fit to a dataset, however complex and rich, is not a causal model. Even if one were to obtain a probabilistic model over all images the world (one could start with \eg ImageNet \cite{russakovsky15imagenet}), this would tell very little about the real-world (causal) relationships between objects.
+		In machine learning, fitting neural network models as functions to approximate datasets has seen tremendous progress recently - to the point that it is considered a solved problem\todo{cite something, maybe bigGAN etc)}. This progress is mainly due to the effectiveness of neural networks to fit high-dimensional functions. But a probabilistic fit to a dataset, however complex and rich, is not a causal model. Even if one were to obtain a probabilistic model over all images of the world (one could start with \eg ImageNet \cite{russakovsky15imagenet}), this would tell very little about the real-world (causal) relationships between objects.
 		\note{One could hope for relationships to emerge by data compression alone, but }
 		\note{A step towards intelligence would be to automate the finding of "meaning" in the learned latent spaces. But meaning has to come from somewhere, and will not emerge from the data itself.}
 
-	What can we learn from these differences? An algorithm to understand the world: should contain useful \textit{prior} assumptions to efficiently use \textit{data} that contains the necessary causal relationships and interactions, to learn a useful \textit{model} of the world.
+	What can we learn from these differences? An algorithm to understand the world: should contain useful \textit{prior} assumptions to efficiently use temporal and interactional \textit{data} that contains the necessary causal relationships and interactions, to learn a useful \textit{model} of the world.
 
 % \section{How to Disentangle?}
 	% change factor $\rightarrow$  image change equivariantly, leave others invariant
@@ -109,7 +95,22 @@
 	% Intelligent pattern recognition algorithms, fuelled by sensory data as learning material alone, may ultimately drive the way to a full-blown artificial intelligence, reasoning about the world on its own. - That is the reasoning behind data-driven and assumptionless machine learning approaches that have conquered several research communities.
 	% A theoretical objection to driving-only-with-data comes from the causal literature: For an understanding of the world, an algorithm needs to model causal processes, that cause an image to be generated.
 
-\newpage
+% \newpage
+\section{Problem Formulation}
+
+	In this thesis, we focus our efforts on image datasets which feature a single object class.
+	Typically, objects appear in an intricate interaction of many causal factors, that can vary.
+	For example, in an image dataset of people, the persons can have a different clothing, skin color, body physique and posture.
+	The image generation process itself may further add factors like illumination, viewpoint or contrast.
+	The manifold factors of possible variation in objects can be classed into to prominent categories: the objects geometric versus its visual properties.
+	% The two prominent factors of variation for articulated objects are geometric shape and visual appearance.
+	The object's geometry subsumes factors like pose, viewpoint and physique to all of which we collectively refer to as \textit{shape}. The object's visual properties are the complement of shape. They encompass qualities like color, texture and shading and are referred to as \textit{appearance}.
+	Disentangling shape from appearance is a difficult problem, due to their intricate interplay, especially under heavy object articulation.
+	Consider a person raising an arm: the color and texture of the pullover sleeve intrinsically does not change, but appears at a different location in the image.
+	The complexity for modelling this interaction enters, as a variation in shape is a change of the domain of appearance rather than a change of its values~\cite{shu18shapeappear}.
+	Even simple shape models~\cite{cootes98activeappear} offer difficult optimization problems.
+	An efficient model for shape should cover all possible states of the object and preserve the local linkage to its intrinsic appearance. For this we partition both shape and appearance.
+
 \section{Contributions}\label{sec:contributions}
 	This thesis provides evidence for two hypotheses:
 	\begin{itemize}

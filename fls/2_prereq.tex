@@ -52,7 +52,7 @@
 		with weight matrices $w, w'$, non-linear so-called activation functions $a, a'$  and bias vectors $w_{0}$, $w_{0}'$.
 		Neural networks can also comprise multiple hidden layers connect by $h_j  =  a (\sum_i w_{ji} h_i + w_{0i})$.
 		It can be shown, that in the limit of infinite hidden units $h_j$ a one-hidden-layer network is enough to approximate any (continuous) function arbitrarily close \cite{cybenko89approx, hornik91approx}.
-		In practice, however, networks with more that one layer, referred to as deep neural networks, seem to work better. This may be due to the possibility of building a hierarchical feature representation \cite{zeiler14vis}, that reflects the hierarchical nature of the physical reality.
+		In practice, however, networks with more than one hidden layer, referred to as deep neural networks, seem to work better. This may be due to the possibility of building a hierarchical feature representation \cite{zeiler14vis}, that reflects the hierarchical nature of the physical reality.
 		Typical activation functions are for example the sigmoid function ($a_{sigm}$ or the rectified linear unit ($a_{relu}$):
 		\begin{equation}
 			a_{\textrm{sigm}}(x)= \frac{1}{1+e^{-x}}
@@ -88,7 +88,7 @@
 			w^{t+1} = w^{t} + \lambda \nabla_{w^t}	 \mathcal{L} (w^t),
 		\end{equation}
 		where $\lambda$ is the learning rate, parametrizing the step size. In practice, calculating derivatives of the likelihood \wrt the weights can be done efficiently via error backpropagation.
-		For big datasets it becomes cumbersome to calculate the gradient w.r.t the whole dataset. Taking only a random subset of the data for an approximation of the gradient, renders the optimization stochastic; the procedure is then called stochastic gradient descent.
+		For big datasets it becomes cumbersome to calculate the gradient \wrt the whole dataset. Taking only a random subset of the data for an approximation of the gradient, renders the optimization stochastic; the procedure is then called stochastic gradient descent.
 
 
 \newpage
@@ -98,11 +98,11 @@
 	\end{quote}
 	Learning and understanding structure in data by being able to generate, is the rationale behind generative modelling.
 	Generative models are mostly applied for unsupervised learning and can be contrasted to discriminative models. While discriminative models are used to model posterior conditionals $p(y|x)$ (\eg for supervised learning (cf. Sec. \ref{sec:supervised}), generative models capture the complete data distribution $p(x)$ in an estimate $\hat p(x)$ \cite{bishop06pattern}. Thus, after estimation, one can generate samples from this model $\hat p$. Hence the name generative model.
-	\note{Generative modeling can be used for outlier search, where regions with low probability under the model are taken as indicative for an outlier.}
+	Generative modeling can for example be used for outlier search, where regions with low probability under the model are taken as indicative for an outlier.
 	The currently predominant generative models are built on either autoencoding or adversarial formulations:
 
 	\subsection{Autoencoding Formulations}\label{sec:autoencoding}
-		An autoencoding model is learning by reconstructing samples of data, $\hat x = f(x)$. To enforce data compression (otherwise the identity function is a trivial solution of autoencoding) the function has an information bottleneck, namely an inferred latent code $z$ of reduced dimension. The autoencoder is then the chain of an encoding function $z = e(x)$ and a decoding function $\hat x = d(z) = d(e(x))$.
+		An autoencoding model is learning by reconstructing samples of data, $\hat x = f(x)$. To enforce data compression (otherwise the identity function is a trivial solution of autoencoding) the function has an information bottleneck, namely an inferred latent code $z$ of reduced dimension. The autoencoder is then the chain of an encoding function $z = e(x)$ and a decoding function $\hat x = d(z) = d(e(x))$. \todo{explain why reduced dimension, why variational}
 
 		Whereas the conventional autoencoder consists of deterministic mappings $e, d$, the {variational autoencoder} \cite{kingma13vae} models the probability distribution $p(x)$. More specifically, it maximizes a lower bound to the logarithmic likelihood $\log p(x)$ of data $x$. This so-called variational lower bound $\mathcal{L}$ is given by:
 		% \begin{equation}\label{eq:vae}
