@@ -250,4 +250,22 @@
 %
 % $p(x| do(s), do(a))$
 
+	\subsection{Image Transformation as Intervention}\label{sec:transform}
+		\begin{figure}[htp]
+			\centering
+			\input{fls/tikz/trans.tex}
+			\caption{An image $\mathbf{x}$ is assumed to be generated from the factors of shape $\sigma$ and appearance $\alpha$. Implementing an intervention with a transformation of factors, means changing one factor without changing the other.}
+			\label{fig:intervene}
+		\end{figure}
+		% $p(x| do(a), b)$
+		To disentangle shape $\sigma$ and appearance $\alpha$, we can emulate interventions by image transformations. Under the assumption that certain transformations only lead to a change in shape, while leaving appearance invariant or vice versa, we obtain access to interventional data. %of the type x | s, a , x | do(s), a
+
+
+	\subsection{Analysis-by-Synthesis to Model Assumptions}\label{sec:anabysyn}
+		Additional assumptions can be made about the image generation process in the regime of analysis-by-synthesis:
+		The key idea is, that the process of how an image is generated from underlying factors (graphics), is much better known than estimating the factors from the image (inverse graphics).
+		One can combine a model for analysis and a model for synthesis to reconstruct an image (autoencoding, cf. Sec.~\ref{sec:autoencoding}).
+		Herein the synthesis can be tightly constrained to fit the assumptions about reality~\cite{tieleman14thesis}.
+		Assumptions about how shape and appearance interact enable disentanglement. The idea to generatively entangle in order to disentangle has been explored before in other contexts~\cite{desjardins12genentangle}.
+
 

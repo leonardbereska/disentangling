@@ -1,24 +1,6 @@
 \chapter{Method}\label{sec:method}
 % describe method
 
-% \subsection{Image Transformation as Intervention}\label{sec:transform}
-		\begin{figure}[htp]
-			\centering
-			\input{fls/tikz/trans.tex}
-			\caption{An image $\mathbf{x}$ is assumed to be generated from the factors of shape $\sigma$ and appearance $\alpha$. Implementing an intervention with a transformation of factors, means changeing one factor without changing the other.}
-			\label{fig:intervene}
-		\end{figure}
-		% $p(x| do(a), b)$
-		To disentangle shape $\sigma$ and appearance $\alpha$, we can emulate interventions by image transformations. Under the assumption that certain transformations only lead to a change in shape, while leaving appearance invariant or vice versa, we obtain access to interventional data. %of the type x | s, a , x | do(s), a
-
-
-	% \subsection{Analysis-by-Synthesis to Model Assumptions}\label{sec:anabysyn}
-		Additional assumptions can be made about the image generation process in the regime of analysis-by-synthesis:
-		The key idea is, that the process of how an image is generated from underlying factors (graphics), is much better known than estimating the factors from the image (inverse graphics).
-		One can combine a model for analysis and a model for synthesis to reconstruct an image (autoencoding, cf. Sec.~\ref{sec:autoencoding}).
-		Herein the synthesis can be tightly constrained to fit the assumptions about reality~\cite{tieleman14thesis}.
-		Assumptions about how shape and appearance interact enable disentanglement. The idea to generatively entangle in order to disentangle has been explored before in other contexts~\cite{desjardins12genentangle}.
-
 
 % INTRO FIGURE: PART REPRESENTATION
 % \begin{figure}[t]
@@ -48,8 +30,8 @@
 	% what do our representations entangle still?:
 	% shape: position, shape, size
 	% appearance: illumination, color, texture, material
-	The disentanglement of shape and appearance can be enforced by demanding that shape is invariant under the transformation of appearance and vice versa. This is realized in a two-stream autoencoding formulation. Here, an image is reconstructed from a combination of shape and appearance, with shape extracted from the appearance-transformed image and appearance from a shape-transformed image. Additionally, the part shape is tied to the location of the part in the image: an equivariance loss encourages that the part shape moves in unison with the part in the image. We implement these objectives into a loss framework, which is explained in sec. \ref{sec:framework}. \\
-	To assert a decomposition into independent local parts, we ensure their local modelling and treatment throughout the whole pipeline. This is highlighted when describing the architecture in sec. \ref{sec:architecture}.
+	The disentanglement of shape and appearance can be enforced by demanding that shape is invariant under the transformation of appearance and vice versa. This is realized in a two-stream autoencoding formulation. Here, an image is reconstructed from a combination of shape and appearance, with shape extracted from the appearance-transformed image and appearance from a shape-transformed image. Additionally, the part shape is tied to the location of the part in the image: an equivariance loss encourages that the part shape moves in unison with the part in the image. We implement these objectives into a loss framework, which is explained in Sec. \ref{sec:framework}. \\
+	To assert a decomposition into independent local parts, we ensure their local modelling and treatment throughout the whole pipeline. This is highlighted when describing the architecture in Sec. \ref{sec:architecture}.
 
 	\begin{figure}[htp]
 		\centering
@@ -62,8 +44,8 @@
 	% CROSSING TASK FRAMEWORK
 	\begin{figure}[t]
 		\centering
-		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/other/architecture_final}
-		\caption{Encoder $E$ encodes shape and appearance for two transformed images $s(\mathbf{x})$ and $a(\mathbf{x})$, after recombination $R$ of $({\alpha}_{s(\mathbf{x})}, {\sigma}_{a(\mathbf{x})})$ into latent image $Z$, the decoder $D$ reconstructs the image $\mathbf{x}$.}
+		\includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.\linewidth]{fig/other/setup2}
+		\caption{Shape $\sigma$ and appearance $\alpha$ are encoded for two transformed images $s(\mathbf{x})$ and $a(\mathbf{x})$, after recombination of the latent code $({\alpha}_{s(\mathbf{x})}, {\sigma}_{a(\mathbf{x})})$ into a latent image, the image $\mathbf{x}$ is reconstructed.}
 		\label{fig:architecture}
 	\end{figure}
 	%Definitions
@@ -88,7 +70,7 @@
 	If the invariance constraints, as formulated above, are full-filled, these transformations do not change the latent code.
 	Thus, the loss implicitly enforces invariance.
 	To obtain shape and appearance, we encode both $a(\mathbf{x})$ and $s(\mathbf{x})$ with an encoder $\mathrm{E}$.
-	And, after a recombination (for details see sec. \ref{sec:architecture}) to a latent image $Z$, a decoder $\mathrm{D}$ reconstructs the image.
+	And, after a recombination (for details see Sec. \ref{sec:architecture}) to a latent image $Z$, a decoder $\mathrm{D}$ reconstructs the image.
 	This configuration is depicted in Fig. \ref{fig:architecture}, the reconstruction loss $\mathcal{L}_{\textrm{rec}}$ is as follows:
 	%\begin{align}
 	%\mathcal{L}_{\textrm{rec}} &=  \lVert X -  \mathrm{D}[\mathrm{R}[\mathrm{E}(\mathbf{x})]]\rVert \\
