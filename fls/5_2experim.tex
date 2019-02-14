@@ -23,7 +23,7 @@
 		\end{figure}
 
 		% On Deep Fashion , a benchmark dataset for supervised disentangling methods, the task is to separate person ID (appearance) from body pose (shape) and then synthesize new images for previously unseen persons from the test set in eight different poses. We randomly sample the target pose and appearance conditioning from the test set.
-		We compare the disentangling performance quantitatively against a supervised method, namely the variational U-Net \cite{esser18}. We evaluate on the Deep Fashion \cite{liu16deepfashion, liu16deepfashionwild} dataset, a standard benchmark dataset for supervised disentangling methods. In this dataset appearance is defined by a persons ID and shape by the pose of the person. For each ID in the test set, we condition the image generation on 8 different poses which are chosen randomly from the test set. Both VU-Net and our model are conditioned on the exactly the same pose-ID image pairs. Fig. \ref{fig:allswaps} shows qualitative results.
+		We compare the disentangling performance quantitatively against a supervised method, namely the variational U-Net \cite{esser18}. We evaluate on the Deep Fashion \cite{liu16deepfashion, liu16deepfashionwild} dataset, a standard benchmark dataset for supervised disentangling methods. In this dataset appearance is defined by a persons ID and shape is defined by the pose of the person. For each ID in the test set, we condition the image generation on 8 different poses which are chosen randomly from the test set. Both VU-Net and our model are conditioned on the exactly the same pose-ID image pairs. Fig. \ref{fig:allswaps} shows qualitative results.
 		We quantitatively compare against supervised state-of-the-art disentangling \cite{esser18} by evaluating \emph{i)} invariance of shape against variation in appearance by the distance in pose between generated and pose target image and \emph{ii)} invariance of appearance against variation in shape by the re-identification error.
 
 		\begin{tcolorbox}
@@ -73,7 +73,9 @@
 		% In single-image ReID the task is to
 		% many-image ReID
 		% ReID means ranking. rank-1 is the ratio of correct finding by the first entry. rank-n ratio of correct samples that are within first n entries in ranking. mean average precision is the average over
-		The first question we ask, is, if the appearance encoding is stable to variations in pose, hence invariant to pose (shape). Each ID from the test set is generated in 8 different poses. The task for the ReID algorithm is now to rank the similarity of these pose-changed yet same-appearance generations.
+
+
+		The first question we ask, is, if the appearance encoding is stable under variations of pose, hence invariant to pose (shape). Each ID from the test set is generated in 8 different poses. The task for the ReID algorithm is now to rank the similarity of these pose-changed yet same-appearance generations.
 		Although our approach is unsupervised, it is competitive compared to the supervised VU-Net \cite{esser18} as shown in Tab. \ref{tab:reid}. The high chance of re-identifying a persons appearance in a different shape (rank-1 accuracy) shows that the appearance is invariant against variation in shape (pose) for both methods.
  		To visualize the closeness of the same-ID generations in the ReID-embedding the show a t-SNE plot in Fig.~\ref{fig:tsne}.
 
@@ -115,8 +117,8 @@
 			\label{fig:tsne}
 		\end{figure}
 
-		The second question one could ask is, if appearance is preserved, \ie if the ReID algorithm is able to re-identify the groundtruth appearance image from the generation. Results for this are shown in Tab.~\ref{tab:reiddirect}. The result depends strongly on whether the algorithm had been fine-tuned to the Deep Fashion image distribution or the Deep Fashion and the synthesized image distribution. The stark difference can be explained by the difference in the feature distribution: high-frequency details (such as patterns and texture of clothing), are not synthesized correctly, as the model is trained by a reconstruction objective which will blur these high frequencies. On the other hand, the adversarial objective will encourage \textit{some} high frequencies, but not necessarily the ones from the initial appearance conditioning. The ReID algorithm, if not additionally adjusted to this, will pay attention to those details and subsequently fail.
-		unambiguous function between generations and groundtruth can be found.
+		The second question we ask is, if appearance is preserved, \ie if the ReID algorithm is able to re-identify the groundtruth appearance image from the generation. Results for this are shown in Tab.~\ref{tab:reiddirect}. The result depends strongly on whether the algorithm had been fine-tuned to the Deep Fashion image distribution or the Deep Fashion and the synthesized image distribution. The stark difference can be explained by the difference in the feature distribution: high-frequency details (such as patterns and texture of clothing), are not synthesized correctly, as the model is trained by a reconstruction objective which will blur these high frequencies. On the other hand, the adversarial objective will encourage \textit{some} high frequencies, but not necessarily the ones from the initial appearance conditioning. The ReID algorithm, if not additionally adjusted to this, will pay attention to those details and subsequently fail.
+		% unambiguous function between generations and groundtruth can be found.
 
 		\begin{table}[htp]
 			\centering
@@ -148,8 +150,9 @@
 
 
 
-	Conditional image generation can also be extended to the task of {video-to-video translation}. The two conditioning images can be frames from different videos. One frame is acting as the appearance conditioning and the other as shape conditioning. By generating each frame conditioned on the shape and appearance from two videos, one effectively transfers the appearance of one video to the shape of the other on a frame-to-frame level.
-	We evaluate this frame-to-frame video translation on the BBC Pose dataset. The datasets videos of sign language present a delicate and complex articulation of arms and hands. We condition on appearance from videos in the training set and on shape from videos in the test set. A sample for generated frames is shown in Fig. \ref{fig:bbcthumb}, for the complete videos please refer to the supplementary.
+	Conditional image generation can be extended to the task of {video-to-video translation}. The two conditioning images can be frames from different videos. One frame is acting as the appearance conditioning and the other as shape conditioning. By generating each frame conditioned on the shape and appearance from two videos, one effectively transfers the appearance of one video to the shape of the other on a frame-to-frame level.
+	We evaluate this frame-to-frame video translation on the BBC Pose dataset. The videos of sign language present a delicate and complex articulation of arms and hands. We condition on appearance from videos in the training set and on shape from videos in the test set. A sample for generated frames is shown in Fig. \ref{fig:bbcthumb}.
+	% , for the complete videos please refer to the supplementary.
 	We want to point out two features of the model here: Firstly, despite no use of smoothing or interpolation between frames the generated sequence is smooth in the temporal domain. This is enabled by a temporally consistent part assignment which is stable across articulation.
 	Secondly, the training on the natural spatial transforms in video data enables the model to encapsulate realistic transitions such as out-of-plane rotation and complex 3D articulation of \eg hands and even fingers (note the correct translation of the thumbs position in Fig. \ref{fig:bbcthumb}). \\
 	% \begin{itemize}
@@ -162,10 +165,11 @@
 	% \end{itemize}
 
 \section{Disentangling in Parts}\label{sec:partwise}
-	The second type of disentanglement we approach is to factorize the object into local parts. Obviously, object parts are in general not disentangled factors in a sense that they have an independent probability distribution\todo{ref to equation independence in beginning}. Since the parts are geometrically connected, in their spatial layout they are conditioned on each other. For example, you cannot move your head arbitrarily far away from your shoulders. Still, there is a local freedom and modularity - especially in appearance features - that renders a local factorization efficient. As an illustration, the color of the shoes you wear need only be mildly correlated with your hair color.
-	We show that the model disentangles these local modes of variation for a persons appearance (Sec.~\ref{sec:partappearance}) and shape (Sec.~\ref{sec:partshape}).
+	The second type of disentanglement we tackle is to factorize the object into local parts. Obviously, object parts are in general not disentangled factors in a probabilistic sense that they have an factorized probability distribution\todo{ref to equation independence in beginning}. Since the parts are geometrically connected, in their spatial layout they are conditioned on each other. For example, you cannot move your head arbitrarily far away from your shoulders. Still, there is a local freedom and modularity - especially in appearance features - that renders a local factorization efficient. As an illustration, the color of the shoes you wear need only be mildly correlated with your hair color.
+	We show that the model disentangles these local modes of variation for a persons appearance and shape.
+	% (Sec.~\ref{sec:partappearance}) and shape. (Sec.~\ref{sec:partshape}).
 
-	\subsection{Part Appearance Transfer}\label{sec:partappearance}
+	% \subsection{Part Appearance Transfer}\label{sec:partappearance}
 	% PART SWAPS
 	\begin{figure}[htp]
 		\begin{subfigure}{0.49\linewidth}
@@ -201,7 +205,7 @@
 	% \end{itemize}
 	% $\Rightarrow$ Factorization achieved, utility for downstream tasks
 
-	\subsection{Part Shape Changes}\label{sec:partshape}
+	% \subsection{Part Shape Changes}\label{sec:partshape}
 	One can also change the position of individual parts in the shape conditioning, which leads to generations as shown in Fig.~\ref{fig:movekp}. One can observe that the other non-moved parts shapes also lead to stationary parts in the generation, indicating that these parts are spatially disentangled. In the unnatural (never seen in data) regime \eg if the head is to far from the shoulders, the model still hallucinates a head next to the body - similar to supervised results~\cite{debem18dgpose}.
 
 	\begin{figure}[htp]

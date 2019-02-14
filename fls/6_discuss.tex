@@ -17,7 +17,7 @@
 	causality will be shed light on many endeavours in artificial intelligence not only disentangling}
 
 	% summary
-	We have presented an unsupervised approach to learning the compositional part structure of objects by disentangling geometric shape from visual appearance. We derive invariance and equivariance constraints that enable a generative framework to discover consistent landmarks without requiring prior assumptions on landmark layout. Experiments show that our approach significantly improves upon previous unsupervised methods.
+	We have presented an unsupervised approach to learning the compositional part structure of objects by disentangling geometric shape from visual appearance. We derived invariance and equivariance constraints that enable a generative framework to discover consistent landmarks without requiring prior assumptions on landmark layout. Experiments show that our approach significantly improves upon previous unsupervised methods.
  	% context of causality
 	Disentangling shape and appearance has been presented in the broader context of learning the causal structure of the world through images. The insights from the causal literature let us rethink the role of priors, models and data and give a direction for future work.
 	% final metaphor/ joke/ twist
@@ -25,9 +25,6 @@
 	% thanks
 	\note{next step entangling further, to disentangle further}
 	\note{rethink disentanglement, \eg parts have dependencies, but exactly by modelling those dependencies reach disentanglement, similar to appearance conditioning in order to extract shape. look for bengio talk}
-
-	Throughout this work we alluded to two themes: \emph{i)} improving models with realistic constraints and assumptions \emph{ii)} extracting value from richer data, \ie interventional and temporal data.
-	For our task of disentangling shape and appearance of objects these themes translated into \emph{i)} better modelling of the synthesis side in the analysis-by-synthesis framework and \emph{ii)} utilizing image transformations \wrt which to capture invariant and equivariant factors.
 
 
 \section{Future Work}\label{sec:futurework}
@@ -38,6 +35,9 @@
 		% \item better transformations -> appearance locally (around parts changed), appearance changed perceptually -> style transfer
 		% \item local appearance change (as TPS)
 	% \end{itemize}
+	Throughout this work we alluded to two themes: \emph{i)} improving models with realistic constraints and assumptions \emph{ii)} extracting value from richer data, \ie interventional and temporal data.
+	For our task of disentangling shape and appearance of objects these themes translated into \emph{i)} better modelling of the synthesis side in the analysis-by-synthesis framework and \emph{ii)} utilizing image transformations \wrt which to capture invariant and equivariant factors.
+
 
 	With regards to these two themes there are obvious improvements to be made:
 

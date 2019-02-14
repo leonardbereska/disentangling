@@ -16,11 +16,11 @@
 		\label{fig:shape_tennis}
 		\end{subfigure}
 		\caption{Learned shape representation on Penn Action. For visualization, 13 of 16 part activation maps are plotted in one image. (a) Different instances, showing intra-class consistency and (b) video sequence, showing consistency and smoothness under motion, although each frame is processed individually.}
-		\label{fig:shape}
+		\label{fig:shapespenny}
 	\end{figure}
 
 	In this section we will establish that the proposed method (Chapter~\ref{sec:method}) outperforms the state-of-the-art in unsupervised object shape learning by a large margin.
-	The learned shape representation is visualized in Fig.~\ref{fig:shape}. \todo{ours region-based, landmarks only for evaluation}
+	The learned shape representation is visualized in Fig.~\ref{fig:shapespenny}. \todo{ours region-based, landmarks only for evaluation}
 	To quantitatively evaluate the shape estimation, we measure how well groundtruth landmarks (only during testing) are predicted from it.
 	We obtain landmarks from our part-region based shape representation by designating the mean of a part shape $\mu[\sigma^i(\mathbf{x})]$ as the landmark position. To quantify the quality of these landmark estimates, we linearly regress them to human-annotated groundtruth landmarks and measure the test error.
 	% The part shape means $\mu[\sigma^i(x)]$ serve as our landmark estimates and we measure the error when linearly regressing the human-annotated groundtruth landmarks from these estimates.
@@ -37,7 +37,7 @@
 
 \section{Diverse Object Categories}\label{sec:results}
 	% On the object classes of human faces, cat faces, and birds and human and animal bodies our model predicts landmarks consistently across different instances.
-	We test our approach on a diverse set of object classes ranging from human and cat faces to articulated bodies and animals. In the following we go through the results sorted by object category. Where possible we compared to state-of-the-art methods quantitatively in terms of unsupervised landmark prediction, additionally we show qualitative results.
+	We test our approach on a diverse set of object classes ranging from human and cat faces to articulated bodies and animals. In the following we go through the results sorted by object category. Where possible we compare to state-of-the-art methods quantitatively in terms of unsupervised landmark prediction, additionally we show qualitative results.
 	\subsection{Human and Cat Faces}\label{sec:kp_faces}
 		% FACES
 		\begin{figure}[htp]
@@ -97,7 +97,7 @@
 			\end{table}
 			Tab.~\ref{tab:faces} compares against the state-of-the-art.
 			Our approach outperforms competing methods, with a particularly large margin of ca. $4-5\%$ on the more challenging Cat Head dataset. The best competitor suffers from an incomplete disentanglement (as we show in Sec.~\ref{sec:zhang}).
-			An interesting side note: the most severe failure modes for Cat Head were human labelling errors, which suggests that the unsupervised performance could be better than the human labelling in this circumstances.
+			Here we observed, that the most severe failure modes for the Cat Head dataset were human labelling errors, which suggests that the unsupervised performance could be better than the human labelling under these circumstances.
 
 	\subsection{Human Bodies}\label{sec:kp_humanbodies}
 		% BODIES
@@ -232,9 +232,9 @@
 		\end{tcolorbox}
 
 		\subsubsection{Qualitative results}
-			On CUB-200-2011 the model discovers consistent landmarks that closely cover the birds body, despite significant variation in color, texture, size and background. The direct comparison to Zhang \etal~\cite{zhang18} is further discussed in Sec.~\ref{sec:compare}, including a qualitative comparison in Fig.~\ref{fig:compare}.
+			On CUB-200-2011 the model discovers consistent landmarks that closely cover the bird's body, despite significant variation in color, texture, size and background. The direct comparison to Zhang \etal~\cite{zhang18} is further discussed in Sec.~\ref{sec:compare}, including a qualitative comparison in Fig.~\ref{fig:compare}.
 			The performance on the Dogs Run dataset shows that highly differing dog breeds (size, thickness of fur) can be related via semantic parts.
-			Furthermore, the limited amount of data in Dogs Run is no problem for finding meaningful correspondences, firstly due to the unsupervised nature of the model and the transformations acting as a form of data augmentation.
+			Furthermore, the limited amount of data in Dogs Run is no problem for finding meaningful correspondences, due to the unsupervised nature of the model and the transformations acting as a form of data augmentation.
 			On both datasets, the universality of the approach (capturing non-human poses) is underlined once more.
 			This is to be expected, as no specific assumptions about the object-class are introduced in the model formulation.
 
@@ -285,16 +285,16 @@
 
 	\subsection{Background Clutter}\label{sec:background}
 		The question how to separate background from object goes deeper than one might think. Fundamentally the question is equivalent to: \textit{What is an object?}
-		If an unsupervised algorithm is posed the task of finding the object in an image dataset - under the assumption that the object is present in all images - the object is a structure common to these images.
+		If an unsupervised algorithm is given the task of finding the object in an image dataset - under the assumption that the object is present in all images - the object is a structure common to these images.
 		By this definition background is everything that is not strongly correlated with the object itself.
-		This dataset-specific object category can be unintuitive: for example for a bird sitting on a twig, the twig can considered as part of the object, if the dataset shows only birds on twigs (\eg two landmarks are on feet/twig on CUB-200-2011 dataset,  cf. Fig.~\ref{fig:kp_animals}).
-		This dataset-biased pre-categorical thinking of unsupervised algorithms can be seen as a failure, or as a feature: on a dataset of Salsa-dancing humans our method identified the pair of dancers as an object (cf. Fig.~\ref{fig:parity}). \todo{better figure here, make salsa dataset}
-		Technically, we allow the algorithm to focus on the reconstruction of only the object, and not background by a local weighting around the part activation (refer to Sec.~\ref{sec:implementationdetails}). The fundamental issue of strong object-background correlations cannot be solved technically, but requires different data. \todo{look up (and reference to) dataset bias} Interestingly, on with the constrained but repetitive background of the Human3.6M dataset, where traditional background subtraction methods are easily applied, our method struggles: several parts are assigned to background objects. On the other hand, complexly cluttered backgrounds - as long as no correlations to the object exist - such as the background TV screen in the BBC Pose dataset (cf. Fig.~\ref{fig:bbcthumb}) are actually favorable for the method. This is due to the crossed reconstruction objective: if reconstructing the background of the target image is possible with the information of the source appearance image, the algorithm will try to do so by assigning parts to the background, if not, not.
+		This dataset-specific object category can be unintuitive: for example for a bird sitting on a twig, the twig can be considered as part of the object (\eg two landmarks are on feet/twig on CUB-200-2011 dataset,  cf. Fig.~\ref{fig:kp_animals}).
+		This dataset-biased pre-categorical thinking of unsupervised algorithms can be seen as a failure, or as a feature: on a dataset of dancing humans our method identified the pair of dancers as the salient object (cf. Fig.~\ref{fig:parity}). \todo{better figure here, make salsa dataset}
+		Technically, we allow the algorithm to focus on the reconstruction of only the object, and not background by a local weighting around the part activation (refer to Sec.~\ref{sec:implementationdetails}). The fundamental issue of strong object-background correlations might not be solved technically, but require different data or prior knowledge. \todo{look up (and reference to) dataset bias} Interestingly, on with the constrained but repetitive background of the Human3.6M dataset, where traditional background subtraction methods are easily applied, our method struggles: several parts are assigned to background objects. On the other hand, complexly cluttered backgrounds - as long as no correlations to the object exist - such as the background TV screen in the BBC Pose dataset (cf. Fig.~\ref{fig:bbcthumb}) are actually favorable for the method. This is due to the crossed reconstruction objective: if reconstructing the background of the target image is possible with the information of the source appearance image, the algorithm will try to do so by assigning parts to the background, if not, not.
 
 
-	\subsection{Object Articulation and Viewpoint Variation}\label{sec:articulation}
+		\subsection{Object Articulation and Viewpoint Variation}\label{sec:articulation}
 
-		Object articulation and viewpoint variation makes consistent shape learning challenging. In contrast to rigid bodies that can vary in orientation and scale, articulated objects viewed from different viewpoints have many degrees of freedom more.
+		Object articulation and viewpoint variation makes consistent shape learning challenging. In contrast to rigid bodies that can vary in orientation and scale, articulated objects have many degrees of freedom more. Viewing from different points increased the difficulty both in the rigid and the articulated case.
 		Complex articulation can be conceptually simplified by regarding an object as a collection of rigid parts, that again each have only few degrees of freedom. This description of an arrangement of parts is exponentially cheaper than trying to capture it as a whole~\cite{ross06parts}. To enforce the factorization into independent parts it is crucial to restrain the part features and region to be local (how exactly is shown in Sec.~\ref{sec:method}). Landmarks are a simple and efficient implementation of this part factorization idea. In this sense, using landmarks as shape representation is the natural approach for tackling articulation. However, related work does not strictly enforce locality of the learned features (compare~\ref{sec:jakab}) or a local reconstruction from these features.
 
 
@@ -309,7 +309,7 @@
 		Intra-class variation can be both in shape and in appearance. Due to different breeds and species the animal datasets - Dogs Run, CUB-200-2011, Cat Head - present the highest degree of variability within the object class. The method in part coincidentally generalizes and in part inherently enforces in due to the data augmentation with shape and appearance transformations (see also Sec. \ref{sec:transformations}).
 
 \section{Comparative Advantages}\label{sec:compare}
-		In this section we directly compare against the closest competitors on unsupervised learning of shape Zhang \etal~\cite{zhang18} and Jakab \etal~\cite{jakab18}. On a low-level, there are many differences to both approaches, some of which we discuss in the respective related work (\ref{sec:shapelearning}). On a high level, different is that Zhang \etal lack a principled way to disentangle shape and appearance (\eg via transformations) (Sec.~\ref{sec:zhang}) and Jakab \etal model the appearance in a holistic encoding (Sec.~\ref{sec:jakab}).
+		In this section we directly compare against the closest competitors on unsupervised learning of shape Zhang \etal~\cite{zhang18} and Jakab \etal~\cite{jakab18}. On a low-level, there are many differences to both approaches, some of which we discuss in the respective related work (Sec.~\ref{sec:relshapelearning}). On a high level, the main difference is that Zhang \etal lacks a principled way to disentangle shape and appearance (\eg via transformations) (Sec.~\ref{sec:zhang}) and Jakab \etal models the appearance in a holistic encoding (Sec.~\ref{sec:jakab}).
 
 		\subsection{Non-Disentangling Approach}\label{sec:zhang}
 			% HUMAN3.6M DETAILED RESULTS
@@ -422,9 +422,9 @@
 
 			% what is the color augmentation: explain before
 			\todo{what is the crossing task}
-			Perhaps the most insightful comparison for a method is, to compare to lesser versions of itself:
+			Probably the most insightful comparison for a method is, to compare to lesser versions of itself.
 			We ablate the main components of our proposed framework: reconstruction loss $\mathcal{L}_{\textrm{rec}}$, the equivariance loss $\mathcal{L}_{\textrm{equiv}}$, the appearance augmentation and the transformations for disentangling shape and appearance. For the ablation study we use the Cat Head dataset, following the already introduced train-test setup on the task of landmark ground truth regression. Tab. \ref{tab:ablation} illustrates the ablation results.\\
-			Leaving out the reconstruction task naturally leads to the largest drop in performance since only training on equivariance leads to collapsed landmark solutions as discussed in \cite{zhang18}.
+			Leaving out the reconstruction task naturally leads to the largest drop in performance, since training only on equivariance leads to collapsed landmark solutions as discussed in \cite{zhang18}.
 			Note that without both shape and appearance transformations our models performs significantly worse, now comparable to Zhang \etal \cite{zhang18}.
 			Without transformations the reconstruction objective is identical to the one of~\cite{zhang18}, only the model architecture deviates.
 			This suggests, that the improved disentanglement (by transformations) could be explaining the overall performance gain \wrt \cite{zhang18}.  %This performance drop would be larger on datasets with articulation.
@@ -458,7 +458,7 @@
 
 		In this section we discuss the effect of the transformations on learning a consistent and comprehensive representation.
 		Since strong image transformations can make the learning curve for the algorithm too steep, we exponentially schedule the increase in magnitude, finally resulting in image changes as shown in Fig. \ref{fig:coloraugm}.
-		In effect, the transformations teach the algorithm what changes in shape and appearance are. Assuming that samples from the data distribution are - showing the same object class - related via a change in shape and appearance, the transformations blur the distribution. This data augmentation effect is sketched in Fig. \ref{fig:trans}.
+		In effect, the transformations teach the algorithm what changes in shape and appearance are. Assuming that samples from the data distribution are related via a change in shape and appearance, the transformations blur the distribution. This data augmentation effect is sketched in Fig. \ref{fig:trans}.
 
 		\subsection{Spatial Transformations}\label{sec:warps}
 			We perform thin-plate spline (TPS) warps to mimic spatial transformations. These changes incorporate rotation, scaling and translation as a special case. While irreplaceable for calculating the direct equivariance loss\todo{ reference to equation}, they can result in artificial shape changes. After all, most objects - such as human beings or animals, do not warp, but articulate their parts/limbs.
@@ -474,7 +474,7 @@
 			\end{figure}
 
 			We mimic appearance changes with image transformations in color, contrast, hue and brightness. Exemplars for the combined effect of spatial and appearance transformations are shown in Fig. \ref{fig:coloraugm}.
-			Especially for datasets with high intra-class appearance variance, connecting the data points via appearance changes is crucial. On Cat Head for example, without them, the method assigned different landmarks to black cats than to other-color cats. The model will incur no loss, as long as it always has to reconstruct black cats from images of black cats. If it has to relate black and white cats (\eg via color inversion) this intra-class inconsistency has to vanish.\\
+			Especially for datasets with high intra-class appearance variance, connecting the data points via appearance changes is crucial. On Cat Head for example, without them, the method assigned different landmarks to black cats than to other-color cats. The model will incur no loss, as long as it always has to reconstruct black cats from images of black cats. If it has to relate black and white cats (\eg via color inversion) this intra-class inconsistency has to vanish.
 			Ideally one would want more "natural" appearance changes as well. This could be a line of future work (cf. Sec.~\ref{sec:futurework}).
 
 
